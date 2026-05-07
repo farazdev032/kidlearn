@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - English Lesson 6: Grammar Basics</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #4a90d9; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .lesson-hero { background: linear-gradient(135deg, #9b59b6, #4a90d9); color: white; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .lesson-hero h2 { font-size: 28px; margin-bottom: 8px; }
+    .lesson-hero p { font-size: 15px; opacity: 0.9; }
+    .lesson-meta { display: flex; gap: 15px; margin-top: 12px; }
+    .meta-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .hero-icon { font-size: 80px; }
+    .lesson-container { max-width: 800px; margin: 30px auto; padding: 0 20px 50px; }
+    .lesson-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #aaa; }
+    .step.active { color: #9b59b6; font-weight: bold; }
+    .step.done { color: #7ed321; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #aaa; }
+    .step.active .step-circle { background: #9b59b6; color: white; }
+    .step.done .step-circle { background: #7ed321; color: white; }
+    .step-line { flex: 1; height: 2px; background: #e0e0e0; }
+    .step-line.done { background: #7ed321; }
+    .lesson-section { display: none; }
+    .lesson-section.active { display: block; }
+    .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+    .highlight { color: #9b59b6; font-weight: bold; }
+    .tip-box { background: #f5e8ff; border-left: 4px solid #9b59b6; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
+
+    /* GRAMMAR TYPES */
+    .grammar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+    .grammar-card { border-radius: 16px; padding: 20px; text-align: center; }
+    .grammar-icon { font-size: 36px; margin-bottom: 10px; }
+    .grammar-title { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+    .grammar-desc { font-size: 13px; line-height: 1.6; margin-bottom: 10px; }
+    .grammar-examples { font-size: 13px; font-style: italic; }
+    .gc-noun { background: #e8f4ff; color: #4a90d9; }
+    .gc-verb { background: #e0ffe0; color: #3a7a00; }
+    .gc-adj { background: #fff5e0; color: #f5a623; }
+
+    /* EXAMPLE SENTENCE */
+    .example-sentence { background: #f8f8ff; border: 2px solid #9b59b6; border-radius: 14px; padding: 20px; margin: 15px 0; text-align: center; }
+    .ex-sentence { font-size: 22px; font-weight: bold; color: #333; margin-bottom: 15px; }
+    .ex-labels { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .ex-label { padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+    .el-noun { background: #e8f4ff; color: #4a90d9; }
+    .el-verb { background: #e0ffe0; color: #3a7a00; }
+    .el-adj { background: #fff5e0; color: #f5a623; }
+
+    /* IDENTIFY ACTIVITY */
+    .identify-words { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+    .iw-card { background: #f8f8f8; border: 2px solid #e0e0e0; border-radius: 14px; padding: 18px 20px; }
+    .iw-word { font-size: 22px; font-weight: bold; color: #333; margin-bottom: 12px; text-align: center; }
+    .iw-context { font-size: 14px; color: #888; text-align: center; margin-bottom: 12px; font-style: italic; }
+    .iw-btns { display: flex; gap: 10px; justify-content: center; }
+    .iw-btn { padding: 10px 20px; border-radius: 25px; border: 2px solid #e0e0e0; font-size: 14px; font-weight: bold; cursor: pointer; background: white; transition: all 0.2s; }
+    .iw-btn:hover { transform: scale(1.05); }
+    .iw-btn-noun:hover { border-color: #4a90d9; background: #e8f4ff; color: #4a90d9; }
+    .iw-btn-verb:hover { border-color: #7ed321; background: #e0ffe0; color: #3a7a00; }
+    .iw-btn-adj:hover { border-color: #f5a623; background: #fff5e0; color: #f5a623; }
+    .iw-btn.correct-noun { background: #e8f4ff; border-color: #4a90d9; color: #4a90d9; }
+    .iw-btn.correct-verb { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .iw-btn.correct-adj { background: #fff5e0; border-color: #f5a623; color: #f5a623; }
+    .iw-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+    .iw-feedback { text-align: center; font-size: 13px; font-weight: bold; margin-top: 10px; min-height: 20px; }
+
+    /* FILL IN BLANKS */
+    .fib-card { background: #f8f8ff; border: 2px solid #9b59b6; border-radius: 14px; padding: 20px; margin-bottom: 15px; }
+    .fib-sentence { font-size: 18px; color: #333; margin-bottom: 12px; line-height: 2; }
+    .fib-input { border: 2px solid #9b59b6; border-radius: 8px; padding: 4px 10px; font-size: 16px; width: 120px; text-align: center; outline: none; }
+    .fib-input:focus { border-color: #4a90d9; }
+    .fib-options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .fib-option { padding: 6px 14px; background: #f5e8ff; border: 2px solid #9b59b6; border-radius: 20px; font-size: 14px; font-weight: bold; color: #9b59b6; cursor: pointer; transition: all 0.2s; }
+    .fib-option:hover { background: #9b59b6; color: white; }
+    .fib-option.used { background: #ccc; border-color: #ccc; color: white; cursor: not-allowed; }
+    .fib-check { padding: 8px 20px; background: #9b59b6; border: none; border-radius: 20px; color: white; font-size: 14px; cursor: pointer; margin-top: 8px; }
+    .fib-feedback { font-size: 13px; font-weight: bold; margin-top: 8px; min-height: 20px; }
+
+    /* QUIZ */
+    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; }
+    .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+    .quiz-btn { padding: 15px; background: #f0f8ff; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 15px; cursor: pointer; transition: all 0.2s; color: #333; text-align: left; }
+    .quiz-btn:hover { border-color: #9b59b6; background: #f5e8ff; }
+    .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+
+    /* RESULT */
+    .result-box { text-align: center; padding: 20px; }
+    .result-stars { font-size: 50px; margin-bottom: 15px; }
+    .result-title { font-size: 26px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .result-msg { font-size: 15px; color: #666; margin-bottom: 25px; }
+    .result-score { display: inline-block; background: #f5e8ff; color: #9b59b6; font-size: 18px; font-weight: bold; padding: 8px 24px; border-radius: 20px; margin-bottom: 25px; }
+    .btn-next { display: block; width: 100%; padding: 16px; background: #9b59b6; color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-next:hover { background: #7d3f9e; }
+    .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
+    .btn-home { display: inline-block; padding: 14px 30px; background: #9b59b6; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="english.html">English</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
+
+<div class="lesson-hero">
+  <div>
+    <h2>📖 English — Lesson 6</h2>
+    <p>Grammar Basics — Nouns, Verbs and Adjectives!</p>
+    <div class="lesson-meta">
+      <span class="meta-badge">🏆 Builders</span>
+      <span class="meta-badge">⏱ 15 minutes</span>
+      <span class="meta-badge">🎯 Ages 9–11</span>
+    </div>
+  </div>
+  <div class="hero-icon">📝</div>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-progress">
+    <div class="step active" id="step1"><div class="step-circle">1</div> Learn</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2"><div class="step-circle">2</div> Identify</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3"><div class="step-circle">3</div> Fill Blanks</div>
+    <div class="step-line" id="line3"></div>
+    <div class="step" id="step4"><div class="step-circle">4</div> Quiz</div>
+    <div class="step-line" id="line4"></div>
+    <div class="step" id="step5"><div class="step-circle">5</div> Done!</div>
+  </div>
+
+  <!-- SECTION 1: LEARN -->
+  <div class="lesson-section active" id="section1">
+    <div class="card">
+      <h3>📝 What is Grammar?</h3>
+      <p><span class="highlight">Grammar</span> is the set of rules that tells us how to use words correctly. Today we will learn the three most important types of words — <span class="highlight">Nouns</span>, <span class="highlight">Verbs</span>, and <span class="highlight">Adjectives</span>!</p>
+      <div class="tip-box">💡 <strong>Remember:</strong> Every sentence is made up of different types of words. Knowing what each word does helps you write and speak much better!</div>
+    </div>
+
+    <div class="card">
+      <h3>🔤 The Three Word Types</h3>
+      <div class="grammar-grid">
+        <div class="grammar-card gc-noun">
+          <div class="grammar-icon">👤</div>
+          <div class="grammar-title">Noun</div>
+          <div class="grammar-desc">A naming word. Names a person, place, animal or thing.</div>
+          <div class="grammar-examples">Ali, Lahore, cat, book, school</div>
+        </div>
+        <div class="grammar-card gc-verb">
+          <div class="grammar-icon">⚡</div>
+          <div class="grammar-title">Verb</div>
+          <div class="grammar-desc">An action word. Tells us what someone or something does.</div>
+          <div class="grammar-examples">runs, eats, jumps, reads, sleeps</div>
+        </div>
+        <div class="grammar-card gc-adj">
+          <div class="grammar-icon">🎨</div>
+          <div class="grammar-title">Adjective</div>
+          <div class="grammar-desc">A describing word. Tells us more about a noun.</div>
+          <div class="grammar-examples">big, red, happy, tall, beautiful</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📚 See them in a sentence!</h3>
+      <div class="example-sentence">
+        <div class="ex-sentence">The <u>tall</u> boy <u>runs</u> to <u>school</u>.</div>
+        <div class="ex-labels">
+          <span class="ex-label el-adj">🎨 tall = Adjective</span>
+          <span class="ex-label el-noun">👤 boy = Noun</span>
+          <span class="ex-label el-verb">⚡ runs = Verb</span>
+          <span class="ex-label el-noun">👤 school = Noun</span>
+        </div>
+      </div>
+      <div class="example-sentence">
+        <div class="ex-sentence">A <u>beautiful</u> <u>bird</u> <u>sings</u> sweetly.</div>
+        <div class="ex-labels">
+          <span class="ex-label el-adj">🎨 beautiful = Adjective</span>
+          <span class="ex-label el-noun">👤 bird = Noun</span>
+          <span class="ex-label el-verb">⚡ sings = Verb</span>
+        </div>
+      </div>
+    </div>
+    <button class="btn-next" onclick="goToSection(2)">Next — Identify Words ➡️</button>
+  </div>
+
+  <!-- SECTION 2: IDENTIFY -->
+  <div class="lesson-section" id="section2">
+    <div class="card">
+      <h3>🔍 What type of word is it?</h3>
+      <p>Look at each word and its sentence. Click whether it is a <strong style="color:#4a90d9">Noun</strong>, <strong style="color:#3a7a00">Verb</strong>, or <strong style="color:#f5a623">Adjective</strong>!</p>
+      <div class="identify-words" id="identifyWords"></div>
+      <div id="identifyFeedback" style="text-align:center;font-size:15px;font-weight:bold;margin-top:10px;min-height:24px"></div>
+      <button class="btn-next" id="nextToFIB" onclick="goToSection(3)" style="display:none">Next — Fill in the Blanks ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: FILL IN BLANKS -->
+  <div class="lesson-section" id="section3">
+    <div class="card">
+      <h3>✏️ Fill in the Blanks!</h3>
+      <p>Choose the correct word from the options to complete each sentence!</p>
+      <div id="fibContainer"></div>
+      <button class="btn-next" id="nextToQuiz" onclick="goToSection(4)" style="display:none">Next — Quiz ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4: QUIZ -->
+  <div class="lesson-section" id="section4">
+    <div class="card">
+      <h3>🧠 Grammar Quiz — 4 Questions!</h3>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: RESULT -->
+  <div class="lesson-section" id="section5">
+    <div class="card">
+      <div class="result-box">
+        <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+        <div class="result-title" id="resultTitle">Lesson Complete!</div>
+        <div class="result-score" id="resultScore">Quiz Score: 4/4</div>
+        <p class="result-msg" id="resultMsg">Amazing! You understand Grammar basics perfectly!</p>
+        <br/>
+        <a href="lesson-english-5.html" class="btn-home">← Lesson 5</a>
+        <a href="lesson-english-7.html" class="btn-success">Next Lesson →</a>
+        <a href="dashboard.html" class="btn-home">Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+  // IDENTIFY DATA
+  const identifyData = [
+    { word:'BOOK', context:'She reads a book every night.', type:'noun', reason:'BOOK is a noun — it is the name of a thing!' },
+    { word:'HAPPY', context:'The happy child laughed loudly.', type:'adj', reason:'HAPPY is an adjective — it describes the child!' },
+    { word:'JUMPS', context:'The frog jumps over the rock.', type:'verb', reason:'JUMPS is a verb — it tells us what the frog does!' },
+    { word:'LAHORE', context:'Ali lives in Lahore.', type:'noun', reason:'LAHORE is a noun — it is the name of a place!' },
+    { word:'BEAUTIFUL', context:'She has a beautiful dress.', type:'adj', reason:'BEAUTIFUL is an adjective — it describes the dress!' },
+    { word:'SLEEPS', context:'The baby sleeps quietly.', type:'verb', reason:'SLEEPS is a verb — it tells us what the baby does!' },
+  ];
+
+  let iwAnswered = 0;
+  let iwCorrect = 0;
+
+  function loadIdentify() {
+    const container = document.getElementById('identifyWords');
+    container.innerHTML = '';
+    identifyData.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'iw-card';
+      div.id = 'iw-' + idx;
+      div.innerHTML = `
+        <div class="iw-word">${item.word}</div>
+        <div class="iw-context">"${item.context}"</div>
+        <div class="iw-btns">
+          <button class="iw-btn iw-btn-noun" onclick="checkIdentify(${idx},'noun',this)">👤 Noun</button>
+          <button class="iw-btn iw-btn-verb" onclick="checkIdentify(${idx},'verb',this)">⚡ Verb</button>
+          <button class="iw-btn iw-btn-adj" onclick="checkIdentify(${idx},'adj',this)">🎨 Adjective</button>
+        </div>
+        <div class="iw-feedback" id="iwf-${idx}"></div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function checkIdentify(idx, answer, btn) {
+    const div = document.getElementById('iw-' + idx);
+    const btns = div.querySelectorAll('.iw-btn');
+    btns.forEach(b => b.disabled = true);
+    const fb = document.getElementById('iwf-' + idx);
+    const item = identifyData[idx];
+    if (answer === item.type) {
+      btn.classList.add('correct-' + item.type);
+      fb.style.color = '#7ed321';
+      fb.textContent = '✅ ' + item.reason;
+      iwCorrect++;
+    } else {
+      btn.classList.add('wrong');
+      fb.style.color = '#e74c3c';
+      fb.textContent = '❌ ' + item.reason;
+    }
+    iwAnswered++;
+    if (iwAnswered === identifyData.length) {
+      setTimeout(() => {
+        document.getElementById('identifyFeedback').textContent = `🎉 You got ${iwCorrect} out of ${identifyData.length} correct!`;
+        document.getElementById('nextToFIB').style.display = 'block';
+      }, 800);
+    }
+  }
+
+  // FILL IN BLANKS DATA
+  const fibData = [
+    { sentence:'The _____ cat sat on the mat.', blank:'_____', answer:'fluffy', options:['fluffy','runs','Karachi'], hint:'Choose an adjective (describing word)', type:'Adjective' },
+    { sentence:'Sara _____ to school every day.', blank:'_____', answer:'walks', options:['walks','tall','mango'], hint:'Choose a verb (action word)', type:'Verb' },
+    { sentence:'The _____ is very tall and green.', blank:'_____', answer:'tree', options:['tree','quickly','beautiful'], hint:'Choose a noun (naming word)', type:'Noun' },
+    { sentence:'He has a _____ dog named Bruno.', blank:'_____', answer:'big', options:['big','barks','garden'], hint:'Choose an adjective (describing word)', type:'Adjective' },
+  ];
+
+  let fibAnswered = 0;
+  let fibCorrect = 0;
+
+  function loadFIB() {
+    const container = document.getElementById('fibContainer');
+    container.innerHTML = '';
+    fibData.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'fib-card';
+      div.id = 'fib-' + idx;
+      const shuffled = [...item.options].sort(() => Math.random() - 0.5);
+      div.innerHTML = `
+        <div class="fib-sentence">${item.sentence.replace(item.blank, `<span id="fibDisplay-${idx}" style="color:#9b59b6;font-weight:bold;min-width:80px;display:inline-block;border-bottom:2px solid #9b59b6">_____</span>`)}</div>
+        <div style="font-size:13px;color:#888;margin-bottom:8px">💡 ${item.hint}</div>
+        <div class="fib-options" id="fibOptions-${idx}">
+          ${shuffled.map(o => `<button class="fib-option" onclick="selectFIB(${idx},'${o}',this)">${o}</button>`).join('')}
+        </div>
+        <button class="fib-check" onclick="checkFIB(${idx})">✅ Check</button>
+        <div class="fib-feedback" id="fibFb-${idx}"></div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  let fibSelections = {};
+
+  function selectFIB(idx, word, btn) {
+    const options = document.querySelectorAll(`#fibOptions-${idx} .fib-option`);
+    options.forEach(o => o.classList.remove('used'));
+    btn.classList.add('used');
+    fibSelections[idx] = word;
+    document.getElementById('fibDisplay-' + idx).textContent = word;
+  }
+
+  function checkFIB(idx) {
+    const fb = document.getElementById('fibFb-' + idx);
+    const selected = fibSelections[idx];
+    const item = fibData[idx];
+    const options = document.querySelectorAll(`#fibOptions-${idx} .fib-option`);
+    options.forEach(o => o.disabled = true);
+    document.querySelector(`#fib-${idx} .fib-check`).disabled = true;
+    if (!selected) { fb.style.color='#e74c3c'; fb.textContent='❌ Please select a word first!'; return; }
+    if (selected === item.answer) {
+      fb.style.color = '#7ed321';
+      fb.textContent = `✅ Correct! "${item.answer}" is the right ${item.type}!`;
+      document.getElementById('fibDisplay-' + idx).style.color = '#7ed321';
+      fibCorrect++;
+    } else {
+      fb.style.color = '#e74c3c';
+      fb.textContent = `❌ Not quite! The correct answer is "${item.answer}" (${item.type}).`;
+      document.getElementById('fibDisplay-' + idx).textContent = item.answer;
+      document.getElementById('fibDisplay-' + idx).style.color = '#7ed321';
+    }
+    fibAnswered++;
+    if (fibAnswered === fibData.length) {
+      setTimeout(() => {
+        document.getElementById('nextToQuiz').style.display = 'block';
+      }, 800);
+    }
+  }
+
+  // QUIZ DATA
+  const quizData = [
+    { q:'Which of these is a NOUN?', options:['Quickly','Beautiful','Mountain','Runs'], answer:2 },
+    { q:'Which of these is a VERB?', options:['Happy','Elephant','Blue','Swims'], answer:3 },
+    { q:'Which of these is an ADJECTIVE?', options:['Dances','Tiny','Pakistan','Eats'], answer:1 },
+    { q:'In "The old man walks slowly" — what is the adjective?', options:['man','walks','old','slowly'], answer:2 },
+  ];
+  let quizIdx = 0;
+  let quizScore = 0;
+
+  function loadQuiz() {
+    const q = quizData[quizIdx];
+    document.getElementById('quizContainer').innerHTML = `
+      <div class="quiz-question">Q${quizIdx+1}: ${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((o,i) => `<button class="quiz-btn" onclick="checkQuiz(${i},${q.answer},this)">${o}</button>`).join('')}
+      </div>
+      <div style="text-align:center;color:#aaa;font-size:13px">Question ${quizIdx+1} of ${quizData.length}</div>
+    `;
+  }
+
+  function checkQuiz(selected, correct, btn) {
+    const btns = document.querySelectorAll('.quiz-btn');
+    btns.forEach(b => b.disabled = true);
+    if (selected === correct) { btn.classList.add('correct'); quizScore++; }
+    else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+    setTimeout(() => {
+      quizIdx++;
+      if (quizIdx < quizData.length) { loadQuiz(); }
+      else { showResult(); }
+    }, 1200);
+  }
+
+  function showResult() {
+    goToSection(5);
+    const pct = quizScore / quizData.length;
+    let stars, title, msg;
+    if (pct === 1) { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You are a grammar champion! You know your Nouns, Verbs and Adjectives perfectly!'; }
+    else if (pct >= 0.5) { stars='⭐⭐'; title='Well Done! 😊'; msg='Great work! You have a good understanding of grammar. Keep practising!'; }
+    else { stars='⭐'; title='Good Try! 💪'; msg='Grammar takes practice! Review the lesson and try the quiz again!'; }
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = `Quiz Score: ${quizScore}/${quizData.length}`;
+    document.getElementById('resultMsg').textContent = msg;
+  }
+
+  // NAVIGATION
+  function goToSection(n) {
+    document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
+    for (let i=1; i<=5; i++) {
+      const step = document.getElementById('step'+i);
+      if (i < n) { step.className='step done'; step.querySelector('.step-circle').textContent='✓'; }
+      else if (i===n) { step.className='step active'; step.querySelector('.step-circle').textContent=i; }
+      else { step.className='step'; step.querySelector('.step-circle').textContent=i; }
+      if (i < 5) {
+        const line = document.getElementById('line'+i);
+        if (line) line.className = i < n ? 'step-line done' : 'step-line';
+      }
+    }
+    if (n===2) { iwAnswered=0; iwCorrect=0; loadIdentify(); }
+    if (n===3) { fibAnswered=0; fibCorrect=0; fibSelections={}; loadFIB(); }
+    if (n===4) { quizIdx=0; quizScore=0; loadQuiz(); }
+    window.scrollTo(0,0);
+  }
+</script>
+</body>
+</html>
