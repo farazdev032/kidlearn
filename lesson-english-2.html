@@ -216,6 +216,7 @@
   </div>
 
   <!-- SECTION 4: QUIZ -->
+
   <div class="lesson-section" id="section4">
     <div class="card">
       <h3>🧠 Mini Quiz — 3 Questions!</h3>
@@ -254,6 +255,7 @@
     const card = document.createElement('div');
     card.className = 'phonics-card';
     card.innerHTML = `<div class="ph-letter">${p.l}</div><div class="ph-sound">${p.s}</div><div class="ph-word">${p.w}</div>`;
+   card.onclick = () => speak(p.l + ' says ' + p.s.replace(/"/g,'') + '. Example: ' + p.w.replace(/[^\w\s]/gu, '').trim());
     grid.appendChild(card);
   });
 
@@ -392,5 +394,6 @@
     window.scrollTo(0,0);
   }
 </script>
+<script src="audio.js"></script>
 </body>
 </html>
