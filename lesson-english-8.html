@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - English Lesson 8: Story Writing</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #4a90d9; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .lesson-hero { background: linear-gradient(135deg, #9b59b6, #4a90d9); color: white; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .lesson-hero h2 { font-size: 28px; margin-bottom: 8px; }
+    .lesson-hero p { font-size: 15px; opacity: 0.9; }
+    .lesson-meta { display: flex; gap: 15px; margin-top: 12px; }
+    .meta-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .hero-icon { font-size: 80px; }
+    .lesson-container { max-width: 800px; margin: 30px auto; padding: 0 20px 50px; }
+    .lesson-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #aaa; }
+    .step.active { color: #9b59b6; font-weight: bold; }
+    .step.done { color: #7ed321; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #aaa; }
+    .step.active .step-circle { background: #9b59b6; color: white; }
+    .step.done .step-circle { background: #7ed321; color: white; }
+    .step-line { flex: 1; height: 2px; background: #e0e0e0; }
+    .step-line.done { background: #7ed321; }
+    .lesson-section { display: none; }
+    .lesson-section.active { display: block; }
+    .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+    .highlight { color: #9b59b6; font-weight: bold; }
+    .tip-box { background: #f5e8ff; border-left: 4px solid #9b59b6; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
+
+    /* STORY PARTS */
+    .story-parts { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+    .story-part { border-radius: 14px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 15px; }
+    .sp-icon { font-size: 28px; flex-shrink: 0; }
+    .sp-content h4 { font-size: 16px; font-weight: bold; margin-bottom: 6px; }
+    .sp-content p { font-size: 14px; margin: 0; line-height: 1.6; }
+    .sp-beginning { background: #e8f4ff; }
+    .sp-beginning h4 { color: #4a90d9; }
+    .sp-middle { background: #e0ffe0; }
+    .sp-middle h4 { color: #3a7a00; }
+    .sp-end { background: #fff5e0; }
+    .sp-end h4 { color: #f5a623; }
+
+    /* STORY ELEMENTS */
+    .elements-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0; }
+    .element-card { border-radius: 12px; padding: 15px; }
+    .element-card h4 { font-size: 15px; font-weight: bold; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .element-card p { font-size: 13px; color: #555; margin: 0; }
+    .ec1 { background: #e8f4ff; }
+    .ec1 h4 { color: #4a90d9; }
+    .ec2 { background: #e0ffe0; }
+    .ec2 h4 { color: #3a7a00; }
+    .ec3 { background: #fff5e0; }
+    .ec3 h4 { color: #f5a623; }
+    .ec4 { background: #f5e8ff; }
+    .ec4 h4 { color: #9b59b6; }
+
+    /* STORY EXAMPLE */
+    .story-example { background: #f8f8ff; border: 2px solid #9b59b6; border-radius: 16px; padding: 25px; margin: 20px 0; }
+    .story-example h4 { font-size: 18px; font-weight: bold; color: #9b59b6; margin-bottom: 15px; text-align: center; }
+    .story-para { margin-bottom: 12px; font-size: 15px; color: #333; line-height: 1.8; }
+    .story-label { display: inline-block; font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 10px; margin-bottom: 5px; }
+    .sl-b { background: #e8f4ff; color: #4a90d9; }
+    .sl-m { background: #e0ffe0; color: #3a7a00; }
+    .sl-e { background: #fff5e0; color: #f5a623; }
+
+    /* PLAN ACTIVITY */
+    .plan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0; }
+    .plan-card { border-radius: 12px; padding: 15px; }
+    .plan-card h4 { font-size: 14px; font-weight: bold; margin-bottom: 8px; }
+    .plan-input { width: 100%; border: 2px solid #e0e0e0; border-radius: 8px; padding: 8px 10px; font-size: 14px; outline: none; font-family: Arial; }
+    .plan-input:focus { border-color: #9b59b6; }
+    .pc1 { background: #e8f4ff; }
+    .pc1 h4 { color: #4a90d9; }
+    .pc1 .plan-input { border-color: #4a90d9; }
+    .pc2 { background: #e0ffe0; }
+    .pc2 h4 { color: #3a7a00; }
+    .pc2 .plan-input { border-color: #7ed321; }
+    .pc3 { background: #fff5e0; }
+    .pc3 h4 { color: #f5a623; }
+    .pc3 .plan-input { border-color: #f5a623; }
+    .pc4 { background: #f5e8ff; }
+    .pc4 h4 { color: #9b59b6; }
+    .pc4 .plan-input { border-color: #9b59b6; }
+
+    /* WRITE STORY */
+    .story-textarea { width: 100%; height: 250px; border: 2px solid #9b59b6; border-radius: 12px; padding: 15px; font-size: 15px; font-family: Arial; resize: vertical; outline: none; line-height: 1.8; color: #333; }
+    .story-textarea:focus { border-color: #4a90d9; }
+    .word-count { font-size: 13px; color: #888; margin-top: 8px; text-align: right; }
+    .story-feedback { border-radius: 12px; padding: 15px; margin-top: 15px; display: none; }
+    .story-feedback h4 { margin-bottom: 8px; font-size: 16px; }
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+    .check-item { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .check-item.pass { color: #3a7a00; }
+    .check-item.fail { color: #e74c3c; }
+
+    /* QUIZ */
+    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; }
+    .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+    .quiz-btn { padding: 15px; background: #f0f8ff; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 15px; cursor: pointer; transition: all 0.2s; color: #333; text-align: left; }
+    .quiz-btn:hover { border-color: #9b59b6; background: #f5e8ff; }
+    .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+
+    /* RESULT */
+    .result-box { text-align: center; padding: 20px; }
+    .result-stars { font-size: 50px; margin-bottom: 15px; }
+    .result-title { font-size: 26px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .result-msg { font-size: 15px; color: #666; margin-bottom: 15px; }
+    .result-score { display: inline-block; background: #f5e8ff; color: #9b59b6; font-size: 18px; font-weight: bold; padding: 8px 24px; border-radius: 20px; margin-bottom: 20px; }
+    .completion-badge { background: linear-gradient(135deg, #9b59b6, #4a90d9); color: white; border-radius: 20px; padding: 20px; margin: 20px 0; }
+    .completion-badge h3 { font-size: 22px; margin-bottom: 8px; }
+    .completion-badge p { font-size: 14px; opacity: 0.9; }
+    .btn-next { display: block; width: 100%; padding: 16px; background: #9b59b6; color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-submit { display: block; width: 100%; padding: 14px; background: #7ed321; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-plan { display: block; width: 100%; padding: 14px; background: #9b59b6; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
+    .btn-home { display: inline-block; padding: 14px 30px; background: #9b59b6; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="english.html">English</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
+
+<div class="lesson-hero">
+  <div>
+    <h2>📖 English — Lesson 8</h2>
+    <p>Story Writing — Beginning, Middle and End!</p>
+    <div class="lesson-meta">
+      <span class="meta-badge">🏆 Builders</span>
+      <span class="meta-badge">⏱ 25 minutes</span>
+      <span class="meta-badge">🎯 Ages 9–11</span>
+    </div>
+  </div>
+  <div class="hero-icon">📚</div>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-progress">
+    <div class="step active" id="step1"><div class="step-circle">1</div> Learn</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2"><div class="step-circle">2</div> Read Story</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3"><div class="step-circle">3</div> Plan</div>
+    <div class="step-line" id="line3"></div>
+    <div class="step" id="step4"><div class="step-circle">4</div> Write</div>
+    <div class="step-line" id="line4"></div>
+    <div class="step" id="step5"><div class="step-circle">5</div> Quiz</div>
+    <div class="step-line" id="line5"></div>
+    <div class="step" id="step6"><div class="step-circle">6</div> Done!</div>
+  </div>
+
+  <!-- SECTION 1: LEARN -->
+  <div class="lesson-section active" id="section1">
+    <div class="card">
+      <h3>📚 What is a Story?</h3>
+      <p>A <span class="highlight">story</span> is a piece of writing that tells about events happening to characters. Every good story has a <span class="highlight">beginning</span>, a <span class="highlight">middle</span>, and an <span class="highlight">end</span>!</p>
+      <div class="tip-box">💡 <strong>The Golden Rule of Story Writing:</strong> Every story needs a CHARACTER who has a PROBLEM and finds a SOLUTION. That is what makes a story exciting to read!</div>
+    </div>
+
+    <div class="card">
+      <h3>🏗️ The 3 Parts of a Story</h3>
+      <div class="story-parts">
+        <div class="story-part sp-beginning">
+          <div class="sp-icon">🌅</div>
+          <div class="sp-content">
+            <h4>Beginning — Set the Scene</h4>
+            <p>Introduce your characters and setting. Tell the reader WHO is in the story, WHERE it happens, and WHEN. Make it interesting so the reader wants to keep reading!</p>
+          </div>
+        </div>
+        <div class="story-part sp-middle">
+          <div class="sp-icon">⚡</div>
+          <div class="sp-content">
+            <h4>Middle — The Problem</h4>
+            <p>This is where something exciting happens! The character faces a problem or challenge. This is the most important part — it keeps the reader interested!</p>
+          </div>
+        </div>
+        <div class="story-part sp-end">
+          <div class="sp-icon">🌟</div>
+          <div class="sp-content">
+            <h4>End — The Solution</h4>
+            <p>The character solves the problem. The story comes to a satisfying close. The reader should feel happy or satisfied at the end!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎭 The 4 Elements of a Great Story</h3>
+      <div class="elements-grid">
+        <div class="element-card ec1">
+          <h4>👤 Characters</h4>
+          <p>The people or animals in your story. Give them names and describe what they look like!</p>
+        </div>
+        <div class="element-card ec2">
+          <h4>🏠 Setting</h4>
+          <p>WHERE and WHEN the story happens. A forest, a city, a school — be specific!</p>
+        </div>
+        <div class="element-card ec3">
+          <h4>⚠️ Problem</h4>
+          <p>Something goes wrong or a challenge appears. Without a problem, there is no story!</p>
+        </div>
+        <div class="element-card ec4">
+          <h4>✅ Solution</h4>
+          <p>How the character fixes the problem. Make it clever or surprising!</p>
+        </div>
+      </div>
+    </div>
+    <button class="btn-next" onclick="goToSection(2)">Next — Read a Story ➡️</button>
+  </div>
+
+  <!-- SECTION 2: READ STORY -->
+  <div class="lesson-section" id="section2">
+    <div class="card">
+      <h3>📖 Read this Story carefully!</h3>
+      <p>Notice how it has a clear beginning, middle and end!</p>
+      <div class="story-example">
+        <h4>🦁 The Lost Lion Cub</h4>
+        <div class="story-para">
+          <span class="story-label sl-b">🔵 Beginning</span><br>
+          Once upon a time, in the heart of the African savannah, there lived a young lion cub named Simba. He had golden fur and bright curious eyes. One sunny morning, Simba wandered too far from his family while chasing a butterfly.
+        </div>
+        <div class="story-para">
+          <span class="story-label sl-m">🟢 Middle</span><br>
+          Suddenly, Simba realised he was lost. The tall grass looked the same in every direction. He called out for his mother but heard no reply. A kind old elephant named Tembo heard his cries. "Do not worry, little one," said Tembo gently. "I know this land well. I will help you find your family."
+        </div>
+        <div class="story-para">
+          <span class="story-label sl-e">🟡 End</span><br>
+          Tembo lifted his trunk and let out a great trumpet sound. Soon, Simba's mother came running through the grass. She nuzzled her cub lovingly. Simba thanked Tembo with a happy roar. From that day on, Simba never wandered too far from home — but he always remembered his kind friend Tembo.
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px">
+        <div style="background:#e8f4ff;border-radius:12px;padding:12px">
+          <div style="font-weight:bold;color:#4a90d9;margin-bottom:4px">👤 Characters</div>
+          <div style="font-size:14px;color:#555">Simba (lion cub), Tembo (elephant), Simba's mother</div>
+        </div>
+        <div style="background:#e0ffe0;border-radius:12px;padding:12px">
+          <div style="font-weight:bold;color:#3a7a00;margin-bottom:4px">🏠 Setting</div>
+          <div style="font-size:14px;color:#555">African savannah, sunny morning</div>
+        </div>
+        <div style="background:#fff5e0;border-radius:12px;padding:12px">
+          <div style="font-weight:bold;color:#f5a623;margin-bottom:4px">⚠️ Problem</div>
+          <div style="font-size:14px;color:#555">Simba gets lost chasing a butterfly</div>
+        </div>
+        <div style="background:#f5e8ff;border-radius:12px;padding:12px">
+          <div style="font-weight:bold;color:#9b59b6;margin-bottom:4px">✅ Solution</div>
+          <div style="font-size:14px;color:#555">Tembo helps find Simba's mother</div>
+        </div>
+      </div>
+      <button class="btn-next" style="margin-top:20px" onclick="goToSection(3)">Next — Plan Your Story ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: PLAN -->
+  <div class="lesson-section" id="section3">
+    <div class="card">
+      <h3>📋 Plan Your Story!</h3>
+      <p>Good writers always plan before they write! Fill in your story plan below.</p>
+      <div class="plan-grid">
+        <div class="plan-card pc1">
+          <h4>👤 Main Character</h4>
+          <input class="plan-input" id="planChar" placeholder="e.g. A girl named Sara..." />
+        </div>
+        <div class="plan-card pc2">
+          <h4>🏠 Setting</h4>
+          <input class="plan-input" id="planSetting" placeholder="e.g. A forest near a river..." />
+        </div>
+        <div class="plan-card pc3">
+          <h4>⚠️ Problem</h4>
+          <input class="plan-input" id="planProblem" placeholder="e.g. She gets lost..." />
+        </div>
+        <div class="plan-card pc4">
+          <h4>✅ Solution</h4>
+          <input class="plan-input" id="planSolution" placeholder="e.g. A kind bird shows the way..." />
+        </div>
+      </div>
+      <div style="background:#f5e8ff;border-radius:12px;padding:15px;margin-top:10px">
+        <div style="font-weight:bold;color:#9b59b6;margin-bottom:8px">💡 Story Starter Ideas:</div>
+        <div style="font-size:14px;color:#555;display:flex;flex-direction:column;gap:6px">
+          <div>🐠 A little fish who dreams of seeing the ocean</div>
+          <div>🧙 A young wizard who loses their magic wand</div>
+          <div>👦 A boy who finds a mysterious map</div>
+          <div>🐦 A bird who is afraid to fly</div>
+        </div>
+      </div>
+      <button class="btn-plan" onclick="goToSection(4)">Next — Write Your Story ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4: WRITE -->
+  <div class="lesson-section" id="section4">
+    <div class="card">
+      <h3>✍️ Write Your Story!</h3>
+      <p>Use your plan to write a complete story with a beginning, middle and end!</p>
+      <div id="storyPlanSummary" style="background:#f5e8ff;border-radius:12px;padding:15px;margin-bottom:15px;font-size:14px;color:#555"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+        <span style="background:#e8f4ff;color:#4a90d9;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold">🔵 Beginning: Set the scene</span>
+        <span style="background:#e0ffe0;color:#3a7a00;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold">🟢 Middle: The problem</span>
+        <span style="background:#fff5e0;color:#f5a623;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold">🟡 End: The solution</span>
+      </div>
+      <textarea class="story-textarea" id="storyTextarea" placeholder="Once upon a time..." oninput="updateStoryCount()"></textarea>
+      <div class="word-count" id="storyWordCount">Words: 0 | Aim for at least 80 words</div>
+      <div class="story-feedback" id="storyFeedback">
+        <h4>✅ Story submitted!</h4>
+        <div class="checklist" id="storyChecklist"></div>
+      </div>
+      <button class="btn-submit" onclick="checkStory()">✅ Submit My Story</button>
+      <button class="btn-next" id="nextToQuiz" onclick="goToSection(5)" style="display:none;margin-top:10px">Next — Final Quiz ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 5: QUIZ -->
+  <div class="lesson-section" id="section5">
+    <div class="card">
+      <h3>🧠 Story Writing Quiz — 4 Questions!</h3>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: RESULT -->
+  <div class="lesson-section" id="section6">
+    <div class="card">
+      <div class="result-box">
+        <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+        <div class="result-title" id="resultTitle">Lesson Complete!</div>
+        <div class="result-score" id="resultScore">Quiz Score: 4/4</div>
+        <p class="result-msg" id="resultMsg">Amazing! You are now a story writer!</p>
+        <div class="completion-badge">
+          <h3>🎓 English Course Complete!</h3>
+          <p>Congratulations! You have finished all 8 English lessons. You have learned the Alphabet, Phonics, CVC Words, Sentences, Reading, Grammar, Paragraphs and Story Writing!</p>
+        </div>
+        <a href="lesson-english-7.html" class="btn-home">← Lesson 7</a>
+        <a href="dashboard.html" class="btn-success">🏠 Back to Dashboard</a>
+        <a href="english.html" class="btn-home">📖 English Home</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+  // STORY PLAN SUMMARY
+  function showPlanSummary() {
+    const char = document.getElementById('planChar').value || 'a character';
+    const setting = document.getElementById('planSetting').value || 'somewhere';
+    const problem = document.getElementById('planProblem').value || 'a problem';
+    const solution = document.getElementById('planSolution').value || 'a solution';
+    document.getElementById('storyPlanSummary').innerHTML = `
+      <strong style="color:#9b59b6">📋 Your Story Plan:</strong><br>
+      👤 Character: ${char} &nbsp;|&nbsp; 🏠 Setting: ${setting}<br>
+      ⚠️ Problem: ${problem} &nbsp;|&nbsp; ✅ Solution: ${solution}
+    `;
+  }
+
+  // WORD COUNT
+  function updateStoryCount() {
+    const text = document.getElementById('storyTextarea').value.trim();
+    const words = text === '' ? 0 : text.split(/\s+/).length;
+    const wc = document.getElementById('storyWordCount');
+    wc.textContent = `Words: ${words} | Aim for at least 80 words`;
+    wc.style.color = words >= 80 ? '#7ed321' : '#888';
+  }
+
+  // CHECK STORY
+  function checkStory() {
+    const text = document.getElementById('storyTextarea').value.trim();
+    const words = text === '' ? 0 : text.split(/\s+/).length;
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+    const hasCapital = text.length > 0 && text[0] === text[0].toUpperCase();
+    const hasPunctuation = /[.!?]$/.test(text.trim());
+    const hasEnoughWords = words >= 80;
+    const hasEnoughSentences = sentences >= 6;
+    const hasOnce = text.toLowerCase().includes('once') || text.toLowerCase().includes('one day') || text.toLowerCase().includes('there was');
+
+    const checks = [
+      { label:'Starts with a capital letter', pass: hasCapital },
+      { label:'Ends with punctuation (. ! ?)', pass: hasPunctuation },
+      { label:'Has at least 80 words', pass: hasEnoughWords },
+      { label:'Has at least 6 sentences', pass: hasEnoughSentences },
+      { label:'Has a story opening', pass: hasOnce || words > 30 },
+    ];
+
+    const fb = document.getElementById('storyFeedback');
+    const checklist = document.getElementById('storyChecklist');
+    fb.style.display = 'block';
+    checklist.innerHTML = checks.map(c =>
+      `<div class="check-item ${c.pass ? 'pass' : 'fail'}">${c.pass ? '✅' : '❌'} ${c.label}</div>`
+    ).join('');
+
+    const passed = checks.filter(c => c.pass).length;
+    if (passed >= 4) {
+      fb.style.background = '#e0ffe0';
+      fb.querySelector('h4').style.color = '#3a7a00';
+      fb.querySelector('h4').textContent = '🌟 Excellent story! You are a real writer!';
+    } else if (passed >= 2) {
+      fb.style.background = '#fff5e0';
+      fb.querySelector('h4').style.color = '#f5a623';
+      fb.querySelector('h4').textContent = '👍 Good start! Keep writing and improving!';
+    } else {
+      fb.style.background = '#ffe0e0';
+      fb.querySelector('h4').style.color = '#e74c3c';
+      fb.querySelector('h4').textContent = '💪 Keep going! Try to write more sentences!';
+    }
+    document.getElementById('nextToQuiz').style.display = 'block';
+  }
+
+  // QUIZ DATA
+  const quizData = [
+    { q:'What are the 3 parts of a story?', options:['Introduction, Body, Conclusion','Beginning, Middle, End','Opening, Details, Closing','Start, Action, Finish'], answer:1 },
+    { q:'What is the SETTING of a story?', options:['The main character','The problem in the story','Where and when the story happens','How the story ends'], answer:2 },
+    { q:'In "The Lost Lion Cub" — what was Simba\'s PROBLEM?', options:['He was hungry','He got lost','He lost his toy','He could not roar'], answer:1 },
+    { q:'What makes a story EXCITING to read?', options:['Very long sentences','A character with a problem to solve','Lots of adjectives','A very short ending'], answer:1 },
+  ];
+  let quizIdx = 0;
+  let quizScore = 0;
+
+  function loadQuiz() {
+    const q = quizData[quizIdx];
+    document.getElementById('quizContainer').innerHTML = `
+      <div class="quiz-question">Q${quizIdx+1}: ${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((o,i) => `<button class="quiz-btn" onclick="checkQuiz(${i},${q.answer},this)">${o}</button>`).join('')}
+      </div>
+      <div style="text-align:center;color:#aaa;font-size:13px">Question ${quizIdx+1} of ${quizData.length}</div>
+    `;
+  }
+
+  function checkQuiz(selected, correct, btn) {
+    const btns = document.querySelectorAll('.quiz-btn');
+    btns.forEach(b => b.disabled = true);
+    if (selected === correct) { btn.classList.add('correct'); quizScore++; }
+    else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+    setTimeout(() => {
+      quizIdx++;
+      if (quizIdx < quizData.length) { loadQuiz(); }
+      else { showResult(); }
+    }, 1200);
+  }
+
+  function showResult() {
+    goToSection(6);
+    const pct = quizScore / quizData.length;
+    let stars, title, msg;
+    if (pct === 1) { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You are a master story writer! You have completed the entire English course!'; }
+    else if (pct >= 0.5) { stars='⭐⭐'; title='Well Done! 😊'; msg='Great work! You understand story writing well. Keep writing stories every day!'; }
+    else { stars='⭐'; title='Good Try! 💪'; msg='Story writing takes lots of practice! Keep reading and writing and you will improve!'; }
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = `Quiz Score: ${quizScore}/${quizData.length}`;
+    document.getElementById('resultMsg').textContent = msg;
+  }
+
+  // NAVIGATION
+  function goToSection(n) {
+    document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
+    for (let i=1; i<=6; i++) {
+      const step = document.getElementById('step'+i);
+      if (!step) continue;
+      if (i < n) { step.className='step done'; step.querySelector('.step-circle').textContent='✓'; }
+      else if (i===n) { step.className='step active'; step.querySelector('.step-circle').textContent=i; }
+      else { step.className='step'; step.querySelector('.step-circle').textContent=i; }
+      if (i < 6) {
+        const line = document.getElementById('line'+i);
+        if (line) line.className = i < n ? 'step-line done' : 'step-line';
+      }
+    }
+    if (n===4) showPlanSummary();
+    if (n===5) { quizIdx=0; quizScore=0; loadQuiz(); }
+    window.scrollTo(0,0);
+  }
+</script>
+</body>
+</html>
