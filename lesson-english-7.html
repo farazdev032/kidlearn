@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - English Lesson 7: Writing a Paragraph</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #4a90d9; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .lesson-hero { background: linear-gradient(135deg, #9b59b6, #4a90d9); color: white; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .lesson-hero h2 { font-size: 28px; margin-bottom: 8px; }
+    .lesson-hero p { font-size: 15px; opacity: 0.9; }
+    .lesson-meta { display: flex; gap: 15px; margin-top: 12px; }
+    .meta-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .hero-icon { font-size: 80px; }
+    .lesson-container { max-width: 800px; margin: 30px auto; padding: 0 20px 50px; }
+    .lesson-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #aaa; }
+    .step.active { color: #9b59b6; font-weight: bold; }
+    .step.done { color: #7ed321; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #aaa; }
+    .step.active .step-circle { background: #9b59b6; color: white; }
+    .step.done .step-circle { background: #7ed321; color: white; }
+    .step-line { flex: 1; height: 2px; background: #e0e0e0; }
+    .step-line.done { background: #7ed321; }
+    .lesson-section { display: none; }
+    .lesson-section.active { display: block; }
+    .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+    .highlight { color: #9b59b6; font-weight: bold; }
+    .tip-box { background: #f5e8ff; border-left: 4px solid #9b59b6; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
+
+    /* PARAGRAPH STRUCTURE */
+    .para-structure { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+    .para-part { border-radius: 14px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 15px; }
+    .pp-num { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; flex-shrink: 0; color: white; }
+    .pp-content h4 { font-size: 16px; font-weight: bold; margin-bottom: 4px; }
+    .pp-content p { font-size: 14px; margin: 0; }
+    .pp-topic { background: #e8f4ff; }
+    .pp-topic .pp-num { background: #4a90d9; }
+    .pp-topic h4 { color: #4a90d9; }
+    .pp-support { background: #e0ffe0; }
+    .pp-support .pp-num { background: #7ed321; }
+    .pp-support h4 { color: #3a7a00; }
+    .pp-conclude { background: #fff5e0; }
+    .pp-conclude .pp-num { background: #f5a623; }
+    .pp-conclude h4 { color: #f5a623; }
+
+    /* PARAGRAPH EXAMPLE */
+    .para-example { background: #f8f8ff; border: 2px solid #9b59b6; border-radius: 16px; padding: 25px; margin: 20px 0; line-height: 2; font-size: 16px; color: #333; }
+    .ts { background: #e8f4ff; padding: 2px 6px; border-radius: 6px; color: #4a90d9; font-weight: bold; }
+    .ss { background: #e0ffe0; padding: 2px 6px; border-radius: 6px; color: #3a7a00; }
+    .cs { background: #fff5e0; padding: 2px 6px; border-radius: 6px; color: #f5a623; font-weight: bold; }
+
+    /* ANALYSE ACTIVITY */
+    .analyse-para { background: #f8f8ff; border: 2px solid #9b59b6; border-radius: 14px; padding: 20px; margin-bottom: 20px; font-size: 16px; line-height: 2; color: #333; }
+    .analyse-questions { display: flex; flex-direction: column; gap: 15px; }
+    .aq-card { background: #f0f8ff; border-radius: 12px; padding: 16px; }
+    .aq-question { font-size: 15px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .aq-options { display: flex; flex-direction: column; gap: 8px; }
+    .aq-btn { padding: 10px 14px; background: white; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; cursor: pointer; text-align: left; color: #333; transition: all 0.2s; }
+    .aq-btn:hover { border-color: #9b59b6; background: #f5e8ff; }
+    .aq-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .aq-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+    .aq-feedback { font-size: 13px; font-weight: bold; margin-top: 8px; min-height: 20px; }
+
+    /* WRITE PARAGRAPH */
+    .write-topic { background: #f5e8ff; border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; }
+    .write-topic h4 { color: #9b59b6; font-size: 16px; margin-bottom: 6px; }
+    .write-topic p { font-size: 14px; color: #555; margin: 0; }
+    .write-guides { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+    .write-guide { border-radius: 10px; padding: 12px; text-align: center; font-size: 13px; }
+    .wg1 { background: #e8f4ff; color: #4a90d9; }
+    .wg2 { background: #e0ffe0; color: #3a7a00; }
+    .wg3 { background: #fff5e0; color: #f5a623; }
+    .write-guide strong { display: block; margin-bottom: 4px; font-size: 14px; }
+    .para-textarea { width: 100%; height: 180px; border: 2px solid #9b59b6; border-radius: 12px; padding: 15px; font-size: 15px; font-family: Arial, sans-serif; resize: vertical; outline: none; line-height: 1.7; color: #333; }
+    .para-textarea:focus { border-color: #4a90d9; }
+    .word-count { font-size: 13px; color: #888; margin-top: 8px; text-align: right; }
+    .write-feedback { background: #e0ffe0; border-radius: 12px; padding: 15px; margin-top: 15px; display: none; }
+    .write-feedback h4 { color: #3a7a00; margin-bottom: 8px; }
+    .write-feedback p { font-size: 14px; color: #555; margin: 0; }
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+    .check-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #555; }
+    .check-item.pass { color: #3a7a00; }
+    .check-item.fail { color: #e74c3c; }
+
+    /* QUIZ */
+    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; }
+    .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+    .quiz-btn { padding: 15px; background: #f0f8ff; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 15px; cursor: pointer; transition: all 0.2s; color: #333; text-align: left; }
+    .quiz-btn:hover { border-color: #9b59b6; background: #f5e8ff; }
+    .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+
+    /* RESULT */
+    .result-box { text-align: center; padding: 20px; }
+    .result-stars { font-size: 50px; margin-bottom: 15px; }
+    .result-title { font-size: 26px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .result-msg { font-size: 15px; color: #666; margin-bottom: 25px; }
+    .result-score { display: inline-block; background: #f5e8ff; color: #9b59b6; font-size: 18px; font-weight: bold; padding: 8px 24px; border-radius: 20px; margin-bottom: 25px; }
+    .btn-next { display: block; width: 100%; padding: 16px; background: #9b59b6; color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-next:hover { background: #7d3f9e; }
+    .btn-submit { display: block; width: 100%; padding: 14px; background: #7ed321; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
+    .btn-home { display: inline-block; padding: 14px 30px; background: #9b59b6; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="english.html">English</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
+
+<div class="lesson-hero">
+  <div>
+    <h2>📖 English — Lesson 7</h2>
+    <p>Writing a Paragraph — Structure and Style!</p>
+    <div class="lesson-meta">
+      <span class="meta-badge">🏆 Builders</span>
+      <span class="meta-badge">⏱ 20 minutes</span>
+      <span class="meta-badge">🎯 Ages 9–11</span>
+    </div>
+  </div>
+  <div class="hero-icon">✍️</div>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-progress">
+    <div class="step active" id="step1"><div class="step-circle">1</div> Learn</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2"><div class="step-circle">2</div> Analyse</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3"><div class="step-circle">3</div> Write</div>
+    <div class="step-line" id="line3"></div>
+    <div class="step" id="step4"><div class="step-circle">4</div> Quiz</div>
+    <div class="step-line" id="line4"></div>
+    <div class="step" id="step5"><div class="step-circle">5</div> Done!</div>
+  </div>
+
+  <!-- SECTION 1: LEARN -->
+  <div class="lesson-section active" id="section1">
+    <div class="card">
+      <h3>✍️ What is a Paragraph?</h3>
+      <p>A <span class="highlight">paragraph</span> is a group of sentences all about <span class="highlight">one main idea</span>. A good paragraph has three parts — a beginning, a middle, and an end!</p>
+      <div class="tip-box">💡 <strong>Remember:</strong> Every paragraph starts with an indent (a small space) or a new line. All sentences in a paragraph must be about the SAME topic!</div>
+    </div>
+
+    <div class="card">
+      <h3>🏗️ The 3 Parts of a Paragraph</h3>
+      <div class="para-structure">
+        <div class="para-part pp-topic">
+          <div class="pp-num">1</div>
+          <div class="pp-content">
+            <h4>Topic Sentence</h4>
+            <p>The FIRST sentence. It tells the reader what the whole paragraph is about. It is the most important sentence!</p>
+          </div>
+        </div>
+        <div class="para-part pp-support">
+          <div class="pp-num">2</div>
+          <div class="pp-content">
+            <h4>Supporting Sentences</h4>
+            <p>The MIDDLE sentences (2-4 sentences). They give details, examples, and reasons to support the topic sentence.</p>
+          </div>
+        </div>
+        <div class="para-part pp-conclude">
+          <div class="pp-num">3</div>
+          <div class="pp-content">
+            <h4>Concluding Sentence</h4>
+            <p>The LAST sentence. It wraps up the paragraph and reminds the reader of the main idea.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📚 Example Paragraph — See the parts!</h3>
+      <div class="para-example">
+        <span class="ts">Dogs make wonderful pets.</span>
+        <span class="ss"> They are loyal and always happy to see their owners.</span>
+        <span class="ss"> Dogs can be trained to follow commands and even do tricks.</span>
+        <span class="ss"> They also help keep their owners active by going on walks every day.</span>
+        <span class="cs"> For all these reasons, dogs are truly a man's best friend.</span>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <span style="background:#e8f4ff;color:#4a90d9;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:bold">🔵 Blue = Topic Sentence</span>
+        <span style="background:#e0ffe0;color:#3a7a00;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:bold">🟢 Green = Supporting Sentences</span>
+        <span style="background:#fff5e0;color:#f5a623;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:bold">🟡 Yellow = Concluding Sentence</span>
+      </div>
+    </div>
+    <button class="btn-next" onclick="goToSection(2)">Next — Analyse a Paragraph ➡️</button>
+  </div>
+
+  <!-- SECTION 2: ANALYSE -->
+  <div class="lesson-section" id="section2">
+    <div class="card">
+      <h3>🔍 Analyse this Paragraph!</h3>
+      <p>Read the paragraph carefully, then answer the questions below!</p>
+      <div class="analyse-para">
+        "My school is a wonderful place to learn. It has large classrooms with colourful walls and comfortable chairs. The teachers are very kind and always help students understand difficult topics. The school also has a big playground where students can play during breaks. I am very happy to study at my school."
+      </div>
+      <div class="analyse-questions" id="analyseQuestions"></div>
+      <button class="btn-next" id="nextToWrite" onclick="goToSection(3)" style="display:none">Next — Write Your Paragraph ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: WRITE -->
+  <div class="lesson-section" id="section3">
+    <div class="card">
+      <h3>✏️ Write Your Own Paragraph!</h3>
+      <p>Now it is your turn! Write a paragraph about the topic below. Remember to include all 3 parts!</p>
+      <div class="write-topic">
+        <h4>📝 Your Topic:</h4>
+        <p><strong>"My Favourite Animal"</strong> — Write about your favourite animal. Why do you like it? What does it look like? Where does it live?</p>
+      </div>
+      <div class="write-guides">
+        <div class="write-guide wg1"><strong>🔵 Start with:</strong>My favourite animal is...</div>
+        <div class="write-guide wg2"><strong>🟢 Then write:</strong>2-3 sentences about why you like it</div>
+        <div class="write-guide wg3"><strong>🟡 End with:</strong>That is why... / For these reasons...</div>
+      </div>
+      <textarea class="para-textarea" id="paraTextarea" placeholder="Start writing your paragraph here..." oninput="updateWordCount()"></textarea>
+      <div class="word-count" id="wordCount">Words: 0 | Aim for at least 40 words</div>
+      <div class="write-feedback" id="writeFeedback">
+        <h4>✅ Great job! Here is your feedback:</h4>
+        <div class="checklist" id="checklist"></div>
+      </div>
+      <button class="btn-submit" onclick="checkParagraph()">✅ Submit My Paragraph</button>
+      <button class="btn-next" id="nextToQuiz" onclick="goToSection(4)" style="display:none;margin-top:10px">Next — Quiz ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4: QUIZ -->
+  <div class="lesson-section" id="section4">
+    <div class="card">
+      <h3>🧠 Paragraph Quiz — 4 Questions!</h3>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: RESULT -->
+  <div class="lesson-section" id="section5">
+    <div class="card">
+      <div class="result-box">
+        <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+        <div class="result-title" id="resultTitle">Lesson Complete!</div>
+        <div class="result-score" id="resultScore">Quiz Score: 4/4</div>
+        <p class="result-msg" id="resultMsg">Amazing! You can now write a proper paragraph!</p>
+        <br/>
+        <a href="lesson-english-6.html" class="btn-home">← Lesson 6</a>
+        <a href="lesson-english-8.html" class="btn-success">Next Lesson →</a>
+        <a href="dashboard.html" class="btn-home">Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+  // ANALYSE QUESTIONS
+  const analyseData = [
+    { q:'What is the TOPIC SENTENCE of this paragraph?', options:['The school has a big playground.','My school is a wonderful place to learn.','The teachers are very kind.','I am very happy to study at my school.'], answer:1, feedback:'✅ The topic sentence is the FIRST sentence — it tells us what the whole paragraph is about!' },
+    { q:'How many SUPPORTING SENTENCES does this paragraph have?', options:['1','2','3','4'], answer:2, feedback:'✅ There are 3 supporting sentences — about classrooms, teachers, and playground!' },
+    { q:'Which sentence is the CONCLUDING SENTENCE?', options:['My school is a wonderful place to learn.','The teachers are very kind.','I am very happy to study at my school.','It has large classrooms.'], answer:2, feedback:'✅ The concluding sentence is the LAST sentence — it wraps up the paragraph!' },
+    { q:'What is this paragraph mainly about?', options:['The teachers','The playground','The school canteen','The school as a whole'], answer:3, feedback:'✅ The whole paragraph is about the school — every sentence relates to the school!' },
+  ];
+
+  let analyseAnswered = 0;
+  let analyseCorrect = 0;
+
+  function loadAnalyse() {
+    const container = document.getElementById('analyseQuestions');
+    container.innerHTML = '';
+    analyseData.forEach((q, idx) => {
+      const div = document.createElement('div');
+      div.className = 'aq-card';
+      div.id = 'aq-' + idx;
+      div.innerHTML = `
+        <div class="aq-question">Q${idx+1}: ${q.q}</div>
+        <div class="aq-options">
+          ${q.options.map((o,i) => `<button class="aq-btn" onclick="checkAnalyse(${idx},${i},${q.answer},this)">${o}</button>`).join('')}
+        </div>
+        <div class="aq-feedback" id="aqf-${idx}"></div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function checkAnalyse(qIdx, selected, correct, btn) {
+    const div = document.getElementById('aq-' + qIdx);
+    const btns = div.querySelectorAll('.aq-btn');
+    btns.forEach(b => b.disabled = true);
+    const fb = document.getElementById('aqf-' + qIdx);
+    if (selected === correct) {
+      btn.classList.add('correct');
+      fb.style.color = '#7ed321';
+      analyseCorrect++;
+    } else {
+      btn.classList.add('wrong');
+      btns[correct].classList.add('correct');
+      fb.style.color = '#e74c3c';
+    }
+    fb.textContent = analyseData[qIdx].feedback;
+    analyseAnswered++;
+    if (analyseAnswered === analyseData.length) {
+      setTimeout(() => {
+        document.getElementById('nextToWrite').style.display = 'block';
+      }, 800);
+    }
+  }
+
+  // WORD COUNT
+  function updateWordCount() {
+    const text = document.getElementById('paraTextarea').value.trim();
+    const words = text === '' ? 0 : text.split(/\s+/).length;
+    const wc = document.getElementById('wordCount');
+    wc.textContent = `Words: ${words} | Aim for at least 40 words`;
+    wc.style.color = words >= 40 ? '#7ed321' : '#888';
+  }
+
+  // CHECK PARAGRAPH
+  function checkParagraph() {
+    const text = document.getElementById('paraTextarea').value.trim();
+    const words = text === '' ? 0 : text.split(/\s+/).length;
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+    const hasCapital = text.length > 0 && text[0] === text[0].toUpperCase();
+    const hasPunctuation = /[.!?]$/.test(text.trim());
+    const hasEnoughWords = words >= 40;
+    const hasEnoughSentences = sentences >= 4;
+
+    const checks = [
+      { label: 'Starts with a capital letter', pass: hasCapital },
+      { label: 'Ends with punctuation (. ! ?)', pass: hasPunctuation },
+      { label: 'Has at least 40 words', pass: hasEnoughWords },
+      { label: 'Has at least 4 sentences', pass: hasEnoughSentences },
+      { label: 'Contains content about your topic', pass: words >= 20 },
+    ];
+
+    const fb = document.getElementById('writeFeedback');
+    const checklist = document.getElementById('checklist');
+    fb.style.display = 'block';
+    checklist.innerHTML = checks.map(c =>
+      `<div class="check-item ${c.pass ? 'pass' : 'fail'}">${c.pass ? '✅' : '❌'} ${c.label}</div>`
+    ).join('');
+
+    const passed = checks.filter(c => c.pass).length;
+    if (passed >= 4) {
+      fb.style.background = '#e0ffe0';
+      fb.querySelector('h4').textContent = '✅ Excellent paragraph! Well done!';
+      document.getElementById('nextToQuiz').style.display = 'block';
+    } else if (passed >= 2) {
+      fb.style.background = '#fff5e0';
+      fb.querySelector('h4').textContent = '👍 Good start! Try to improve the areas marked with ❌';
+      document.getElementById('nextToQuiz').style.display = 'block';
+    } else {
+      fb.style.background = '#ffe0e0';
+      fb.querySelector('h4').textContent = '💪 Keep trying! Focus on the areas marked with ❌';
+    }
+  }
+
+  // QUIZ DATA
+  const quizData = [
+    { q:'What is the FIRST part of a paragraph called?', options:['Concluding sentence','Supporting sentence','Topic sentence','Opening phrase'], answer:2 },
+    { q:'What do SUPPORTING SENTENCES do?', options:['End the paragraph','Introduce a new topic','Give details about the main idea','Start a new paragraph'], answer:2 },
+    { q:'How should every paragraph begin?', options:['With a full stop','With a capital letter','With a question mark','With a number'], answer:1 },
+    { q:'What does a CONCLUDING SENTENCE do?', options:['Introduces the topic','Gives more details','Asks a question','Wraps up the paragraph'], answer:3 },
+  ];
+  let quizIdx = 0;
+  let quizScore = 0;
+
+  function loadQuiz() {
+    const q = quizData[quizIdx];
+    document.getElementById('quizContainer').innerHTML = `
+      <div class="quiz-question">Q${quizIdx+1}: ${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((o,i) => `<button class="quiz-btn" onclick="checkQuiz(${i},${q.answer},this)">${o}</button>`).join('')}
+      </div>
+      <div style="text-align:center;color:#aaa;font-size:13px">Question ${quizIdx+1} of ${quizData.length}</div>
+    `;
+  }
+
+  function checkQuiz(selected, correct, btn) {
+    const btns = document.querySelectorAll('.quiz-btn');
+    btns.forEach(b => b.disabled = true);
+    if (selected === correct) { btn.classList.add('correct'); quizScore++; }
+    else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+    setTimeout(() => {
+      quizIdx++;
+      if (quizIdx < quizData.length) { loadQuiz(); }
+      else { showResult(); }
+    }, 1200);
+  }
+
+  function showResult() {
+    goToSection(5);
+    const pct = quizScore / quizData.length;
+    let stars, title, msg;
+    if (pct === 1) { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You are a paragraph writing champion! Your writing skills are excellent!'; }
+    else if (pct >= 0.5) { stars='⭐⭐'; title='Well Done! 😊'; msg='Great work! You understand paragraph writing well. Keep practising your writing!'; }
+    else { stars='⭐'; title='Good Try! 💪'; msg:'Paragraph writing takes practice! Review the lesson and try again!'; }
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = `Quiz Score: ${quizScore}/${quizData.length}`;
+    document.getElementById('resultMsg').textContent = msg;
+  }
+
+  // NAVIGATION
+  function goToSection(n) {
+    document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
+    for (let i=1; i<=5; i++) {
+      const step = document.getElementById('step'+i);
+      if (i < n) { step.className='step done'; step.querySelector('.step-circle').textContent='✓'; }
+      else if (i===n) { step.className='step active'; step.querySelector('.step-circle').textContent=i; }
+      else { step.className='step'; step.querySelector('.step-circle').textContent=i; }
+      if (i < 5) {
+        const line = document.getElementById('line'+i);
+        if (line) line.className = i < n ? 'step-line done' : 'step-line';
+      }
+    }
+    if (n===2) { analyseAnswered=0; analyseCorrect=0; loadAnalyse(); }
+    if (n===4) { quizIdx=0; quizScore=0; loadQuiz(); }
+    window.scrollTo(0,0);
+  }
+</script>
+</body>
+</html>
