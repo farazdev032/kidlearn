@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - English Lesson 3: Simple Words</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #4a90d9; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .lesson-hero { background: linear-gradient(135deg, #4a90d9, #764ba2); color: white; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .lesson-hero h2 { font-size: 28px; margin-bottom: 8px; }
+    .lesson-hero p { font-size: 15px; opacity: 0.9; }
+    .lesson-meta { display: flex; gap: 15px; margin-top: 12px; }
+    .meta-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .hero-icon { font-size: 80px; }
+    .lesson-container { max-width: 800px; margin: 30px auto; padding: 0 20px 50px; }
+    .lesson-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #aaa; }
+    .step.active { color: #4a90d9; font-weight: bold; }
+    .step.done { color: #7ed321; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #aaa; }
+    .step.active .step-circle { background: #4a90d9; color: white; }
+    .step.done .step-circle { background: #7ed321; color: white; }
+    .step-line { flex: 1; height: 2px; background: #e0e0e0; }
+    .step-line.done { background: #7ed321; }
+    .lesson-section { display: none; }
+    .lesson-section.active { display: block; }
+    .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+    .highlight { color: #4a90d9; font-weight: bold; }
+    .tip-box { background: #fff5e0; border-left: 4px solid #f5a623; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
+    .words-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+    .word-card { background: #e8f4ff; border: 2px solid #4a90d9; border-radius: 16px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .word-card:hover { background: #4a90d9; transform: translateY(-4px); }
+    .word-card:hover .wc-word { color: white; }
+    .wc-emoji { font-size: 36px; margin-bottom: 8px; }
+    .wc-word { font-size: 20px; font-weight: bold; color: #4a90d9; margin-bottom: 4px; }
+    .wc-letters { font-size: 13px; color: #888; letter-spacing: 4px; }
+    .match-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+    .match-col { display: flex; flex-direction: column; gap: 10px; }
+    .match-col h4 { font-size: 14px; color: #888; text-align: center; margin-bottom: 5px; }
+    .match-word { padding: 14px; background: #e8f4ff; border: 2px solid #4a90d9; border-radius: 12px; text-align: center; font-size: 18px; font-weight: bold; color: #4a90d9; cursor: pointer; transition: all 0.2s; }
+    .match-word:hover { background: #4a90d9; color: white; }
+    .match-word.selected { background: #764ba2; color: white; border-color: #764ba2; }
+    .match-word.matched { background: #7ed321; color: white; border-color: #7ed321; cursor: default; }
+    .match-pic { padding: 14px; background: #fff5e0; border: 2px solid #f5a623; border-radius: 12px; text-align: center; font-size: 28px; cursor: pointer; transition: all 0.2s; }
+    .match-pic:hover { transform: scale(1.05); }
+    .match-pic.selected { background: #f5a623; border-color: #f5a623; }
+    .match-pic.matched { background: #7ed321; border-color: #7ed321; cursor: default; }
+    .match-feedback { text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px; min-height: 28px; }
+    .spell-container { text-align: center; }
+    .spell-image { font-size: 80px; margin: 10px 0; }
+    .spell-hint { font-size: 16px; color: #666; margin-bottom: 20px; }
+    .spell-boxes { display: flex; gap: 10px; justify-content: center; margin: 15px 0; }
+    .spell-box { width: 54px; height: 54px; border: 3px solid #4a90d9; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #4a90d9; background: #e8f4ff; }
+    .spell-box.filled { background: #4a90d9; color: white; }
+    .spell-box.correct { background: #7ed321; border-color: #7ed321; color: white; }
+    .spell-box.wrong { background: #fee; border-color: #e74c3c; color: #e74c3c; }
+    .spell-letters { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 15px 0; }
+    .spell-btn { width: 50px; height: 50px; border-radius: 12px; border: 2px solid #4a90d9; background: #e8f4ff; font-size: 20px; font-weight: bold; color: #4a90d9; cursor: pointer; transition: all 0.2s; }
+    .spell-btn:hover { background: #4a90d9; color: white; }
+    .spell-btn.used { background: #ccc; border-color: #ccc; color: white; cursor: not-allowed; }
+    .spell-feedback { font-size: 16px; font-weight: bold; margin-top: 10px; min-height: 28px; }
+    .spell-actions { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+    .btn-clear { padding: 10px 20px; background: #fee; border: 2px solid #e74c3c; border-radius: 25px; color: #e74c3c; font-size: 14px; cursor: pointer; }
+    .btn-check { padding: 10px 20px; background: #4a90d9; border: none; border-radius: 25px; color: white; font-size: 14px; cursor: pointer; }
+    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; }
+    .quiz-image { font-size: 60px; text-align: center; margin-bottom: 15px; }
+    .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+    .quiz-btn { padding: 15px; background: #f0f8ff; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 16px; cursor: pointer; transition: all 0.2s; color: #333; }
+    .quiz-btn:hover { border-color: #4a90d9; background: #e8f4ff; }
+    .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+    .result-box { text-align: center; padding: 20px; }
+    .result-stars { font-size: 50px; margin-bottom: 15px; }
+    .result-title { font-size: 26px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .result-msg { font-size: 15px; color: #666; margin-bottom: 25px; }
+    .result-score { display: inline-block; background: #e8f4ff; color: #4a90d9; font-size: 18px; font-weight: bold; padding: 8px 24px; border-radius: 20px; margin-bottom: 25px; }
+    .btn-next { display: block; width: 100%; padding: 16px; background: #4a90d9; color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-next:hover { background: #357abd; }
+    .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
+    .btn-home { display: inline-block; padding: 14px 30px; background: #4a90d9; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="english.html">English</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
+
+<div class="lesson-hero">
+  <div>
+    <h2>📖 English — Lesson 3</h2>
+    <p>Simple 3-Letter Words — CVC Words!</p>
+    <div class="lesson-meta">
+      <span class="meta-badge">⭐ Starters</span>
+      <span class="meta-badge">⏱ 12 minutes</span>
+      <span class="meta-badge">🎯 Ages 4–6</span>
+    </div>
+  </div>
+  <div class="hero-icon">🔡</div>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-progress">
+    <div class="step active" id="step1"><div class="step-circle">1</div> Learn</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2"><div class="step-circle">2</div> Match</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3"><div class="step-circle">3</div> Spell</div>
+    <div class="step-line" id="line3"></div>
+    <div class="step" id="step4"><div class="step-circle">4</div> Quiz</div>
+    <div class="step-line" id="line4"></div>
+    <div class="step" id="step5"><div class="step-circle">5</div> Done!</div>
+  </div>
+
+  <!-- SECTION 1: LEARN -->
+  <div class="lesson-section active" id="section1">
+    <div class="card">
+      <h3>🔡 What are CVC Words?</h3>
+      <p><span class="highlight">CVC</span> stands for <span class="highlight">Consonant — Vowel — Consonant</span>. These are the simplest 3-letter words in English. Every CVC word has a consonant at the start, a vowel in the middle, and a consonant at the end!</p>
+      <div class="tip-box">💡 <strong>Example:</strong> The word <strong>CAT</strong> = C (consonant) + A (vowel) + T (consonant). That is a CVC word!</div>
+    </div>
+    <div class="card">
+      <h3>📚 Learn These 12 CVC Words — Click each one!</h3>
+      <div class="words-grid" id="wordsGrid"></div>
+    </div>
+    <button class="btn-next" onclick="goToSection(2)">Next — Match Activity ➡️</button>
+  </div>
+
+  <!-- SECTION 2: MATCH -->
+  <div class="lesson-section" id="section2">
+    <div class="card">
+      <h3>🎯 Match the Word to the Picture!</h3>
+      <p>Click a word on the left, then click its matching picture on the right!</p>
+      <div class="match-container">
+        <div class="match-col">
+          <h4>Words</h4>
+          <div id="matchWords"></div>
+        </div>
+        <div class="match-col">
+          <h4>Pictures</h4>
+          <div id="matchPics"></div>
+        </div>
+      </div>
+      <div class="match-feedback" id="matchFeedback"></div>
+      <button class="btn-next" id="nextToSpell" onclick="goToSection(3)" style="display:none">Next — Spelling ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: SPELL -->
+  <div class="lesson-section" id="section3">
+    <div class="card">
+      <h3>✏️ Spell the Word!</h3>
+      <p>Look at the picture and click the letters in the correct order to spell the word!</p>
+      <div class="spell-container">
+        <div class="spell-image" id="spellImage">🐱</div>
+        <div class="spell-hint" id="spellHint"></div>
+        <div class="spell-boxes" id="spellBoxes"></div>
+        <div class="spell-letters" id="spellLetters"></div>
+        <div class="spell-actions">
+          <button class="btn-clear" onclick="clearSpell()">🗑 Clear</button>
+          <button class="btn-check" onclick="checkSpell()">✅ Check</button>
+        </div>
+        <div class="spell-feedback" id="spellFeedback"></div>
+      </div>
+      <button class="btn-next" id="nextToQuiz" onclick="goToSection(4)" style="display:none">Next — Quiz ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4: QUIZ -->
+  <div class="lesson-section" id="section4">
+    <div class="card">
+      <h3>🧠 Mini Quiz — 4 Questions!</h3>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: RESULT -->
+  <div class="lesson-section" id="section5">
+    <div class="card">
+      <div class="result-box">
+        <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+        <div class="result-title" id="resultTitle">Lesson Complete!</div>
+        <div class="result-score" id="resultScore">Quiz Score: 4/4</div>
+        <p class="result-msg" id="resultMsg">Amazing! You can now read and spell simple 3-letter words!</p>
+        <br/>
+        <a href="lesson-english-2.html" class="btn-home">← Lesson 2</a>
+        <a href="lesson-english-4.html" class="btn-success">Next Lesson →</a>
+        <a href="dashboard.html" class="btn-home">Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+  // WORD GRID DATA
+  const wordData = [
+    {word:'CAT',emoji:'🐱'},{word:'DOG',emoji:'🐶'},
+    {word:'SUN',emoji:'☀️'},{word:'CUP',emoji:'☕'},
+    {word:'BED',emoji:'🛏️'},{word:'HEN',emoji:'🐔'},
+    {word:'PIG',emoji:'🐷'},{word:'BAT',emoji:'🦇'},
+    {word:'POT',emoji:'🍲'},{word:'BUS',emoji:'🚌'},
+    {word:'FAN',emoji:'🌀'},{word:'MAP',emoji:'🗺️'},
+  ];
+
+  // BUILD WORD GRID
+  const grid = document.getElementById('wordsGrid');
+  wordData.forEach(w => {
+    const card = document.createElement('div');
+    card.className = 'word-card';
+    card.innerHTML = `<div class="wc-emoji">${w.emoji}</div><div class="wc-word">${w.word}</div><div class="wc-letters">${w.word.split('').join(' · ')}</div>`;
+    grid.appendChild(card);
+  });
+
+  // MATCH DATA
+  const matchPairs = [
+    {word:'CAT', emoji:'🐱'},
+    {word:'SUN', emoji:'☀️'},
+    {word:'BED', emoji:'🛏️'},
+    {word:'PIG', emoji:'🐷'},
+  ];
+  let selectedWord = null;
+  let selectedPic = null;
+  let matchedCount = 0;
+
+  function loadMatch() {
+    const wordsCol = document.getElementById('matchWords');
+    const picsCol = document.getElementById('matchPics');
+    wordsCol.innerHTML = '';
+    picsCol.innerHTML = '';
+    const shuffledPics = [...matchPairs].sort(() => Math.random() - 0.5);
+    matchPairs.forEach(p => {
+      const w = document.createElement('div');
+      w.className = 'match-word';
+      w.textContent = p.word;
+      w.dataset.word = p.word;
+      w.onclick = () => selectMatchWord(w);
+      wordsCol.appendChild(w);
+    });
+    shuffledPics.forEach(p => {
+      const pic = document.createElement('div');
+      pic.className = 'match-pic';
+      pic.textContent = p.emoji;
+      pic.dataset.word = p.word;
+      pic.onclick = () => selectMatchPic(pic);
+      picsCol.appendChild(pic);
+    });
+  }
+
+  function selectMatchWord(el) {
+    if (el.classList.contains('matched')) return;
+    document.querySelectorAll('.match-word').forEach(w => w.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedWord = el;
+    checkMatch();
+  }
+
+  function selectMatchPic(el) {
+    if (el.classList.contains('matched')) return;
+    document.querySelectorAll('.match-pic').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPic = el;
+    checkMatch();
+  }
+
+  function checkMatch() {
+    if (!selectedWord || !selectedPic) return;
+    const fb = document.getElementById('matchFeedback');
+    if (selectedWord.dataset.word === selectedPic.dataset.word) {
+      selectedWord.classList.remove('selected');
+      selectedWord.classList.add('matched');
+      selectedPic.classList.remove('selected');
+      selectedPic.classList.add('matched');
+      fb.style.color = '#7ed321';
+      fb.textContent = '✅ Correct match! Well done!';
+      matchedCount++;
+      if (matchedCount === matchPairs.length) {
+        fb.textContent = '🎉 All matched! Amazing work!';
+        document.getElementById('nextToSpell').style.display = 'block';
+      }
+    } else {
+      fb.style.color = '#e74c3c';
+      fb.textContent = '❌ Not quite! Try again!';
+      setTimeout(() => {
+        selectedWord.classList.remove('selected');
+        selectedPic.classList.remove('selected');
+        fb.textContent = '';
+      }, 1000);
+    }
+    selectedWord = null;
+    selectedPic = null;
+  }
+
+  // SPELL DATA — letters are hardcoded to always include correct letters
+  const spellWords = [
+    {word:'CAT', emoji:'🐱', hint:'A furry pet that meows',   letters:['C','A','T','B','M']},
+    {word:'DOG', emoji:'🐶', hint:'A pet that barks',         letters:['D','O','G','B','K']},
+    {word:'SUN', emoji:'☀️', hint:'It shines in the sky',     letters:['S','U','N','B','M']},
+  ];
+
+  let spellIdx = 0;
+  let spellCurrent = '';
+  let spellUsed = [];
+
+  function loadSpell() {
+    const sw = spellWords[spellIdx];
+    spellCurrent = '';
+    spellUsed = [];
+    document.getElementById('spellImage').textContent = sw.emoji;
+    document.getElementById('spellHint').textContent = '💡 ' + sw.hint;
+    document.getElementById('spellFeedback').textContent = '';
+    document.getElementById('nextToQuiz').style.display = 'none';
+
+    // Build answer boxes
+    const boxes = document.getElementById('spellBoxes');
+    boxes.innerHTML = '';
+    for (let i = 0; i < sw.word.length; i++) {
+      const box = document.createElement('div');
+      box.className = 'spell-box';
+      box.id = 'sbox-' + i;
+      boxes.appendChild(box);
+    }
+
+    // Build letter buttons — shuffled from hardcoded list
+    const lettersDiv = document.getElementById('spellLetters');
+    lettersDiv.innerHTML = '';
+    const shuffled = [...sw.letters].sort(() => Math.random() - 0.5);
+    shuffled.forEach(l => {
+      const btn = document.createElement('button');
+      btn.className = 'spell-btn';
+      btn.textContent = l;
+      btn.onclick = () => addSpellLetter(l, btn);
+      lettersDiv.appendChild(btn);
+    });
+  }
+
+  function addSpellLetter(l, btn) {
+    const sw = spellWords[spellIdx];
+    if (spellCurrent.length < sw.word.length && !btn.classList.contains('used')) {
+      btn.classList.add('used');
+      spellUsed.push(btn);
+      spellCurrent += l;
+      const box = document.getElementById('sbox-' + (spellCurrent.length - 1));
+      box.textContent = l;
+      box.classList.add('filled');
+    }
+  }
+
+  function clearSpell() {
+    const sw = spellWords[spellIdx];
+    spellCurrent = '';
+    spellUsed.forEach(b => b.classList.remove('used'));
+    spellUsed = [];
+    for (let i = 0; i < sw.word.length; i++) {
+      const box = document.getElementById('sbox-' + i);
+      box.textContent = '';
+      box.className = 'spell-box';
+    }
+    document.getElementById('spellFeedback').textContent = '';
+  }
+
+  function checkSpell() {
+    const sw = spellWords[spellIdx];
+    const fb = document.getElementById('spellFeedback');
+    if (spellCurrent === sw.word) {
+      for (let i = 0; i < sw.word.length; i++) {
+        document.getElementById('sbox-' + i).className = 'spell-box correct';
+      }
+      fb.style.color = '#7ed321';
+      fb.textContent = '✅ Correct! You spelled ' + sw.word + '!';
+      setTimeout(() => {
+        spellIdx++;
+        if (spellIdx < spellWords.length) {
+          loadSpell();
+        } else {
+          document.getElementById('spellFeedback').textContent = '🎉 You spelled all the words!';
+          document.getElementById('nextToQuiz').style.display = 'block';
+        }
+      }, 1500);
+    } else {
+      for (let i = 0; i < sw.word.length; i++) {
+        document.getElementById('sbox-' + i).className = 'spell-box wrong';
+      }
+      fb.style.color = '#e74c3c';
+      fb.textContent = '❌ Not quite! Try again!';
+      setTimeout(() => clearSpell(), 1200);
+    }
+  }
+
+  // QUIZ DATA
+  const quizData = [
+    { q:"What does CVC stand for?", img:'', options:["Colour Vowel Colour","Consonant Vowel Consonant","Cat Van Cup","Consonant Verb Concept"], answer:1 },
+    { q:"Which of these is a CVC word?", img:'', options:["STREET","CAT","BRIGHT","SCHOOL"], answer:1 },
+    { q:"What picture matches the word DOG?", img:'', options:["🐱 Cat","🐔 Hen","🐶 Dog","🐷 Pig"], answer:2 },
+    { q:"Which letter is missing? C _ T", img:'', options:["B","A","U","O"], answer:1 },
+  ];
+  let quizIdx = 0;
+  let quizScore = 0;
+
+  function loadQuiz() {
+    const q = quizData[quizIdx];
+    document.getElementById('quizContainer').innerHTML = `
+      ${q.img ? `<div class="quiz-image">${q.img}</div>` : ''}
+      <div class="quiz-question">Q${quizIdx+1}: ${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((o,i) => `<button class="quiz-btn" onclick="checkQuiz(${i},${q.answer},this)">${o}</button>`).join('')}
+      </div>
+      <div style="text-align:center;color:#aaa;font-size:13px">Question ${quizIdx+1} of ${quizData.length}</div>
+    `;
+  }
+
+  function checkQuiz(selected, correct, btn) {
+    const btns = document.querySelectorAll('.quiz-btn');
+    btns.forEach(b => b.disabled = true);
+    if (selected === correct) { btn.classList.add('correct'); quizScore++; }
+    else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+    setTimeout(() => {
+      quizIdx++;
+      if (quizIdx < quizData.length) { loadQuiz(); }
+      else { showResult(); }
+    }, 1200);
+  }
+
+  function showResult() {
+    goToSection(5);
+    const pct = quizScore / quizData.length;
+    let stars, title, msg;
+    if (pct === 1) { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You can read and spell CVC words like a champion!'; }
+    else if (pct >= 0.5) { stars='⭐⭐'; title='Well Done! 😊'; msg='Great job! You are getting good at simple words. Keep practising!'; }
+    else { stars='⭐'; title='Good Try! 💪'; msg='Simple words take practice! Try the lesson again and you will get better!'; }
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = `Quiz Score: ${quizScore}/${quizData.length}`;
+    document.getElementById('resultMsg').textContent = msg;
+  }
+
+  // NAVIGATION
+  function goToSection(n) {
+    document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
+    for (let i=1; i<=5; i++) {
+      const step = document.getElementById('step'+i);
+      if (i < n) { step.className='step done'; step.querySelector('.step-circle').textContent='✓'; }
+      else if (i===n) { step.className='step active'; step.querySelector('.step-circle').textContent=i; }
+      else { step.className='step'; step.querySelector('.step-circle').textContent=i; }
+      if (i < 5) {
+        const line = document.getElementById('line'+i);
+        if (line) line.className = i < n ? 'step-line done' : 'step-line';
+      }
+    }
+    if (n===2) { matchedCount=0; selectedWord=null; selectedPic=null; loadMatch(); }
+    if (n===3) { spellIdx=0; loadSpell(); }
+    if (n===4) { quizIdx=0; quizScore=0; loadQuiz(); }
+    window.scrollTo(0,0);
+  }
+</script>
+</body>
+</html>
