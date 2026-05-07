@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - English Lesson 4: Simple Sentences</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #4a90d9; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .lesson-hero { background: linear-gradient(135deg, #4a90d9, #764ba2); color: white; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .lesson-hero h2 { font-size: 28px; margin-bottom: 8px; }
+    .lesson-hero p { font-size: 15px; opacity: 0.9; }
+    .lesson-meta { display: flex; gap: 15px; margin-top: 12px; }
+    .meta-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .hero-icon { font-size: 80px; }
+    .lesson-container { max-width: 800px; margin: 30px auto; padding: 0 20px 50px; }
+    .lesson-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #aaa; }
+    .step.active { color: #4a90d9; font-weight: bold; }
+    .step.done { color: #7ed321; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #aaa; }
+    .step.active .step-circle { background: #4a90d9; color: white; }
+    .step.done .step-circle { background: #7ed321; color: white; }
+    .step-line { flex: 1; height: 2px; background: #e0e0e0; }
+    .step-line.done { background: #7ed321; }
+    .lesson-section { display: none; }
+    .lesson-section.active { display: block; }
+    .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+    .highlight { color: #4a90d9; font-weight: bold; }
+    .tip-box { background: #fff5e0; border-left: 4px solid #f5a623; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
+
+    /* SENTENCE EXAMPLES */
+    .sentence-examples { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+    .sentence-card { background: #e8f4ff; border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; gap: 15px; }
+    .sentence-emoji { font-size: 32px; flex-shrink: 0; }
+    .sentence-text { font-size: 18px; font-weight: bold; color: #333; }
+    .sentence-parts { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+    .part { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    .part-subject { background: #e8f4ff; color: #4a90d9; }
+    .part-verb { background: #e0ffe0; color: #3a7a00; }
+    .part-object { background: #fff5e0; color: #f5a623; }
+
+    /* IDENTIFY ACTIVITY */
+    .identify-grid { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+    .identify-card { background: #f8f8f8; border: 2px solid #e0e0e0; border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    .identify-text { font-size: 16px; color: #333; flex: 1; }
+    .identify-btns { display: flex; gap: 8px; flex-shrink: 0; }
+    .id-btn { padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0; font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.2s; background: white; }
+    .id-btn:hover { border-color: #4a90d9; }
+    .id-btn.selected-yes { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .id-btn.selected-no { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+    .id-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .id-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+    .identify-feedback { text-align: center; font-size: 15px; font-weight: bold; margin-top: 15px; min-height: 24px; }
+
+    /* ARRANGE ACTIVITY */
+    .arrange-container { margin: 20px 0; }
+    .arrange-question { font-size: 16px; color: #666; margin-bottom: 10px; }
+    .arrange-image { font-size: 50px; text-align: center; margin-bottom: 10px; }
+    .arranged-words { display: flex; gap: 8px; flex-wrap: wrap; min-height: 54px; background: #f0f8ff; border: 2px dashed #4a90d9; border-radius: 14px; padding: 10px; margin-bottom: 15px; align-items: center; }
+    .arranged-word { background: #4a90d9; color: white; padding: 8px 14px; border-radius: 20px; font-size: 15px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+    .arranged-word:hover { background: #357abd; }
+    .word-pool { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; min-height: 44px; }
+    .pool-word { background: #e8f4ff; color: #4a90d9; border: 2px solid #4a90d9; padding: 8px 14px; border-radius: 20px; font-size: 15px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+    .pool-word:hover { background: #4a90d9; color: white; }
+    .pool-word.used { background: #ccc; border-color: #ccc; color: white; cursor: not-allowed; }
+    .arrange-actions { display: flex; gap: 10px; margin-bottom: 10px; }
+    .btn-clear { padding: 10px 20px; background: #fee; border: 2px solid #e74c3c; border-radius: 25px; color: #e74c3c; font-size: 14px; cursor: pointer; }
+    .btn-check { padding: 10px 20px; background: #4a90d9; border: none; border-radius: 25px; color: white; font-size: 14px; cursor: pointer; }
+    .arrange-feedback { font-size: 16px; font-weight: bold; min-height: 28px; margin-top: 5px; }
+
+    /* QUIZ */
+    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; }
+    .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+    .quiz-btn { padding: 15px; background: #f0f8ff; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 15px; cursor: pointer; transition: all 0.2s; color: #333; text-align: left; }
+    .quiz-btn:hover { border-color: #4a90d9; background: #e8f4ff; }
+    .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+
+    /* RESULT */
+    .result-box { text-align: center; padding: 20px; }
+    .result-stars { font-size: 50px; margin-bottom: 15px; }
+    .result-title { font-size: 26px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .result-msg { font-size: 15px; color: #666; margin-bottom: 25px; }
+    .result-score { display: inline-block; background: #e8f4ff; color: #4a90d9; font-size: 18px; font-weight: bold; padding: 8px 24px; border-radius: 20px; margin-bottom: 25px; }
+    .btn-next { display: block; width: 100%; padding: 16px; background: #4a90d9; color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-next:hover { background: #357abd; }
+    .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
+    .btn-home { display: inline-block; padding: 14px 30px; background: #4a90d9; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="english.html">English</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
+
+<div class="lesson-hero">
+  <div>
+    <h2>📖 English — Lesson 4</h2>
+    <p>Simple Sentences — Subject, Verb and Object!</p>
+    <div class="lesson-meta">
+      <span class="meta-badge">🚀 Explorers</span>
+      <span class="meta-badge">⏱ 15 minutes</span>
+      <span class="meta-badge">🎯 Ages 6–8</span>
+    </div>
+  </div>
+  <div class="hero-icon">📝</div>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-progress">
+    <div class="step active" id="step1"><div class="step-circle">1</div> Learn</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2"><div class="step-circle">2</div> Identify</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3"><div class="step-circle">3</div> Arrange</div>
+    <div class="step-line" id="line3"></div>
+    <div class="step" id="step4"><div class="step-circle">4</div> Quiz</div>
+    <div class="step-line" id="line4"></div>
+    <div class="step" id="step5"><div class="step-circle">5</div> Done!</div>
+  </div>
+
+  <!-- SECTION 1: LEARN -->
+  <div class="lesson-section active" id="section1">
+    <div class="card">
+      <h3>📝 What is a Sentence?</h3>
+      <p>A <span class="highlight">sentence</span> is a group of words that makes complete sense. Every sentence has at least two parts — someone doing something!</p>
+      <div class="tip-box">💡 <strong>Remember:</strong> A sentence always starts with a <strong>Capital Letter</strong> and ends with a <strong>Full Stop (.)</strong> or <strong>Question Mark (?)</strong> or <strong>Exclamation Mark (!)</strong></div>
+    </div>
+
+    <div class="card">
+      <h3>🔍 Parts of a Sentence</h3>
+      <p>A simple sentence has 3 parts:</p>
+      <div style="display:flex;gap:12px;margin:15px 0;flex-wrap:wrap">
+        <div style="background:#e8f4ff;border-radius:12px;padding:15px 20px;text-align:center;flex:1">
+          <div style="font-size:24px;margin-bottom:6px">👤</div>
+          <div style="font-weight:bold;color:#4a90d9;margin-bottom:4px">Subject</div>
+          <div style="font-size:13px;color:#666">WHO is doing something</div>
+        </div>
+        <div style="background:#e0ffe0;border-radius:12px;padding:15px 20px;text-align:center;flex:1">
+          <div style="font-size:24px;margin-bottom:6px">⚡</div>
+          <div style="font-weight:bold;color:#3a7a00;margin-bottom:4px">Verb</div>
+          <div style="font-size:13px;color:#666">WHAT they are doing</div>
+        </div>
+        <div style="background:#fff5e0;border-radius:12px;padding:15px 20px;text-align:center;flex:1">
+          <div style="font-size:24px;margin-bottom:6px">🎯</div>
+          <div style="font-weight:bold;color:#f5a623;margin-bottom:4px">Object</div>
+          <div style="font-size:13px;color:#666">WHAT they are doing it to</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📚 Example Sentences — See how they work!</h3>
+      <div class="sentence-examples">
+        <div class="sentence-card">
+          <div class="sentence-emoji">🐱</div>
+          <div>
+            <div class="sentence-text">The cat drinks milk.</div>
+            <div class="sentence-parts">
+              <span class="part part-subject">👤 The cat = Subject</span>
+              <span class="part part-verb">⚡ drinks = Verb</span>
+              <span class="part part-object">🎯 milk = Object</span>
+            </div>
+          </div>
+        </div>
+        <div class="sentence-card">
+          <div class="sentence-emoji">👦</div>
+          <div>
+            <div class="sentence-text">Ali reads a book.</div>
+            <div class="sentence-parts">
+              <span class="part part-subject">👤 Ali = Subject</span>
+              <span class="part part-verb">⚡ reads = Verb</span>
+              <span class="part part-object">🎯 a book = Object</span>
+            </div>
+          </div>
+        </div>
+        <div class="sentence-card">
+          <div class="sentence-emoji">🐦</div>
+          <div>
+            <div class="sentence-text">The bird sings a song.</div>
+            <div class="sentence-parts">
+              <span class="part part-subject">👤 The bird = Subject</span>
+              <span class="part part-verb">⚡ sings = Verb</span>
+              <span class="part part-object">🎯 a song = Object</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-next" onclick="goToSection(2)">Next — Identify Sentences ➡️</button>
+  </div>
+
+  <!-- SECTION 2: IDENTIFY -->
+  <div class="lesson-section" id="section2">
+    <div class="card">
+      <h3>🔍 Is it a Sentence?</h3>
+      <p>Read each group of words. Click <strong>YES</strong> if it is a complete sentence or <strong>NO</strong> if it is not!</p>
+      <div class="identify-grid" id="identifyGrid"></div>
+      <div class="identify-feedback" id="identifyFeedback"></div>
+      <button class="btn-next" id="nextToArrange" onclick="goToSection(3)" style="display:none">Next — Arrange Words ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: ARRANGE -->
+  <div class="lesson-section" id="section3">
+    <div class="card">
+      <h3>🔀 Arrange the Words!</h3>
+      <p>Click the words in the correct order to make a proper sentence!</p>
+      <div class="arrange-container" id="arrangeContainer"></div>
+      <button class="btn-next" id="nextToQuiz" onclick="goToSection(4)" style="display:none">Next — Quiz ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4: QUIZ -->
+  <div class="lesson-section" id="section4">
+    <div class="card">
+      <h3>🧠 Mini Quiz — 4 Questions!</h3>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: RESULT -->
+  <div class="lesson-section" id="section5">
+    <div class="card">
+      <div class="result-box">
+        <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+        <div class="result-title" id="resultTitle">Lesson Complete!</div>
+        <div class="result-score" id="resultScore">Quiz Score: 4/4</div>
+        <p class="result-msg" id="resultMsg">Amazing! You can now read and write simple sentences!</p>
+        <br/>
+        <a href="lesson-english-3.html" class="btn-home">← Lesson 3</a>
+        <a href="lesson-english-5.html" class="btn-success">Next Lesson →</a>
+        <a href="dashboard.html" class="btn-home">Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+  // IDENTIFY ACTIVITY DATA
+  const identifyData = [
+    { text:'The dog runs fast.', isSentence:true, reason:'✅ Yes! It starts with a capital letter, has a subject and verb, and ends with a full stop.' },
+    { text:'big red apple', isSentence:false, reason:'❌ No! This is just a group of words with no verb and no capital letter or full stop.' },
+    { text:'Sara eats rice.', isSentence:true, reason:'✅ Yes! Sara is the subject, eats is the verb, and rice is the object.' },
+    { text:'running quickly very', isSentence:false, reason:'❌ No! These words do not make complete sense together.' },
+    { text:'The bird sings.', isSentence:true, reason:'✅ Yes! The bird is the subject and sings is the verb.' },
+    { text:'happy jumping cat the', isSentence:false, reason:'❌ No! The words are in the wrong order and make no sense.' },
+  ];
+
+  let identifyAnswered = 0;
+  let identifyCorrect = 0;
+
+  function loadIdentify() {
+    const grid = document.getElementById('identifyGrid');
+    grid.innerHTML = '';
+    identifyData.forEach((item, idx) => {
+      const card = document.createElement('div');
+      card.className = 'identify-card';
+      card.id = 'icard-' + idx;
+      card.innerHTML = `
+        <div class="identify-text">"${item.text}"</div>
+        <div class="identify-btns">
+          <button class="id-btn" onclick="checkIdentify(${idx}, true, this)">✅ YES</button>
+          <button class="id-btn" onclick="checkIdentify(${idx}, false, this)">❌ NO</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function checkIdentify(idx, answer, btn) {
+    const card = document.getElementById('icard-' + idx);
+    const btns = card.querySelectorAll('.id-btn');
+    btns.forEach(b => b.disabled = true);
+    const item = identifyData[idx];
+    const fb = document.getElementById('identifyFeedback');
+    if (answer === item.isSentence) {
+      btn.classList.add('correct');
+      identifyCorrect++;
+      fb.style.color = '#7ed321';
+      fb.textContent = item.reason;
+    } else {
+      btn.classList.add('wrong');
+      fb.style.color = '#e74c3c';
+      fb.textContent = item.reason;
+    }
+    identifyAnswered++;
+    if (identifyAnswered === identifyData.length) {
+      setTimeout(() => {
+        fb.textContent = `🎉 You got ${identifyCorrect} out of ${identifyData.length} correct! Great work!`;
+        document.getElementById('nextToArrange').style.display = 'block';
+      }, 1000);
+    }
+  }
+
+  // ARRANGE ACTIVITY DATA
+  const arrangeData = [
+    { words:['The','cat','drinks','milk','.'], answer:'The cat drinks milk .', emoji:'🐱', hint:'What does the cat drink?' },
+    { words:['Ali','plays','football','.'], answer:'Ali plays football .', emoji:'⚽', hint:'What does Ali play?' },
+    { words:['The','sun','shines','brightly','.'], answer:'The sun shines brightly .', emoji:'☀️', hint:'What does the sun do?' },
+  ];
+
+  let arrangeIdx = 0;
+  let arrangedWords = [];
+  let usedWordBtns = [];
+
+  function loadArrange() {
+    const item = arrangeData[arrangeIdx];
+    const container = document.getElementById('arrangeContainer');
+    const shuffled = [...item.words].sort(() => Math.random() - 0.5);
+    arrangedWords = [];
+    usedWordBtns = [];
+
+    container.innerHTML = `
+      <div class="arrange-image">${item.emoji}</div>
+      <div class="arrange-question">💡 Hint: ${item.hint}</div>
+      <div class="arranged-words" id="arrangedWords"></div>
+      <div class="word-pool" id="wordPool">
+        ${shuffled.map((w,i) => `<button class="pool-word" id="pw-${i}" onclick="addWord('${w}', this)">${w}</button>`).join('')}
+      </div>
+      <div class="arrange-actions">
+        <button class="btn-clear" onclick="clearArrange()">🗑 Clear</button>
+        <button class="btn-check" onclick="checkArrange()">✅ Check</button>
+      </div>
+      <div class="arrange-feedback" id="arrangeFeedback"></div>
+    `;
+  }
+
+  function addWord(word, btn) {
+    if (btn.classList.contains('used')) return;
+    btn.classList.add('used');
+    usedWordBtns.push(btn);
+    arrangedWords.push(word);
+    const div = document.getElementById('arrangedWords');
+    const span = document.createElement('span');
+    span.className = 'arranged-word';
+    span.textContent = word;
+    span.onclick = () => removeWord(word, btn, span);
+    div.appendChild(span);
+  }
+
+  function removeWord(word, btn, span) {
+    btn.classList.remove('used');
+    usedWordBtns = usedWordBtns.filter(b => b !== btn);
+    arrangedWords = arrangedWords.filter((w,i) => {
+      if (w === word && arrangedWords.indexOf(w) === i) { return false; }
+      return true;
+    });
+    span.remove();
+    const idx = arrangedWords.indexOf(word);
+    if (idx > -1) arrangedWords.splice(idx, 1);
+    document.getElementById('arrangedWords').innerHTML = '';
+    arrangedWords = [];
+    usedWordBtns.forEach(b => {
+      b.classList.remove('used');
+    });
+    usedWordBtns = [];
+  }
+
+  function clearArrange() {
+    arrangedWords = [];
+    usedWordBtns.forEach(b => b.classList.remove('used'));
+    usedWordBtns = [];
+    document.getElementById('arrangedWords').innerHTML = '';
+    document.getElementById('arrangeFeedback').textContent = '';
+  }
+
+  function checkArrange() {
+    const item = arrangeData[arrangeIdx];
+    const fb = document.getElementById('arrangeFeedback');
+    const userAnswer = arrangedWords.join(' ');
+    if (userAnswer === item.answer) {
+      fb.style.color = '#7ed321';
+      fb.textContent = '✅ Correct! "' + userAnswer.replace(' .', '.') + '" — Well done!';
+      setTimeout(() => {
+        arrangeIdx++;
+        if (arrangeIdx < arrangeData.length) {
+          loadArrange();
+        } else {
+          fb.textContent = '🎉 You arranged all the sentences correctly!';
+          document.getElementById('nextToQuiz').style.display = 'block';
+        }
+      }, 1500);
+    } else {
+      fb.style.color = '#e74c3c';
+      fb.textContent = '❌ Not quite! Try again. Remember: Capital letter first!';
+      setTimeout(() => clearArrange(), 1500);
+    }
+  }
+
+  // QUIZ DATA
+  const quizData = [
+    { q:'Which of these is a complete sentence?', options:['big blue sky','The dog barks loudly.','running fast very','happy the cat'], answer:1 },
+    { q:'What does every sentence start with?', options:['A small letter','A number','A capital letter','A full stop'], answer:2 },
+    { q:'In the sentence "Sara eats rice" — what is the VERB?', options:['Sara','rice','eats','the'], answer:2 },
+    { q:'Which punctuation mark ends a sentence?', options:['Comma (,)','Full stop (.)','Apostrophe (\')','Hyphen (-)'], answer:1 },
+  ];
+  let quizIdx = 0;
+  let quizScore = 0;
+
+  function loadQuiz() {
+    const q = quizData[quizIdx];
+    document.getElementById('quizContainer').innerHTML = `
+      <div class="quiz-question">Q${quizIdx+1}: ${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((o,i) => `<button class="quiz-btn" onclick="checkQuiz(${i},${q.answer},this)">${o}</button>`).join('')}
+      </div>
+      <div style="text-align:center;color:#aaa;font-size:13px">Question ${quizIdx+1} of ${quizData.length}</div>
+    `;
+  }
+
+  function checkQuiz(selected, correct, btn) {
+    const btns = document.querySelectorAll('.quiz-btn');
+    btns.forEach(b => b.disabled = true);
+    if (selected === correct) { btn.classList.add('correct'); quizScore++; }
+    else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+    setTimeout(() => {
+      quizIdx++;
+      if (quizIdx < quizData.length) { loadQuiz(); }
+      else { showResult(); }
+    }, 1200);
+  }
+
+  function showResult() {
+    goToSection(5);
+    const pct = quizScore / quizData.length;
+    let stars, title, msg;
+    if (pct === 1) { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You understand sentences perfectly. You are an Explorer champion!'; }
+    else if (pct >= 0.5) { stars='⭐⭐'; title='Well Done! 😊'; msg='Great work! You understand simple sentences well. Keep practising!'; }
+    else { stars='⭐'; title='Good Try! 💪'; msg='Sentences take practice! Try the lesson again and you will get better!'; }
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = `Quiz Score: ${quizScore}/${quizData.length}`;
+    document.getElementById('resultMsg').textContent = msg;
+  }
+
+  // NAVIGATION
+  function goToSection(n) {
+    document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
+    for (let i=1; i<=5; i++) {
+      const step = document.getElementById('step'+i);
+      if (i < n) { step.className='step done'; step.querySelector('.step-circle').textContent='✓'; }
+      else if (i===n) { step.className='step active'; step.querySelector('.step-circle').textContent=i; }
+      else { step.className='step'; step.querySelector('.step-circle').textContent=i; }
+      if (i < 5) {
+        const line = document.getElementById('line'+i);
+        if (line) line.className = i < n ? 'step-line done' : 'step-line';
+      }
+    }
+    if (n===2) { identifyAnswered=0; identifyCorrect=0; loadIdentify(); }
+    if (n===3) { arrangeIdx=0; loadArrange(); }
+    if (n===4) { quizIdx=0; quizScore=0; loadQuiz(); }
+    window.scrollTo(0,0);
+  }
+</script>
+</body>
+</html>
