@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - Register</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+
+    header {
+      background: #4a90d9;
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 28px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 15px; }
+
+    .page-hero {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .page-hero h2 { font-size: 36px; margin-bottom: 10px; }
+    .page-hero p { font-size: 16px; opacity: 0.9; }
+
+    .form-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+    }
+    .form-section h3 {
+      font-size: 18px;
+      color: #4a90d9;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f0f8ff;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 15px;
+      color: #333;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #4a90d9;
+    }
+
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .subject-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f0f8ff;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .subject-check:hover { border-color: #4a90d9; background: #e8f4ff; }
+    .subject-check input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .subject-check label {
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .learning-style {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .style-card {
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .style-card:hover { border-color: #4a90d9; background: #e8f4ff; }
+    .style-card input[type="radio"] { display: none; }
+    .style-card.selected { border-color: #4a90d9; background: #e8f4ff; }
+    .style-card .icon { font-size: 28px; margin-bottom: 6px; }
+    .style-card h4 { font-size: 14px; color: #333; margin-bottom: 4px; }
+    .style-card p { font-size: 12px; color: #666; }
+
+    .register-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 10px;
+    }
+    .register-btn:hover { opacity: 0.9; }
+
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 30px;
+    }
+    .success-message .icon { font-size: 60px; margin-bottom: 15px; }
+    .success-message h3 { font-size: 24px; color: #4a90d9; margin-bottom: 10px; }
+    .success-message p { font-size: 15px; color: #666; margin-bottom: 20px; }
+    .success-message a {
+      display: inline-block;
+      background: #4a90d9;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin: 10px 40px 40px;
+      background: #4a90d9;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    footer {
+      background: #333;
+      color: #aaa;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div><h1>🌟 KidLearn</h1></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#">Subjects</a>
+      <a href="#">Login</a>
+    </nav>
+  </header>
+
+  <div class="page-hero">
+    <h2>🎉 Join KidLearn!</h2>
+    <p>Create your child's free account in 2 minutes</p>
+  </div>
+
+  <div class="form-container">
+
+    <!-- REGISTRATION FORM -->
+    <div id="registerForm">
+
+      <!-- Parent Details -->
+      <div class="form-section">
+        <h3>👨‍👩‍👧 Parent Details</h3>
+        <div class="form-group">
+          <label>Parent Full Name</label>
+          <input type="text" id="parentName" placeholder="e.g. Ahmed Khan" />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="parentEmail" placeholder="e.g. ahmed@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="parentPhone" placeholder="e.g. 0300-1234567" />
+        </div>
+      </div>
+
+      <!-- Child Details -->
+      <div class="form-section">
+        <h3>👶 Child Details</h3>
+        <div class="form-group" style="text-align:center;">
+          <label>Child's Profile Picture</label>
+          <div id="avatarContainer" style="margin:10px auto;width:110px;height:110px;border-radius:50%;background:#e8f4ff;border:3px dashed #4a90d9;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;" onclick="document.getElementById('profilePic').click()">
+            <div id="avatarPlaceholder">
+              <div style="font-size:36px;">👶</div>
+              <div style="font-size:11px;color:#4a90d9;margin-top:4px;">Click to upload</div>
+            </div>
+            <img id="avatarPreview" src="" style="display:none;width:110px;height:110px;object-fit:cover;border-radius:50%;" />
+          </div>
+          <input type="file" id="profilePic" accept="image/*" style="display:none;" onchange="previewImage(event)" />
+          <p style="font-size:12px;color:#999;margin-top:6px;">JPG, PNG — max 2MB</p>
+        </div>
+        <div class="form-group">
+          <label>Child's Name</label>
+          <input type="text" id="childName" placeholder="e.g. Sara Ahmed" />
+        </div>
+        <div class="form-group">
+          <label>Child's Age</label>
+          <select id="childAge">
+            <option value="">-- Select Age --</option>
+            <option value="3">3 years</option>
+            <option value="4">4 years</option>
+            <option value="5">5 years</option>
+            <option value="6">6 years</option>
+            <option value="7">7 years</option>
+            <option value="8">8 years</option>
+            <option value="9">9 years</option>
+            <option value="10">10 years</option>
+            <option value="11">11 years</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Class / Grade</label>
+          <select id="childClass">
+            <option value="">-- Select Class --</option>
+            <option>Nursery</option>
+            <option>KG</option>
+            <option>Class 1</option>
+            <option>Class 2</option>
+            <option>Class 3</option>
+            <option>Class 4</option>
+            <option>Class 5</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Subject Selection -->
+      <div class="form-section">
+        <h3>📚 Select Subjects</h3>
+        <p style="font-size:13px;color:#666;margin-bottom:10px;">Choose the subjects your child will study</p>
+        <div class="subjects-grid">
+          <div class="subject-check">
+            <input type="checkbox" id="eng" checked />
+            <label for="eng">📖 English</label>
+          </div>
+          <div class="subject-check">
+            <input type="checkbox" id="mth" checked />
+            <label for="mth">🔢 Maths</label>
+          </div>
+          <div class="subject-check">
+            <input type="checkbox" id="sci" checked />
+            <label for="sci">🔬 Science</label>
+          </div>
+          <div class="subject-check">
+            <input type="checkbox" id="urd" checked />
+            <label for="urd">✍️ Urdu</label>
+          </div>
+          <div class="subject-check">
+            <input type="checkbox" id="cmp" checked />
+            <label for="cmp">💻 Computer</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Learning Style -->
+      <div class="form-section">
+        <h3>🎯 Child's Learning Style</h3>
+        <p style="font-size:13px;color:#666;margin-bottom:10px;">How does your child learn best? (Choose the ONE that fits most)</p>
+        <div class="learning-style">
+          <div class="style-card selected" onclick="selectStyle(this)">
+            <input type="radio" name="style" value="visual" checked />
+            <div class="icon">👁️</div>
+            <h4>Visual</h4>
+            <p>Learns through pictures and colours</p>
+          </div>
+          <div class="style-card" onclick="selectStyle(this)">
+            <input type="radio" name="style" value="audio" />
+            <div class="icon">🔊</div>
+            <h4>Audio</h4>
+            <p>Learns by listening and hearing</p>
+          </div>
+          <div class="style-card" onclick="selectStyle(this)">
+            <input type="radio" name="style" value="reading" />
+            <div class="icon">📖</div>
+            <h4>Reading</h4>
+            <p>Learns by reading and writing</p>
+          </div>
+          <div class="style-card" onclick="selectStyle(this)">
+            <input type="radio" name="style" value="hands-on" />
+            <div class="icon">🤲</div>
+            <h4>Hands-on</h4>
+            <p>Learns by doing activities</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="register-btn" onclick="submitForm()">
+        🚀 Create Free Account
+      </button>
+
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    <div class="success-message" id="successMessage">
+      <div class="icon">🎉</div>
+      <h3>Welcome to KidLearn!</h3>
+      <p id="successText">Your child's account has been created successfully. Let the learning begin!</p>
+      <a href="index.html">Start Learning Now →</a>
+    </div>
+
+  </div>
+
+  <a href="index.html" class="back-btn">← Back to Home</a>
+
+  <footer>
+    <p>© 2025 KidLearn · Built with ❤️ for Pakistani children</p>
+  </footer>
+
+  <script>
+    function selectStyle(card) {
+      document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      card.querySelector('input[type="radio"]').checked = true;
+    }
+
+    function submitForm() {
+      const parentName = document.getElementById('parentName').value.trim();
+      const parentEmail = document.getElementById('parentEmail').value.trim();
+      const childName = document.getElementById('childName').value.trim();
+      const childAge = document.getElementById('childAge').value;
+
+      if (!parentName || !parentEmail || !childName || !childAge) {
+        alert('Please fill in all required fields!');
+        return;
+      }
+
+      document.getElementById('successText').textContent =
+        `Welcome! ${childName}'s account has been created successfully. Let the learning begin!`;
+
+      document.getElementById('registerForm').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

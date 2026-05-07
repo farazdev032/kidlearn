@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - English</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+
+    header {
+      background: #4a90d9;
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 28px; }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 15px;
+    }
+
+    .page-hero {
+      background: #4a90d9;
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .page-hero h2 { font-size: 36px; margin-bottom: 10px; }
+    .page-hero p { font-size: 16px; opacity: 0.9; }
+
+    .levels {
+      padding: 40px;
+      text-align: center;
+    }
+    .levels h2 { font-size: 26px; margin-bottom: 8px; color: #333; }
+    .levels p { color: #666; margin-bottom: 30px; }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto 40px;
+    }
+    .level-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: transform 0.2s;
+      border-top: 4px solid #4a90d9;
+    }
+    .level-card:hover { transform: translateY(-5px); }
+    .level-card .icon { font-size: 36px; margin-bottom: 12px; }
+    .level-card h3 { font-size: 18px; color: #333; margin-bottom: 6px; }
+    .level-card p { font-size: 13px; color: #666; margin-bottom: 4px; }
+    .level-card .age { 
+      display: inline-block;
+      background: #e8f4ff;
+      color: #4a90d9;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-top: 8px;
+    }
+
+    .topics {
+      background: white;
+      padding: 40px;
+      text-align: center;
+    }
+    .topics h2 { font-size: 26px; margin-bottom: 30px; color: #333; }
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .topic-card {
+      background: #f0f8ff;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #d0e8ff;
+    }
+    .topic-card .icon { font-size: 28px; margin-bottom: 8px; }
+    .topic-card h4 { font-size: 14px; color: #333; }
+
+    .back-btn {
+      display: inline-block;
+      margin: 30px 40px;
+      background: #4a90d9;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 15px;
+    }
+    .back-btn:hover { background: #357abd; }
+
+    footer {
+      background: #333;
+      color: #aaa;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>🌟 KidLearn</h1>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#">Subjects</a>
+      <a href="#">Register</a>
+    </nav>
+  </header>
+
+  <div class="page-hero">
+    <h2>📖 English</h2>
+    <p>Reading, writing, phonics and more — choose your level!</p>
+  </div>
+
+  <section class="levels">
+    <h2>Choose Your Level</h2>
+    <p>Pick the level that matches your age and knowledge</p>
+    <div class="level-grid">
+      <div class="level-card">
+        <div class="icon">⭐</div>
+        <h3>Starters</h3>
+        <p>Letter sounds, simple words, colouring letters</p>
+        <span class="age">Ages 3–5</span>
+      </div>
+      <div class="level-card">
+        <div class="icon">🚀</div>
+        <h3>Explorers</h3>
+        <p>Short sentences, reading simple books, spelling</p>
+        <span class="age">Ages 6–8</span>
+      </div>
+      <div class="level-card">
+        <div class="icon">🏆</div>
+        <h3>Builders</h3>
+        <p>Paragraphs, grammar, comprehension, writing stories</p>
+        <span class="age">Ages 9–11</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="topics">
+    <h2>What You Will Learn</h2>
+    <div class="topic-grid">
+      <div class="topic-card"><div class="icon">🔤</div><h4>Phonics</h4></div>
+      <div class="topic-card"><div class="icon">📚</div><h4>Reading</h4></div>
+      <div class="topic-card"><div class="icon">✏️</div><h4>Writing</h4></div>
+      <div class="topic-card"><div class="icon">🗣️</div><h4>Speaking</h4></div>
+      <div class="topic-card"><div class="icon">🔡</div><h4>Spelling</h4></div>
+      <div class="topic-card"><div class="icon">📝</div><h4>Grammar</h4></div>
+      <div class="topic-card"><div class="icon">📖</div><h4>Comprehension</h4></div>
+      <div class="topic-card"><div class="icon">🌟</div><h4>Vocabulary</h4></div>
+    </div>
+  </section>
+
+  <a href="index.html" class="back-btn">← Back to Home</a>
+
+  <footer>
+    <p>© 2025 KidLearn · Built with ❤️ for Pakistani children</p>
+  </footer>
+
+</body>
+</html>

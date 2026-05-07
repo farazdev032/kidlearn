@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - Assessment Quiz</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+
+    header {
+      background: #4a90d9;
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 28px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 15px; }
+
+    .page-hero {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .page-hero h2 { font-size: 36px; margin-bottom: 10px; }
+    .page-hero p { font-size: 16px; opacity: 0.9; }
+
+    .quiz-container {
+      max-width: 650px;
+      margin: 40px auto;
+      padding: 0 20px 40px;
+    }
+
+    /* SUBJECT SELECTION */
+    #subjectSelect { display: block; }
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .subj-card {
+      background: white;
+      border-radius: 16px;
+      padding: 25px 15px;
+      text-align: center;
+      cursor: pointer;
+      border: 2px solid #e0e0e0;
+      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+    .subj-card:hover { transform: translateY(-4px); border-color: #4a90d9; }
+    .subj-card .icon { font-size: 36px; margin-bottom: 10px; }
+    .subj-card h3 { font-size: 15px; color: #333; }
+
+    /* QUIZ SCREEN */
+    #quizScreen { display: none; }
+    .progress-bar-wrap {
+      background: #e0e0e0;
+      border-radius: 20px;
+      height: 10px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 10px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 20px;
+      transition: width 0.4s;
+    }
+    .question-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+    .question-num {
+      font-size: 13px;
+      color: #4a90d9;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .question-text {
+      font-size: 20px;
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .option-btn {
+      padding: 14px 18px;
+      background: #f0f8ff;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 15px;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+    .option-btn:hover { border-color: #4a90d9; background: #e8f4ff; }
+    .option-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .option-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+    .option-btn:disabled { cursor: not-allowed; }
+
+    .quiz-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #666;
+    }
+    .stars { color: #f5a623; font-size: 18px; }
+
+    /* RESULT SCREEN */
+    #resultScreen { display: none; }
+    .result-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+    .result-stars { font-size: 48px; margin-bottom: 15px; }
+    .result-level {
+      display: inline-block;
+      font-size: 22px;
+      font-weight: bold;
+      padding: 10px 30px;
+      border-radius: 30px;
+      margin: 15px 0;
+    }
+    .level-starter { background: #fff5e0; color: #f5a623; }
+    .level-explorer { background: #e8f4ff; color: #4a90d9; }
+    .level-builder { background: #f5e8ff; color: #9b59b6; }
+    .result-score { font-size: 18px; color: #666; margin: 10px 0 20px; }
+    .result-msg { font-size: 15px; color: #555; margin-bottom: 25px; line-height: 1.6; }
+    .result-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 25px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .btn-secondary {
+      background: white;
+      color: #4a90d9;
+      border: 2px solid #4a90d9;
+      padding: 14px 28px;
+      border-radius: 25px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .select-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    .select-sub {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #4a90d9;
+      text-decoration: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div><h1>🌟 KidLearn</h1></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="register.html">Register</a>
+    </nav>
+  </header>
+
+  <div class="page-hero">
+    <h2>🧠 Assessment Quiz</h2>
+    <p>Find out which level is right for your child!</p>
+  </div>
+
+  <div class="quiz-container">
+
+    <!-- STEP 1: SELECT SUBJECT -->
+    <div id="subjectSelect">
+      <p class="select-title">Choose a Subject</p>
+      <p class="select-sub">Your child will answer 5 questions. We will find their perfect level!</p>
+      <div class="subject-grid">
+        <div class="subj-card" onclick="startQuiz('english')">
+          <div class="icon">📖</div><h3>English</h3>
+        </div>
+        <div class="subj-card" onclick="startQuiz('maths')">
+          <div class="icon">🔢</div><h3>Maths</h3>
+        </div>
+        <div class="subj-card" onclick="startQuiz('science')">
+          <div class="icon">🔬</div><h3>Science</h3>
+        </div>
+        <div class="subj-card" onclick="startQuiz('urdu')">
+          <div class="icon">✍️</div><h3>Urdu</h3>
+        </div>
+        <div class="subj-card" onclick="startQuiz('computer')">
+          <div class="icon">💻</div><h3>Computer</h3>
+        </div>
+      </div>
+      <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+
+    <!-- STEP 2: QUIZ -->
+    <div id="quizScreen">
+      <div class="quiz-info">
+        <span id="subjectLabel">English</span>
+        <span class="stars" id="starsEarned">⭐ 0 stars</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progressBar" style="width:0%"></div>
+      </div>
+      <div class="question-card">
+        <div class="question-num" id="questionNum">Question 1 of 5</div>
+        <div class="question-text" id="questionText">Loading...</div>
+        <div class="options" id="optionsContainer"></div>
+      </div>
+    </div>
+
+    <!-- STEP 3: RESULT -->
+    <div id="resultScreen">
+      <div class="result-card">
+        <div class="result-stars" id="resultStars">🌟🌟🌟</div>
+        <h2 style="color:#333;font-size:24px;">Your Level is...</h2>
+        <div class="result-level" id="resultLevel">Explorer</div>
+        <div class="result-score" id="resultScore">You got 4 out of 5 correct!</div>
+        <p class="result-msg" id="resultMsg">Great job! You are ready for the Explorer level.</p>
+        <div class="result-btns">
+          <button class="btn-primary" onclick="goToSubject()">Start Learning →</button>
+          <button class="btn-secondary" onclick="retakeQuiz()">Try Again</button>
+        </div>
+      </div>
+      <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+
+  </div>
+
+  <script>
+    const questions = {
+      english: [
+        { q: "Which of these is a vowel?", options: ["B", "C", "A", "D"], answer: 2 },
+        { q: "What comes after the letter 'D' in the alphabet?", options: ["F", "E", "G", "C"], answer: 1 },
+        { q: "Which word rhymes with 'CAT'?", options: ["Dog", "Bat", "Cup", "Sun"], answer: 1 },
+        { q: "How many letters are in the word 'SCHOOL'?", options: ["5", "7", "6", "4"], answer: 2 },
+        { q: "Which sentence is correct?", options: ["She are happy.", "She is happy.", "She am happy.", "She be happy."], answer: 1 }
+      ],
+      maths: [
+        { q: "What is 5 + 3?", options: ["7", "9", "8", "6"], answer: 2 },
+        { q: "Which number comes after 19?", options: ["18", "21", "20", "22"], answer: 2 },
+        { q: "What is 10 - 4?", options: ["5", "7", "4", "6"], answer: 3 },
+        { q: "How many sides does a triangle have?", options: ["4", "2", "5", "3"], answer: 3 },
+        { q: "What is 6 × 2?", options: ["10", "14", "8", "12"], answer: 3 }
+      ],
+      science: [
+        { q: "Which of these is a living thing?", options: ["Rock", "Water", "Tree", "Sand"], answer: 2 },
+        { q: "What do plants need to grow?", options: ["Milk", "Sunlight", "Juice", "Plastic"], answer: 1 },
+        { q: "What is the closest star to Earth?", options: ["Moon", "Mars", "The Sun", "Venus"], answer: 2 },
+        { q: "How many legs does an insect have?", options: ["4", "8", "6", "2"], answer: 2 },
+        { q: "What state of matter is ice?", options: ["Gas", "Liquid", "Plasma", "Solid"], answer: 3 }
+      ],
+      urdu: [
+        { q: "Which of these is the first letter of the Urdu alphabet?", options: ["ب", "ا", "پ", "ت"], answer: 1 },
+        { q: "How many letters are in the Urdu alphabet?", options: ["26", "30", "36", "40"], answer: 2 },
+        { q: "What does 'کتاب' mean in English?", options: ["Pen", "Chair", "Book", "Table"], answer: 2 },
+        { q: "Which of these is a fruit name in Urdu? 'سیب'", options: ["Mango", "Apple", "Banana", "Orange"], answer: 1 },
+        { q: "What does 'پانی' mean in English?", options: ["Milk", "Juice", "Tea", "Water"], answer: 3 }
+      ],
+      computer: [
+        { q: "What do we use to type on a computer?", options: ["Mouse", "Screen", "Keyboard", "Speaker"], answer: 2 },
+        { q: "What does a mouse help us do?", options: ["Type words", "Click and point", "Print papers", "Store files"], answer: 1 },
+        { q: "What is the brain of a computer called?", options: ["RAM", "CPU", "Monitor", "Keyboard"], answer: 1 },
+        { q: "Which of these is used to store files?", options: ["Monitor", "Keyboard", "Hard Drive", "Mouse"], answer: 2 },
+        { q: "What does 'www' stand for in a website address?", options: ["World Wide Web", "World Web Wide", "Wide World Web", "Web World Wide"], answer: 0 }
+      ]
+    };
+
+    let currentSubject = '';
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+
+    function startQuiz(subject) {
+      currentSubject = subject;
+      currentQuestion = 0;
+      score = 0;
+      answered = false;
+      document.getElementById('subjectSelect').style.display = 'none';
+      document.getElementById('quizScreen').style.display = 'block';
+      const labels = { english:'📖 English', maths:'🔢 Maths', science:'🔬 Science', urdu:'✍️ Urdu', computer:'💻 Computer' };
+      document.getElementById('subjectLabel').textContent = labels[subject];
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const q = questions[currentSubject][currentQuestion];
+      const total = questions[currentSubject].length;
+      document.getElementById('questionNum').textContent = `Question ${currentQuestion + 1} of ${total}`;
+      document.getElementById('questionText').textContent = q.q;
+      document.getElementById('progressBar').style.width = `${((currentQuestion) / total) * 100}%`;
+      document.getElementById('starsEarned').textContent = `⭐ ${score} stars`;
+      const container = document.getElementById('optionsContainer');
+      container.innerHTML = '';
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => selectAnswer(i, q.answer, btn);
+        container.appendChild(btn);
+      });
+      answered = false;
+    }
+
+    function selectAnswer(selected, correct, btn) {
+      if (answered) return;
+      answered = true;
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(b => b.disabled = true);
+      if (selected === correct) {
+        btn.classList.add('correct');
+        score++;
+      } else {
+        btn.classList.add('wrong');
+        buttons[correct].classList.add('correct');
+      }
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < questions[currentSubject].length) {
+          loadQuestion();
+        } else {
+          showResult();
+        }
+      }, 1200);
+    }
+
+    function showResult() {
+      document.getElementById('quizScreen').style.display = 'none';
+      document.getElementById('resultScreen').style.display = 'block';
+      const total = questions[currentSubject].length;
+      document.getElementById('progressBar').style.width = '100%';
+      document.getElementById('resultScore').textContent = `You got ${score} out of ${total} correct!`;
+      let level, levelClass, msg, stars;
+      if (score <= 2) {
+        level = '⭐ Starter'; levelClass = 'level-starter';
+        msg = 'No worries! Everyone starts somewhere. The Starter level is perfect for building your foundation!';
+        stars = '⭐';
+      } else if (score <= 3) {
+        level = '🚀 Explorer'; levelClass = 'level-explorer';
+        msg = 'Well done! You have good basic knowledge. The Explorer level will help you grow even more!';
+        stars = '⭐⭐⭐';
+      } else {
+        level = '🏆 Builder'; levelClass = 'level-builder';
+        msg = 'Amazing! You are very knowledgeable. The Builder level will challenge and excite you!';
+        stars = '⭐⭐⭐⭐⭐';
+      }
+      document.getElementById('resultStars').textContent = stars;
+      const levelEl = document.getElementById('resultLevel');
+      levelEl.textContent = level;
+      levelEl.className = 'result-level ' + levelClass;
+      document.getElementById('resultMsg').textContent = msg;
+    }
+
+    function retakeQuiz() {
+      document.getElementById('resultScreen').style.display = 'none';
+      document.getElementById('subjectSelect').style.display = 'block';
+    }
+
+    function goToSubject() {
+      const pages = { english:'english.html', maths:'maths.html', science:'science.html', urdu:'urdu.html', computer:'computer.html' };
+      window.location.href = pages[currentSubject];
+    }
+  </script>
+
+</body>
+</html>

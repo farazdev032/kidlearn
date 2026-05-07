@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - Learn & Grow!</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+
+    header {
+      background: #4a90d9;
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 28px; }
+    header p { font-size: 14px; opacity: 0.9; }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 15px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+    .hero h2 { font-size: 40px; margin-bottom: 15px; }
+    .hero p { font-size: 18px; margin-bottom: 30px; opacity: 0.9; }
+    .hero button {
+      background: #ffcc00;
+      color: #333;
+      border: none;
+      padding: 15px 35px;
+      font-size: 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .hero button:hover { background: #ffdd44; }
+
+    .subjects {
+      padding: 50px 40px;
+      text-align: center;
+    }
+    .subjects h2 { font-size: 30px; margin-bottom: 10px; color: #333; }
+    .subjects p { color: #666; margin-bottom: 30px; }
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .subject-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .subject-card:hover { transform: translateY(-5px); }
+    .subject-card .icon { font-size: 40px; margin-bottom: 12px; }
+    .subject-card h3 { font-size: 16px; color: #333; }
+    .s1 { border-top: 4px solid #4a90d9; }
+    .s2 { border-top: 4px solid #7ed321; }
+    .s3 { border-top: 4px solid #50e3c2; }
+    .s4 { border-top: 4px solid #f5a623; }
+    .s5 { border-top: 4px solid #9b59b6; }
+
+    .ages {
+      background: #fff;
+      padding: 50px 40px;
+      text-align: center;
+    }
+    .ages h2 { font-size: 30px; margin-bottom: 30px; color: #333; }
+    .age-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .age-card {
+      border-radius: 16px;
+      padding: 25px;
+      color: white;
+    }
+    .age-card h3 { font-size: 20px; margin-bottom: 8px; }
+    .age-card p { font-size: 14px; opacity: 0.9; }
+    .a1 { background: #f5a623; }
+    .a2 { background: #4a90d9; }
+    .a3 { background: #9b59b6; }
+
+    footer {
+      background: #333;
+      color: #aaa;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>🌟 KidLearn</h1>
+      <p>Learning made fun for ages 3–11</p>
+    </div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="assessment.html">Assessment</a>
+      <a href="#">For Parents</a>
+      <a href="register.html">Register</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Learn. Play. Grow. 🚀</h2>
+    <p>A smart learning platform designed for Pakistani kids aged 3 to 11</p>
+    <button>Get Started Free</button>
+  </section>
+
+  <section class="subjects">
+    <h2>Choose a Subject</h2>
+    <p>5 subjects designed for every level</p>
+    <div class="subject-grid">
+      <a href="english.html" style="text-decoration:none;">
+  <div class="subject-card s1"><div class="icon">📖</div><h3>English</h3></div>
+</a>
+      <a href="maths.html" style="text-decoration:none;">
+  <div class="subject-card s2"><div class="icon">🔢</div><h3>Maths</h3></div>
+</a>
+      <a href="science.html" style="text-decoration:none;">
+  <div class="subject-card s3"><div class="icon">🔬</div><h3>Science</h3></div>
+</a>
+      <a href="urdu.html" style="text-decoration:none;">
+  <div class="subject-card s4"><div class="icon">✍️</div><h3>Urdu</h3></div>
+</a>
+      <a href="computer.html" style="text-decoration:none;">
+  <div class="subject-card s5"><div class="icon">💻</div><h3>Computer</h3></div>
+</a>
+  </section>
+
+  <section class="ages">
+    <h2>Pick Your Level</h2>
+    <div class="age-grid">
+      <div class="age-card a1"><h3>⭐ Starters</h3><p>Ages 3–5</p><p>Shapes, colours, numbers</p></div>
+      <div class="age-card a2"><h3>🚀 Explorers</h3><p>Ages 6–8</p><p>Reading, adding, science</p></div>
+      <div class="age-card a3"><h3>🏆 Builders</h3><p>Ages 9–11</p><p>Writing, multiply, coding</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 KidLearn · Built with ❤️ for Pakistani children</p>
+  </footer>
+
+</body>
+</html>
