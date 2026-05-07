@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - English Lesson 5: Reading Comprehension</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #4a90d9; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .lesson-hero { background: linear-gradient(135deg, #4a90d9, #764ba2); color: white; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .lesson-hero h2 { font-size: 28px; margin-bottom: 8px; }
+    .lesson-hero p { font-size: 15px; opacity: 0.9; }
+    .lesson-meta { display: flex; gap: 15px; margin-top: 12px; }
+    .meta-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .hero-icon { font-size: 80px; }
+    .lesson-container { max-width: 800px; margin: 30px auto; padding: 0 20px 50px; }
+    .lesson-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #aaa; }
+    .step.active { color: #4a90d9; font-weight: bold; }
+    .step.done { color: #7ed321; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #aaa; }
+    .step.active .step-circle { background: #4a90d9; color: white; }
+    .step.done .step-circle { background: #7ed321; color: white; }
+    .step-line { flex: 1; height: 2px; background: #e0e0e0; }
+    .step-line.done { background: #7ed321; }
+    .lesson-section { display: none; }
+    .lesson-section.active { display: block; }
+    .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+    .highlight { color: #4a90d9; font-weight: bold; }
+    .tip-box { background: #fff5e0; border-left: 4px solid #f5a623; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
+
+    /* STORY */
+    .story-box { background: #f8f8ff; border: 2px solid #4a90d9; border-radius: 16px; padding: 25px; margin: 20px 0; }
+    .story-title { font-size: 20px; font-weight: bold; color: #4a90d9; margin-bottom: 15px; text-align: center; }
+    .story-image { font-size: 60px; text-align: center; margin-bottom: 15px; }
+    .story-text { font-size: 16px; color: #333; line-height: 2; }
+    .story-text .key-word { background: #e8f4ff; color: #4a90d9; padding: 1px 6px; border-radius: 6px; font-weight: bold; }
+
+    /* COMPREHENSION QUESTIONS */
+    .comp-question { background: #f0f8ff; border-radius: 14px; padding: 20px; margin-bottom: 15px; }
+    .comp-q-text { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 12px; }
+    .comp-options { display: flex; flex-direction: column; gap: 8px; }
+    .comp-btn { padding: 12px 16px; background: white; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; cursor: pointer; transition: all 0.2s; text-align: left; color: #333; }
+    .comp-btn:hover { border-color: #4a90d9; background: #e8f4ff; }
+    .comp-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .comp-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+    .comp-feedback { font-size: 13px; margin-top: 8px; min-height: 20px; font-weight: bold; }
+
+    /* TRUE FALSE */
+    .tf-card { background: #f0f8ff; border-radius: 14px; padding: 18px 20px; margin-bottom: 12px; }
+    .tf-statement { font-size: 16px; color: #333; margin-bottom: 12px; }
+    .tf-btns { display: flex; gap: 10px; }
+    .tf-btn { padding: 10px 24px; border-radius: 25px; border: 2px solid #e0e0e0; font-size: 14px; font-weight: bold; cursor: pointer; background: white; transition: all 0.2s; }
+    .tf-btn:hover { border-color: #4a90d9; }
+    .tf-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .tf-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+    .tf-feedback { font-size: 13px; margin-top: 8px; font-weight: bold; min-height: 20px; }
+
+    /* QUIZ */
+    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; }
+    .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+    .quiz-btn { padding: 15px; background: #f0f8ff; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 15px; cursor: pointer; transition: all 0.2s; color: #333; text-align: left; }
+    .quiz-btn:hover { border-color: #4a90d9; background: #e8f4ff; }
+    .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+
+    /* RESULT */
+    .result-box { text-align: center; padding: 20px; }
+    .result-stars { font-size: 50px; margin-bottom: 15px; }
+    .result-title { font-size: 26px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .result-msg { font-size: 15px; color: #666; margin-bottom: 25px; }
+    .result-score { display: inline-block; background: #e8f4ff; color: #4a90d9; font-size: 18px; font-weight: bold; padding: 8px 24px; border-radius: 20px; margin-bottom: 25px; }
+    .btn-next { display: block; width: 100%; padding: 16px; background: #4a90d9; color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-next:hover { background: #357abd; }
+    .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
+    .btn-home { display: inline-block; padding: 14px 30px; background: #4a90d9; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
+    .score-summary { background: #f0f8ff; border-radius: 14px; padding: 15px; margin: 15px 0; }
+    .score-row { display: flex; justify-content: space-between; font-size: 14px; color: #555; padding: 5px 0; border-bottom: 1px solid #e0e0e0; }
+    .score-row:last-child { border-bottom: none; font-weight: bold; color: #4a90d9; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="english.html">English</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
+
+<div class="lesson-hero">
+  <div>
+    <h2>📖 English — Lesson 5</h2>
+    <p>Reading Comprehension — Read and Understand!</p>
+    <div class="lesson-meta">
+      <span class="meta-badge">🚀 Explorers</span>
+      <span class="meta-badge">⏱ 15 minutes</span>
+      <span class="meta-badge">🎯 Ages 6–8</span>
+    </div>
+  </div>
+  <div class="hero-icon">📚</div>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-progress">
+    <div class="step active" id="step1"><div class="step-circle">1</div> Learn</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2"><div class="step-circle">2</div> Read</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3"><div class="step-circle">3</div> True/False</div>
+    <div class="step-line" id="line3"></div>
+    <div class="step" id="step4"><div class="step-circle">4</div> Quiz</div>
+    <div class="step-line" id="line4"></div>
+    <div class="step" id="step5"><div class="step-circle">5</div> Done!</div>
+  </div>
+
+  <!-- SECTION 1: LEARN -->
+  <div class="lesson-section active" id="section1">
+    <div class="card">
+      <h3>📚 What is Reading Comprehension?</h3>
+      <p><span class="highlight">Reading Comprehension</span> means reading a piece of writing and <span class="highlight">understanding</span> what it says. It is not just about reading the words — it is about knowing the meaning!</p>
+      <div class="tip-box">💡 <strong>Top Tips for Good Reading:</strong><br><br>
+        1️⃣ Read the whole passage first before answering questions<br>
+        2️⃣ Read it again slowly and carefully<br>
+        3️⃣ Look for key words in the questions<br>
+        4️⃣ Find the answer in the passage — it is always there!
+      </div>
+    </div>
+    <div class="card">
+      <h3>🔍 Key Reading Skills</h3>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:10px">
+        <div style="background:#e8f4ff;border-radius:12px;padding:15px">
+          <div style="font-size:24px;margin-bottom:6px">👀</div>
+          <div style="font-weight:bold;color:#4a90d9;margin-bottom:4px">Skimming</div>
+          <div style="font-size:13px;color:#666">Reading quickly to get the main idea</div>
+        </div>
+        <div style="background:#e0ffe0;border-radius:12px;padding:15px">
+          <div style="font-size:24px;margin-bottom:6px">🔍</div>
+          <div style="font-weight:bold;color:#3a7a00;margin-bottom:4px">Scanning</div>
+          <div style="font-size:13px;color:#666">Looking for specific information</div>
+        </div>
+        <div style="background:#fff5e0;border-radius:12px;padding:15px">
+          <div style="font-size:24px;margin-bottom:6px">🧠</div>
+          <div style="font-weight:bold;color:#f5a623;margin-bottom:4px">Understanding</div>
+          <div style="font-size:13px;color:#666">Knowing what the text means</div>
+        </div>
+        <div style="background:#f5e8ff;border-radius:12px;padding:15px">
+          <div style="font-size:24px;margin-bottom:6px">❓</div>
+          <div style="font-weight:bold;color:#9b59b6;margin-bottom:4px">Questioning</div>
+          <div style="font-size:13px;color:#666">Asking who, what, where, when, why</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-next" onclick="goToSection(2)">Next — Read the Story ➡️</button>
+  </div>
+
+  <!-- SECTION 2: READ & COMPREHEND -->
+  <div class="lesson-section" id="section2">
+    <div class="card">
+      <h3>📖 Read the Story carefully!</h3>
+      <div class="story-box">
+        <div class="story-image">🐝</div>
+        <div class="story-title">Bina the Busy Bee</div>
+        <div class="story-text">
+          <p>Bina is a <span class="key-word">bee</span> who lives in a big <span class="key-word">hive</span> in the garden. Every morning, Bina wakes up early and flies to the flowers.</p>
+          <br>
+          <p>Bina loves to collect <span class="key-word">honey</span> from the flowers. She visits red roses, yellow sunflowers, and pink tulips. The flowers smell very sweet.</p>
+          <br>
+          <p>After collecting honey, Bina flies back to her hive. She shares the honey with her <span class="key-word">friends</span>. All the bees in the hive are very happy.</p>
+          <br>
+          <p>At night, Bina rests in her hive. She dreams about the beautiful flowers she will visit tomorrow. Bina is a very <span class="key-word">hardworking</span> and kind bee.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>❓ Answer the Questions!</h3>
+      <p style="margin-bottom:15px">Read the story again and answer these questions. The answers are in the story!</p>
+      <div id="compQuestions"></div>
+      <button class="btn-next" id="nextToTF" onclick="goToSection(3)" style="display:none">Next — True or False ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: TRUE/FALSE -->
+  <div class="lesson-section" id="section3">
+    <div class="card">
+      <h3>✅ True or False?</h3>
+      <p style="margin-bottom:15px">Read each statement about Bina the Bee. Is it TRUE or FALSE?</p>
+      <div id="tfContainer"></div>
+      <button class="btn-next" id="nextToQuiz" onclick="goToSection(4)" style="display:none">Next — Quiz ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4: QUIZ -->
+  <div class="lesson-section" id="section4">
+    <div class="card">
+      <h3>🧠 Final Quiz — 4 Questions!</h3>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: RESULT -->
+  <div class="lesson-section" id="section5">
+    <div class="card">
+      <div class="result-box">
+        <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+        <div class="result-title" id="resultTitle">Lesson Complete!</div>
+        <div class="result-score" id="resultScore">Quiz Score: 4/4</div>
+        <p class="result-msg" id="resultMsg">Amazing! You are a great reader!</p>
+        <br/>
+        <a href="lesson-english-4.html" class="btn-home">← Lesson 4</a>
+        <a href="lesson-english-6.html" class="btn-success">Next Lesson →</a>
+        <a href="dashboard.html" class="btn-home">Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+  // COMPREHENSION QUESTIONS
+  const compData = [
+    { q:'Where does Bina the bee live?', options:['In a tree','In a big hive in the garden','Under a rock','In a house'], answer:1, feedback:'✅ Bina lives in a big hive in the garden!' },
+    { q:'What does Bina love to collect?', options:['Water','Leaves','Honey','Seeds'], answer:2, feedback:'✅ Bina loves to collect honey from the flowers!' },
+    { q:'Which flowers does Bina visit?', options:['Only roses','Roses, sunflowers and tulips','Only sunflowers','Only tulips'], answer:1, feedback:'✅ Bina visits red roses, yellow sunflowers, and pink tulips!' },
+    { q:'What does Bina do at night?', options:['Flies to flowers','Eats honey','Rests and dreams','Plays with friends'], answer:2, feedback:'✅ At night, Bina rests in her hive and dreams about flowers!' },
+  ];
+
+  let compAnswered = 0;
+  let compCorrect = 0;
+
+  function loadComp() {
+    const container = document.getElementById('compQuestions');
+    container.innerHTML = '';
+    compData.forEach((q, idx) => {
+      const div = document.createElement('div');
+      div.className = 'comp-question';
+      div.id = 'cq-' + idx;
+      div.innerHTML = `
+        <div class="comp-q-text">Q${idx+1}: ${q.q}</div>
+        <div class="comp-options">
+          ${q.options.map((o,i) => `<button class="comp-btn" onclick="checkComp(${idx},${i},${q.answer},this)">${o}</button>`).join('')}
+        </div>
+        <div class="comp-feedback" id="cf-${idx}"></div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function checkComp(qIdx, selected, correct, btn) {
+    const div = document.getElementById('cq-' + qIdx);
+    const btns = div.querySelectorAll('.comp-btn');
+    btns.forEach(b => b.disabled = true);
+    const fb = document.getElementById('cf-' + qIdx);
+    if (selected === correct) {
+      btn.classList.add('correct');
+      fb.style.color = '#7ed321';
+      fb.textContent = compData[qIdx].feedback;
+      compCorrect++;
+    } else {
+      btn.classList.add('wrong');
+      btns[correct].classList.add('correct');
+      fb.style.color = '#e74c3c';
+      fb.textContent = '❌ ' + compData[qIdx].feedback;
+    }
+    compAnswered++;
+    if (compAnswered === compData.length) {
+      setTimeout(() => {
+        document.getElementById('nextToTF').style.display = 'block';
+      }, 800);
+    }
+  }
+
+  // TRUE/FALSE DATA
+  const tfData = [
+    { statement:'Bina wakes up early every morning.', answer:true },
+    { statement:'Bina lives in a small hive.', answer:false },
+    { statement:'Bina shares honey with her friends.', answer:true },
+    { statement:'Bina visits only yellow sunflowers.', answer:false },
+    { statement:'Bina is a hardworking and kind bee.', answer:true },
+  ];
+
+  let tfAnswered = 0;
+  let tfCorrect = 0;
+
+  function loadTF() {
+    const container = document.getElementById('tfContainer');
+    container.innerHTML = '';
+    tfData.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'tf-card';
+      div.id = 'tf-' + idx;
+      div.innerHTML = `
+        <div class="tf-statement">${idx+1}. "${item.statement}"</div>
+        <div class="tf-btns">
+          <button class="tf-btn" onclick="checkTF(${idx}, true, this)">✅ True</button>
+          <button class="tf-btn" onclick="checkTF(${idx}, false, this)">❌ False</button>
+        </div>
+        <div class="tf-feedback" id="tff-${idx}"></div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function checkTF(idx, answer, btn) {
+    const div = document.getElementById('tf-' + idx);
+    const btns = div.querySelectorAll('.tf-btn');
+    btns.forEach(b => b.disabled = true);
+    const fb = document.getElementById('tff-' + idx);
+    const correct = tfData[idx].answer;
+    if (answer === correct) {
+      btn.classList.add('correct');
+      fb.style.color = '#7ed321';
+      fb.textContent = '✅ Correct!';
+      tfCorrect++;
+    } else {
+      btn.classList.add('wrong');
+      btns[correct ? 0 : 1].classList.add('correct');
+      fb.style.color = '#e74c3c';
+      fb.textContent = '❌ Not quite! The correct answer is ' + (correct ? 'True' : 'False') + '.';
+    }
+    tfAnswered++;
+    if (tfAnswered === tfData.length) {
+      setTimeout(() => {
+        document.getElementById('nextToQuiz').style.display = 'block';
+      }, 800);
+    }
+  }
+
+  // QUIZ DATA
+  const quizData = [
+    { q:'What is reading comprehension?', options:['Writing a story','Reading and understanding a text','Drawing pictures','Spelling words'], answer:1 },
+    { q:'What is SKIMMING?', options:['Reading every word slowly','Looking for one word','Reading quickly to get the main idea','Writing a summary'], answer:2 },
+    { q:'In the story, what colour are the sunflowers Bina visits?', options:['Red','Pink','Purple','Yellow'], answer:3 },
+    { q:'What is the MAIN idea of the story about Bina?', options:['Bina is lazy','Bina is a hardworking bee who collects honey','Bina hates flowers','Bina never shares'], answer:1 },
+  ];
+  let quizIdx = 0;
+  let quizScore = 0;
+
+  function loadQuiz() {
+    const q = quizData[quizIdx];
+    document.getElementById('quizContainer').innerHTML = `
+      <div class="quiz-question">Q${quizIdx+1}: ${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((o,i) => `<button class="quiz-btn" onclick="checkQuiz(${i},${q.answer},this)">${o}</button>`).join('')}
+      </div>
+      <div style="text-align:center;color:#aaa;font-size:13px">Question ${quizIdx+1} of ${quizData.length}</div>
+    `;
+  }
+
+  function checkQuiz(selected, correct, btn) {
+    const btns = document.querySelectorAll('.quiz-btn');
+    btns.forEach(b => b.disabled = true);
+    if (selected === correct) { btn.classList.add('correct'); quizScore++; }
+    else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+    setTimeout(() => {
+      quizIdx++;
+      if (quizIdx < quizData.length) { loadQuiz(); }
+      else { showResult(); }
+    }, 1200);
+  }
+
+  function showResult() {
+    goToSection(5);
+    const pct = quizScore / quizData.length;
+    let stars, title, msg;
+    if (pct === 1) { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You are an amazing reader! You understood every part of the story!'; }
+    else if (pct >= 0.5) { stars='⭐⭐'; title='Well Done! 😊'; msg='Great reading! You understood most of the story. Keep practising!'; }
+    else { stars='⭐'; title='Good Try! 💪'; msg='Reading takes practice! Read the story again slowly and try once more!'; }
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = `Quiz Score: ${quizScore}/${quizData.length}`;
+    document.getElementById('resultMsg').textContent = msg;
+  }
+
+  // NAVIGATION
+  function goToSection(n) {
+    document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
+    for (let i=1; i<=5; i++) {
+      const step = document.getElementById('step'+i);
+      if (i < n) { step.className='step done'; step.querySelector('.step-circle').textContent='✓'; }
+      else if (i===n) { step.className='step active'; step.querySelector('.step-circle').textContent=i; }
+      else { step.className='step'; step.querySelector('.step-circle').textContent=i; }
+      if (i < 5) {
+        const line = document.getElementById('line'+i);
+        if (line) line.className = i < n ? 'step-line done' : 'step-line';
+      }
+    }
+    if (n===2) { compAnswered=0; compCorrect=0; loadComp(); }
+    if (n===3) { tfAnswered=0; tfCorrect=0; loadTF(); }
+    if (n===4) { quizIdx=0; quizScore=0; loadQuiz(); }
+    window.scrollTo(0,0);
+  }
+</script>
+</body>
+</html>
