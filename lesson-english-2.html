@@ -3,34 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KidLearn - English Lesson 2: Phonics & Sounds</title>
+  <title>KidLearn - English Lesson 2: Phonics Sounds</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: Arial, sans-serif; background: #f0f8ff; }
-    header {
-      background: #4a90d9;
-      color: white;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    header { background: #4a90d9; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
     header h1 { font-size: 24px; }
     nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
-    .lesson-hero {
-      background: linear-gradient(135deg, #4a90d9, #764ba2);
-      color: white;
-      padding: 30px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    .lesson-hero { background: linear-gradient(135deg, #4a90d9, #764ba2); color: white; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
     .lesson-hero h2 { font-size: 28px; margin-bottom: 8px; }
     .lesson-hero p { font-size: 15px; opacity: 0.9; }
     .lesson-meta { display: flex; gap: 15px; margin-top: 12px; }
     .meta-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
     .hero-icon { font-size: 80px; }
-    .lesson-container { max-width: 800px; margin: 30px auto; padding: 0 20px 50px; }
+    .lesson-container { max-width: 900px; margin: 30px auto; padding: 0 20px 50px; }
     .lesson-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
     .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #aaa; }
     .step.active { color: #4a90d9; font-weight: bold; }
@@ -43,60 +29,84 @@
     .lesson-section { display: none; }
     .lesson-section.active { display: block; }
     .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
-    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; }
     .card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 12px; }
-    .highlight { color: #4a90d9; font-weight: bold; }
     .tip-box { background: #fff5e0; border-left: 4px solid #f5a623; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
-
-    /* PHONICS GRID */
-    .phonics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
-    .phonics-card { background: #e8f4ff; border: 2px solid #4a90d9; border-radius: 14px; padding: 15px 10px; text-align: center; cursor: pointer; transition: all 0.2s; }
-    .phonics-card:hover { background: #4a90d9; transform: scale(1.05); }
-    .phonics-card:hover .ph-letter { color: white; }
-    .phonics-card:hover .ph-word { color: rgba(255,255,255,0.8); }
-    .phonics-card:hover .ph-sound { color: rgba(255,255,255,0.9); }
-    .ph-letter { font-size: 28px; font-weight: bold; color: #4a90d9; margin-bottom: 4px; }
-    .ph-sound { font-size: 13px; color: #764ba2; font-style: italic; margin-bottom: 4px; }
-    .ph-word { font-size: 12px; color: #888; }
-
-    /* VOWEL SOUNDS */
-    .vowel-sounds { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 20px 0; }
-    .vs-card { border-radius: 14px; padding: 18px 10px; text-align: center; cursor: pointer; transition: transform 0.2s; }
-    .vs-card:hover { transform: scale(1.08); }
-    .vs-letter { font-size: 30px; font-weight: bold; margin-bottom: 6px; }
-    .vs-sound { font-size: 13px; font-style: italic; margin-bottom: 4px; }
-    .vs-example { font-size: 18px; margin-bottom: 4px; }
-    .vs-word { font-size: 12px; }
-
-    /* WORD BUILDER */
-    .word-builder { text-align: center; margin: 20px 0; }
-    .word-display { font-size: 48px; font-weight: bold; color: #4a90d9; letter-spacing: 8px; margin: 20px 0; min-height: 70px; }
-    .letter-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 15px 0; }
-    .letter-btn { width: 48px; height: 48px; border-radius: 12px; border: 2px solid #4a90d9; background: #e8f4ff; font-size: 20px; font-weight: bold; color: #4a90d9; cursor: pointer; transition: all 0.2s; }
-    .letter-btn:hover { background: #4a90d9; color: white; }
-    .letter-btn.used { background: #ccc; border-color: #ccc; color: white; cursor: not-allowed; }
-    .word-feedback { font-size: 16px; font-weight: bold; min-height: 28px; margin-top: 10px; }
-    .action-row { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
-    .btn-clear { padding: 10px 20px; background: #fee; border: 2px solid #e74c3c; border-radius: 25px; color: #e74c3c; font-size: 14px; cursor: pointer; }
-    .btn-check { padding: 10px 20px; background: #4a90d9; border: none; border-radius: 25px; color: white; font-size: 14px; cursor: pointer; }
-
-    /* QUIZ */
-    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; }
+    .highlight { color: #4a90d9; font-weight: bold; }
+    .progress-section { margin-top: 15px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .progress-text { font-size: 14px; font-weight: bold; color: #333; }
+    .progress-pct { font-size: 13px; color: #7ed321; font-weight: bold; }
+    .progress-track { background: #e0e0e0; border-radius: 20px; height: 12px; overflow: hidden; }
+    .progress-fill { height: 12px; border-radius: 20px; background: linear-gradient(90deg, #4a90d9, #7ed321); width: 0%; transition: width 0.4s; }
+    .letters-nav { display: flex; gap: 6px; flex-wrap: wrap; margin: 15px 0; }
+    .letter-nav-btn { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #e0e0e0; background: white; font-size: 14px; font-weight: bold; color: #333; cursor: pointer; transition: all 0.2s; }
+    .letter-nav-btn:hover { border-color: #4a90d9; color: #4a90d9; }
+    .letter-nav-btn.active { background: #4a90d9; color: white; border-color: #4a90d9; }
+    .letter-nav-btn.visited { border-color: #7ed321; color: #7ed321; }
+    .sound-group { border-radius: 20px; padding: 25px; margin-bottom: 20px; border: 2px solid #4a90d9; background: #f8f8ff; }
+    .sound-header { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+    .sound-big-letter { width: 80px; height: 80px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 42px; font-weight: bold; flex-shrink: 0; }
+    .sound-info h4 { font-size: 20px; color: #333; margin-bottom: 4px; }
+    .sound-ipa { font-size: 22px; font-weight: bold; font-style: italic; margin-bottom: 4px; }
+    .sound-desc { font-size: 14px; color: #666; }
+    .sound-play-btn { margin-left: auto; color: white; border: none; padding: 12px 20px; border-radius: 25px; font-size: 14px; cursor: pointer; }
+    .sound-words { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .sound-word-card { background: white; border-radius: 14px; padding: 18px; text-align: center; border: 2px solid #e0e0e0; cursor: pointer; transition: all 0.2s; }
+    .sound-word-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+    .sw-img { font-size: 44px; margin-bottom: 10px; }
+    .sw-word { font-size: 16px; font-weight: bold; color: #333; }
+    .sw-first { font-weight: bold; font-size: 18px; }
+    .all-done-msg { display: none; background: #e0ffe0; border: 2px solid #7ed321; border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 15px; }
+    .all-done-msg.show { display: block; }
+    .video-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .video-header { background: linear-gradient(135deg, #4a90d9, #764ba2); padding: 20px 25px; color: white; }
+    .video-header h3 { font-size: 20px; margin-bottom: 5px; color: white; }
+    .video-header p { font-size: 14px; opacity: 0.9; margin: 0; }
+    .video-body { padding: 20px; }
+    .video-player { width: 100%; border-radius: 12px; background: #000; max-height: 450px; display: block; }
+    .video-tip { background: #fff5e0; border-radius: 12px; padding: 15px; margin-top: 15px; display: flex; align-items: center; gap: 12px; }
+    .video-tip-icon { font-size: 28px; flex-shrink: 0; }
+    .video-tip-title { font-weight: bold; color: #f5a623; margin-bottom: 4px; font-size: 15px; }
+    .video-tip-desc { font-size: 14px; color: #555; }
+    .video-watched-msg { display: none; background: #e0ffe0; border-radius: 12px; padding: 15px; margin-top: 15px; text-align: center; }
+    .video-watched-msg.show { display: block; }
+    .video-btns { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+    .btn-watched { flex: 1; padding: 14px; background: #7ed321; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; }
+    .btn-skip { padding: 14px 20px; background: #f0f0f0; color: #666; border: none; border-radius: 12px; font-size: 15px; cursor: pointer; }
+    .match-sound-display { background: linear-gradient(135deg, #4a90d9, #764ba2); border-radius: 20px; padding: 25px; text-align: center; color: white; margin-bottom: 20px; }
+    .match-clue { font-size: 20px; font-weight: bold; margin-bottom: 8px; }
+    .match-ipa { font-size: 28px; font-style: italic; opacity: 0.85; margin-bottom: 8px; }
+    .match-play-btn { background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 24px; border-radius: 25px; font-size: 15px; cursor: pointer; margin-top: 12px; }
+    .match-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 15px; }
+    .match-btn { padding: 20px 10px; background: white; border: 3px solid #e0e0e0; border-radius: 16px; font-size: 32px; font-weight: bold; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .match-btn:hover { border-color: #4a90d9; transform: scale(1.05); }
+    .match-btn.correct { background: #e0ffe0; border-color: #7ed321; }
+    .match-btn.wrong { background: #ffe0e0; border-color: #e74c3c; }
+    .match-feedback { text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px; min-height: 30px; }
+    .match-score { text-align: center; font-size: 14px; color: #888; margin-top: 5px; }
+    .odd-question { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 8px; text-align: center; }
+    .odd-hint { font-size: 15px; color: #4a90d9; text-align: center; margin-bottom: 20px; background: #e8f4ff; padding: 10px; border-radius: 12px; }
+    .odd-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 15px; }
+    .odd-btn { background: white; border: 3px solid #e0e0e0; border-radius: 16px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .odd-btn:hover { border-color: #4a90d9; transform: translateY(-3px); }
+    .odd-btn.correct { background: #e0ffe0; border-color: #7ed321; }
+    .odd-btn.wrong { background: #ffe0e0; border-color: #e74c3c; }
+    .odd-emoji { font-size: 36px; margin-bottom: 8px; }
+    .odd-word { font-size: 13px; font-weight: bold; color: #333; }
+    .odd-feedback { text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px; min-height: 28px; }
+    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 15px; text-align: center; }
     .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
-    .quiz-btn { padding: 15px; background: #f0f8ff; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 16px; cursor: pointer; transition: all 0.2s; color: #333; }
+    .quiz-btn { padding: 15px; background: #f0f8ff; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 15px; cursor: pointer; transition: all 0.2s; color: #333; text-align: center; }
     .quiz-btn:hover { border-color: #4a90d9; background: #e8f4ff; }
     .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
     .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
-
-    /* RESULT */
     .result-box { text-align: center; padding: 20px; }
-    .result-stars { font-size: 50px; margin-bottom: 15px; }
-    .result-title { font-size: 26px; font-weight: bold; color: #333; margin-bottom: 10px; }
-    .result-msg { font-size: 15px; color: #666; margin-bottom: 25px; }
-    .result-score { display: inline-block; background: #e8f4ff; color: #4a90d9; font-size: 18px; font-weight: bold; padding: 8px 24px; border-radius: 20px; margin-bottom: 25px; }
-
-    /* BUTTONS */
-    .btn-next { display: block; width: 100%; padding: 16px; background: #4a90d9; color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: background 0.2s; }
+    .result-stars { font-size: 60px; margin-bottom: 15px; }
+    .result-title { font-size: 28px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .result-msg { font-size: 16px; color: #666; margin-bottom: 25px; }
+    .result-score { display: inline-block; background: #e8f4ff; color: #4a90d9; font-size: 20px; font-weight: bold; padding: 10px 28px; border-radius: 20px; margin-bottom: 25px; }
+    .btn-next { display: block; width: 100%; padding: 18px; background: #4a90d9; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
     .btn-next:hover { background: #357abd; }
     .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
     .btn-home { display: inline-block; padding: 14px 30px; background: #4a90d9; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
@@ -116,14 +126,14 @@
 <div class="lesson-hero">
   <div>
     <h2>📖 English — Lesson 2</h2>
-    <p>Phonics & Sounds — How letters sound!</p>
+    <p>Phonics — Learning Letter Sounds A to Z!</p>
     <div class="lesson-meta">
       <span class="meta-badge">⭐ Starters</span>
-      <span class="meta-badge">⏱ 12 minutes</span>
+      <span class="meta-badge">⏱ 15 minutes</span>
       <span class="meta-badge">🎯 Ages 3–6</span>
     </div>
   </div>
-  <div class="hero-icon">🔤</div>
+  <div class="hero-icon">🔊</div>
 </div>
 
 <div class="lesson-container">
@@ -131,214 +141,424 @@
   <div class="lesson-progress">
     <div class="step active" id="step1"><div class="step-circle">1</div> Learn</div>
     <div class="step-line" id="line1"></div>
-    <div class="step" id="step2"><div class="step-circle">2</div> Vowel Sounds</div>
+    <div class="step" id="step2"><div class="step-circle">2</div> Video</div>
     <div class="step-line" id="line2"></div>
-    <div class="step" id="step3"><div class="step-circle">3</div> Word Builder</div>
+    <div class="step" id="step3"><div class="step-circle">3</div> Sounds</div>
     <div class="step-line" id="line3"></div>
-    <div class="step" id="step4"><div class="step-circle">4</div> Quiz</div>
+    <div class="step" id="step4"><div class="step-circle">4</div> Match</div>
     <div class="step-line" id="line4"></div>
-    <div class="step" id="step5"><div class="step-circle">5</div> Done!</div>
+    <div class="step" id="step5"><div class="step-circle">5</div> Odd One Out</div>
+    <div class="step-line" id="line5"></div>
+    <div class="step" id="step6"><div class="step-circle">6</div> Quiz</div>
+    <div class="step-line" id="line6"></div>
+    <div class="step" id="step7"><div class="step-circle">7</div> Done!</div>
   </div>
 
   <!-- SECTION 1: LEARN -->
   <div class="lesson-section active" id="section1">
     <div class="card">
       <h3>🔊 What is Phonics?</h3>
-      <p>Phonics teaches us the <span class="highlight">sounds</span> that letters make. Every letter has its own special sound. When we know the sounds, we can read any word!</p>
-      <div class="tip-box">💡 <strong>Remember:</strong> The letter name and the letter sound are different! The letter is called "Bee" but its sound is "buh" as in <strong>Ball</strong>!</div>
+      <p><span class="highlight">Phonics</span> is learning the <span class="highlight">sounds</span> that letters make. Every letter has its own special sound. When we know the sounds, we can read and write any word!</p>
+      <div class="tip-box">💡 <strong>Important:</strong> The letter NAME and the letter SOUND are different!<br><br>
+        The letter <strong>B</strong> is called <strong>"Bee"</strong> — but it sounds like the start of <strong>Ball</strong>!<br>
+        The letter <strong>S</strong> is called <strong>"Ess"</strong> — but it sounds like the start of <strong>Sun</strong>!
+      </div>
     </div>
     <div class="card">
-      <h3>🔤 Letter Sounds — Click to learn each sound!</h3>
-      <div class="phonics-grid" id="phonicsGrid"></div>
-    </div>
-    <button class="btn-next" onclick="goToSection(2)">Next — Vowel Sounds ➡️</button>
-  </div>
-
-  <!-- SECTION 2: VOWEL SOUNDS -->
-  <div class="lesson-section" id="section2">
-    <div class="card">
-      <h3>🌟 Short Vowel Sounds</h3>
-      <p>Vowels are special — they make a <span class="highlight">short sound</span> and a <span class="highlight">long sound</span>. Let's learn the short sounds first! Click each vowel to see an example word.</p>
-      <div class="vowel-sounds">
-        <div class="vs-card" style="background:#fff5e0;color:#f5a623" onclick="showVowelWord('a')">
-          <div class="vs-letter">A</div>
-          <div class="vs-sound">"ah"</div>
-          <div class="vs-example">🍎</div>
-          <div class="vs-word" id="vw-a">Click me!</div>
+      <h3>🎯 The 5 Vowel Sounds</h3>
+      <p>These 5 letters are called <span class="highlight">vowels</span> — they have very special sounds!</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:15px">
+        <div style="background:#fff5e0;border:2px solid #f5a623;border-radius:14px;padding:15px 20px;text-align:center;min-width:80px">
+          <div style="font-size:28px;font-weight:bold;color:#f5a623">A</div>
+          <div style="font-size:14px;color:#764ba2;font-style:italic">/æ/</div>
+          <div style="font-size:24px;margin:4px 0">🍎</div>
+          <div style="font-size:13px;color:#666">apple</div>
         </div>
-        <div class="vs-card" style="background:#e8f4ff;color:#4a90d9" onclick="showVowelWord('e')">
-          <div class="vs-letter">E</div>
-          <div class="vs-sound">"eh"</div>
-          <div class="vs-example">🥚</div>
-          <div class="vs-word" id="vw-e">Click me!</div>
+        <div style="background:#e8f4ff;border:2px solid #4a90d9;border-radius:14px;padding:15px 20px;text-align:center;min-width:80px">
+          <div style="font-size:28px;font-weight:bold;color:#4a90d9">E</div>
+          <div style="font-size:14px;color:#764ba2;font-style:italic">/ɛ/</div>
+          <div style="font-size:24px;margin:4px 0">🥚</div>
+          <div style="font-size:13px;color:#666">egg</div>
         </div>
-        <div class="vs-card" style="background:#f5e8ff;color:#9b59b6" onclick="showVowelWord('i')">
-          <div class="vs-letter">I</div>
-          <div class="vs-sound">"ih"</div>
-          <div class="vs-example">🐛</div>
-          <div class="vs-word" id="vw-i">Click me!</div>
+        <div style="background:#f5e8ff;border:2px solid #9b59b6;border-radius:14px;padding:15px 20px;text-align:center;min-width:80px">
+          <div style="font-size:28px;font-weight:bold;color:#9b59b6">I</div>
+          <div style="font-size:14px;color:#764ba2;font-style:italic">/ɪ/</div>
+          <div style="font-size:24px;margin:4px 0">🏔️</div>
+          <div style="font-size:13px;color:#666">igloo</div>
         </div>
-        <div class="vs-card" style="background:#e0fdf8;color:#50e3c2" onclick="showVowelWord('o')">
-          <div class="vs-letter">O</div>
-          <div class="vs-sound">"oh"</div>
-          <div class="vs-example">🐙</div>
-          <div class="vs-word" id="vw-o">Click me!</div>
+        <div style="background:#e0fdf8;border:2px solid #50e3c2;border-radius:14px;padding:15px 20px;text-align:center;min-width:80px">
+          <div style="font-size:28px;font-weight:bold;color:#50e3c2">O</div>
+          <div style="font-size:14px;color:#764ba2;font-style:italic">/ɒ/</div>
+          <div style="font-size:24px;margin:4px 0">🐙</div>
+          <div style="font-size:13px;color:#666">octopus</div>
         </div>
-        <div class="vs-card" style="background:#f0ffe0;color:#7ed321" onclick="showVowelWord('u')">
-          <div class="vs-letter">U</div>
-          <div class="vs-sound">"uh"</div>
-          <div class="vs-example">☂️</div>
-          <div class="vs-word" id="vw-u">Click me!</div>
+        <div style="background:#f0ffe0;border:2px solid #7ed321;border-radius:14px;padding:15px 20px;text-align:center;min-width:80px">
+          <div style="font-size:28px;font-weight:bold;color:#7ed321">U</div>
+          <div style="font-size:14px;color:#764ba2;font-style:italic">/ʌ/</div>
+          <div style="font-size:24px;margin:4px 0">☂️</div>
+          <div style="font-size:13px;color:#666">umbrella</div>
         </div>
       </div>
-      <div class="tip-box">💡 Remember: <strong>A</strong>pple, <strong>E</strong>gg, <strong>I</strong>nsect, <strong>O</strong>ctopus, <strong>U</strong>mbrella — these all start with short vowel sounds!</div>
     </div>
-    <button class="btn-next" onclick="goToSection(3)">Next — Word Builder ➡️</button>
+    <button class="btn-next" onclick="goToSection(2)">Next — Watch Phonics Video ➡️</button>
   </div>
 
-  <!-- SECTION 3: WORD BUILDER -->
+  <!-- SECTION 2: VIDEO -->
+  <div class="lesson-section" id="section2">
+    <div class="video-card">
+      <div class="video-header">
+        <h3>🎬 Watch — Phonics Sounds Video</h3>
+        <p>Watch this video carefully to hear all the letter sounds! Then practise them yourself!</p>
+      </div>
+      <div class="video-body">
+        <video id="phonicsVideo" controls class="video-player">
+          <source src="phonics-video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="video-tip">
+          <div class="video-tip-icon">💡</div>
+          <div>
+            <div class="video-tip-title">How to use this video</div>
+            <div class="video-tip-desc">Watch the full video first. Listen carefully to how each letter sounds. Then click the button below to practise the sounds yourself!</div>
+          </div>
+        </div>
+        <div class="video-watched-msg" id="videoWatchedMsg">
+          <div style="font-size:24px;margin-bottom:6px">✅</div>
+          <div style="font-weight:bold;color:#3a7a00;font-size:16px">Great! You watched the phonics video! Now practise the sounds yourself!</div>
+        </div>
+        <div class="video-btns">
+          <button class="btn-watched" onclick="markVideoWatched()">✅ I watched the video!</button>
+          <button class="btn-skip" onclick="skipVideo()">Skip →</button>
+        </div>
+      </div>
+    </div>
+    <button class="btn-next" id="nextSoundsBtn" onclick="goToSection(3)">Next — Practise Sounds ➡️</button>
+  </div>
+
+  <!-- SECTION 3: SOUND PRACTICE -->
   <div class="lesson-section" id="section3">
     <div class="card">
-      <h3>🏗️ Word Builder — Make a 3-letter word!</h3>
-      <p>Use the letters below to build a simple word. Click the letters in the right order!</p>
-      <div class="word-builder">
-        <div id="wordChallenge" style="font-size:16px;color:#666;margin-bottom:10px;"></div>
-        <div class="word-display" id="wordDisplay">_ _ _</div>
-        <div class="letter-buttons" id="letterButtons"></div>
-        <div class="action-row">
-          <button class="btn-clear" onclick="clearWord()">🗑 Clear</button>
-          <button class="btn-check" onclick="checkWord()">✅ Check Word</button>
+      <h3>🔊 Sound Practice — Click each letter!</h3>
+      <p>Click a letter to hear its sound and see <span class="highlight">3 words</span> that start with that sound!</p>
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-text" id="progressText">0 of 26 sounds practised</span>
+          <span class="progress-pct" id="progressPct">0%</span>
         </div>
-        <div class="word-feedback" id="wordFeedback"></div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
       </div>
-      <button class="btn-next" id="nextToQuizBtn" onclick="goToSection(4)" style="display:none">Next — Quiz ➡️</button>
+      <div class="letters-nav" id="lettersNav"></div>
+    </div>
+    <div id="soundGroupContainer"></div>
+    <div class="all-done-msg" id="allDoneMsg">
+      <div style="font-size:50px;margin-bottom:10px">🎉</div>
+      <div style="font-size:22px;font-weight:bold;color:#3a7a00;margin-bottom:6px">Amazing! You practised all 26 sounds!</div>
+      <div style="font-size:14px;color:#555">You are ready to match sounds to letters!</div>
+    </div>
+    <button class="btn-next" onclick="goToSection(4)">Next — Match Sounds ➡️</button>
+  </div>
+
+  <!-- SECTION 4: MATCH -->
+  <div class="lesson-section" id="section4">
+    <div class="card">
+      <h3>🎯 Match the Word to the Letter!</h3>
+      <p>Look at the word and click the letter it starts with!</p>
+      <div class="match-sound-display">
+        <div class="match-clue" id="matchClue">Which letter does Ball start with?</div>
+        <div class="match-ipa" id="matchIPA">/b/</div>
+        <button class="match-play-btn" onclick="playMatchSound()">🔊 Hear it again</button>
+      </div>
+      <div class="match-options" id="matchOptions"></div>
+      <div class="match-feedback" id="matchFeedback"></div>
+      <div class="match-score" id="matchScore">Question 1 of 6</div>
+      <button class="btn-next" id="nextToOdd" onclick="goToSection(5)" style="display:none">Next — Odd One Out ➡️</button>
     </div>
   </div>
 
-  <!-- SECTION 4: QUIZ -->
-
-  <div class="lesson-section" id="section4">
+  <!-- SECTION 5: ODD ONE OUT -->
+  <div class="lesson-section" id="section5">
     <div class="card">
-      <h3>🧠 Mini Quiz — 3 Questions!</h3>
+      <h3>🔍 Odd One Out!</h3>
+      <p>Three words start with the <span class="highlight">same letter sound</span>. One word is different! Click the <span class="highlight">odd one out</span>!</p>
+      <div id="oddContainer"></div>
+      <button class="btn-next" id="nextToQuiz" onclick="goToSection(6)" style="display:none">Next — Quiz ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 6: QUIZ -->
+  <div class="lesson-section" id="section6">
+    <div class="card">
+      <h3>🧠 Phonics Quiz!</h3>
       <div id="quizContainer"></div>
     </div>
   </div>
 
-  <!-- SECTION 5: RESULT -->
-  <div class="lesson-section" id="section5">
+  <!-- SECTION 7: RESULT -->
+  <div class="lesson-section" id="section7">
     <div class="card">
       <div class="result-box">
         <div class="result-stars" id="resultStars">⭐⭐⭐</div>
-        <div class="result-title" id="resultTitle">Lesson Complete!</div>
-        <div class="result-score" id="resultScore">Quiz Score: 3/3</div>
-        <p class="result-msg" id="resultMsg">Amazing! You now know how letters sound!</p>
+        <div class="result-title" id="resultTitle">Phonics Champion!</div>
+        <div class="result-score" id="resultScore">Score: 4/4</div>
+        <p class="result-msg" id="resultMsg">You know your letter sounds perfectly!</p>
         <br/>
         <a href="lesson-english-1.html" class="btn-home">← Lesson 1</a>
         <a href="lesson-english-3.html" class="btn-success">Next Lesson →</a>
-<a href="dashboard.html" class="btn-home">Dashboard</a>
+        <a href="dashboard.html" class="btn-home">Dashboard</a>
       </div>
     </div>
   </div>
 
 </div>
 
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
+<script src="audio.js"></script>
 <script>
-  // PHONICS DATA
-  const phonicsData = [
-    {l:'A',s:'"ah"',w:'Apple 🍎'},{l:'B',s:'"buh"',w:'Ball ⚽'},{l:'C',s:'"kuh"',w:'Cat 🐱'},{l:'D',s:'"duh"',w:'Dog 🐶'},
-    {l:'E',s:'"eh"',w:'Egg 🥚'},{l:'F',s:'"fuh"',w:'Fish 🐟'},{l:'G',s:'"guh"',w:'Goat 🐐'},{l:'H',s:'"huh"',w:'Hat 🎩'},
-    {l:'I',s:'"ih"',w:'Ink 🖊️'},{l:'J',s:'"juh"',w:'Jar 🫙'},{l:'K',s:'"kuh"',w:'Kite 🪁'},{l:'L',s:'"luh"',w:'Lion 🦁'},
-    {l:'M',s:'"muh"',w:'Moon 🌙'},{l:'N',s:'"nuh"',w:'Nest 🪺'},{l:'O',s:'"oh"',w:'Orange 🍊'},{l:'P',s:'"puh"',w:'Pen 🖊️'},
-  ];
-  const grid = document.getElementById('phonicsGrid');
-  phonicsData.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'phonics-card';
-    card.innerHTML = `<div class="ph-letter">${p.l}</div><div class="ph-sound">${p.s}</div><div class="ph-word">${p.w}</div>`;
-   card.onclick = () => speak(p.l + ' says ' + p.s.replace(/"/g,'') + '. Example: ' + p.w.replace(/[^\w\s]/gu, '').trim());
-    grid.appendChild(card);
-  });
 
-  // VOWEL SOUNDS
-  const vowelWords = { a:'Apple 🍎', e:'Egg 🥚', i:'Insect 🐛', o:'Octopus 🐙', u:'Umbrella ☂️' };
-  function showVowelWord(v) {
-    document.getElementById('vw-'+v).textContent = vowelWords[v];
+  // VIDEO FUNCTIONS
+  function markVideoWatched() {
+    document.getElementById('videoWatchedMsg').className = 'video-watched-msg show';
+    document.getElementById('nextSoundsBtn').style.background = '#7ed321';
+    document.getElementById('nextSoundsBtn').textContent = '✅ Next — Practise Sounds ➡️';
+    speak('Great job! You watched the phonics video! Now click next to practise the sounds yourself!');
+    setTimeout(() => {
+      document.getElementById('nextSoundsBtn').scrollIntoView({behavior:'smooth'});
+    }, 500);
   }
 
-  // WORD BUILDER
-  const wordChallenges = [
-    { word:'CAT', letters:['C','A','T','B','D'], hint:'A furry animal that says meow 🐱' },
-    { word:'SUN', letters:['S','U','N','P','K'], hint:'It shines in the sky ☀️' },
-    { word:'HEN', letters:['H','E','N','M','R'], hint:'A female chicken 🐔' },
-  ];
-  let wcIdx = 0;
-  let currentWord = '';
-  let usedLetters = [];
+  function skipVideo() {
+    const v = document.getElementById('phonicsVideo');
+    if (v) v.pause();
+    goToSection(3);
+  }
 
-  function loadWordChallenge() {
-    const wc = wordChallenges[wcIdx];
-    currentWord = '';
-    usedLetters = [];
-    document.getElementById('wordChallenge').textContent = '💡 Hint: ' + wc.hint;
-    document.getElementById('wordDisplay').textContent = '_ _ _';
-    document.getElementById('wordFeedback').textContent = '';
-    document.getElementById('nextToQuizBtn').style.display = 'none';
-    const btns = document.getElementById('letterButtons');
-    btns.innerHTML = '';
-    wc.letters.forEach(l => {
-      const btn = document.createElement('button');
-      btn.className = 'letter-btn';
-      btn.textContent = l;
-      btn.onclick = () => addLetter(l, btn);
-      btns.appendChild(btn);
+  // SOUND DATA
+  const soundData = [
+    { l:'A', ipa:'/æ/', color:'#e74c3c', speakWords:'Apple. Ant. Arrow. All start with the short a sound, like in apple.', words:[{w:'Apple',img:'🍎',say:'Apple'},{w:'Ant',img:'🐜',say:'Ant'},{w:'Arrow',img:'🏹',say:'Arrow'}] },
+    { l:'B', ipa:'/b/', color:'#3498db', speakWords:'Ball. Balloon. Bee. All start with the b sound, like in ball.', words:[{w:'Ball',img:'🏀',say:'Ball'},{w:'Balloon',img:'🎈',say:'Balloon'},{w:'Bee',img:'🐝',say:'Bee'}] },
+    { l:'C', ipa:'/k/', color:'#e67e22', speakWords:'Cat. Car. Cake. All start with the k sound, like in cat.', words:[{w:'Cat',img:'🐱',say:'Cat'},{w:'Car',img:'🚗',say:'Car'},{w:'Cake',img:'🎂',say:'Cake'}] },
+    { l:'D', ipa:'/d/', color:'#9b59b6', speakWords:'Dog. Duck. Drum. All start with the d sound, like in dog.', words:[{w:'Dog',img:'🐶',say:'Dog'},{w:'Duck',img:'🦆',say:'Duck'},{w:'Drum',img:'🥁',say:'Drum'}] },
+    { l:'E', ipa:'/ɛ/', color:'#27ae60', speakWords:'Egg. Elephant. Engine. All start with the short e sound, like in egg.', words:[{w:'Egg',img:'🥚',say:'Egg'},{w:'Elephant',img:'🐘',say:'Elephant'},{w:'Engine',img:'🚂',say:'Engine'}] },
+    { l:'F', ipa:'/f/', color:'#16a085', speakWords:'Fish. Frog. Flower. All start with the f sound, like in fish.', words:[{w:'Fish',img:'🐟',say:'Fish'},{w:'Frog',img:'🐸',say:'Frog'},{w:'Flower',img:'🌸',say:'Flower'}] },
+    { l:'G', ipa:'/ɡ/', color:'#8e44ad', speakWords:'Goat. Grapes. Guitar. All start with the g sound, like in goat.', words:[{w:'Goat',img:'🐐',say:'Goat'},{w:'Grapes',img:'🍇',say:'Grapes'},{w:'Guitar',img:'🎸',say:'Guitar'}] },
+    { l:'H', ipa:'/h/', color:'#c0392b', speakWords:'Hat. House. Horse. All start with the h sound, like in hat.', words:[{w:'Hat',img:'🎩',say:'Hat'},{w:'House',img:'🏠',say:'House'},{w:'Horse',img:'🐴',say:'Horse'}] },
+    { l:'I', ipa:'/ɪ/', color:'#f5a623', speakWords:'Igloo. Insect. Ink. All start with the short i sound, like in igloo.', words:[{w:'Igloo',img:'🏔️',say:'Igloo'},{w:'Insect',img:'🐛',say:'Insect'},{w:'Ink',img:'🖊️',say:'Ink'}] },
+    { l:'J', ipa:'/dʒ/', color:'#4a90d9', speakWords:'Jet. Jam. Jungle. All start with the j sound, like in jet.', words:[{w:'Jet',img:'✈️',say:'Jet'},{w:'Jam',img:'🍓',say:'Jam'},{w:'Jungle',img:'🌴',say:'Jungle'}] },
+    { l:'K', ipa:'/k/', color:'#e74c3c', speakWords:'Kite. King. Kangaroo. All start with the k sound, like in kite.', words:[{w:'Kite',img:'🪁',say:'Kite'},{w:'King',img:'👑',say:'King'},{w:'Kangaroo',img:'🦘',say:'Kangaroo'}] },
+    { l:'L', ipa:'/l/', color:'#3498db', speakWords:'Lion. Lemon. Lamp. All start with the l sound, like in lion.', words:[{w:'Lion',img:'🦁',say:'Lion'},{w:'Lemon',img:'🍋',say:'Lemon'},{w:'Lamp',img:'💡',say:'Lamp'}] },
+    { l:'M', ipa:'/m/', color:'#e67e22', speakWords:'Monkey. Moon. Mango. All start with the m sound, like in monkey.', words:[{w:'Monkey',img:'🐒',say:'Monkey'},{w:'Moon',img:'🌙',say:'Moon'},{w:'Mango',img:'🥭',say:'Mango'}] },
+    { l:'N', ipa:'/n/', color:'#9b59b6', speakWords:'Nose. Nest. Nut. All start with the n sound, like in nose.', words:[{w:'Nose',img:'👃',say:'Nose'},{w:'Nest',img:'🪺',say:'Nest'},{w:'Nut',img:'🥜',say:'Nut'}] },
+    { l:'O', ipa:'/ɒ/', color:'#27ae60', speakWords:'Octopus. Orange. Owl. All start with the short o sound, like in octopus.', words:[{w:'Octopus',img:'🐙',say:'Octopus'},{w:'Orange',img:'🍊',say:'Orange'},{w:'Owl',img:'🦉',say:'Owl'}] },
+    { l:'P', ipa:'/p/', color:'#16a085', speakWords:'Pig. Pizza. Panda. All start with the p sound, like in pig.', words:[{w:'Pig',img:'🐷',say:'Pig'},{w:'Pizza',img:'🍕',say:'Pizza'},{w:'Panda',img:'🐼',say:'Panda'}] },
+    { l:'Q', ipa:'/kw/', color:'#8e44ad', speakWords:'Queen. Quail. Quilt. All start with the qu sound, like in queen.', words:[{w:'Queen',img:'👸',say:'Queen'},{w:'Quail',img:'🐦',say:'Quail'},{w:'Quilt',img:'🛏️',say:'Quilt'}] },
+    { l:'R', ipa:'/r/', color:'#c0392b', speakWords:'Ring. Rainbow. Rabbit. All start with the r sound, like in ring.', words:[{w:'Ring',img:'💍',say:'Ring'},{w:'Rainbow',img:'🌈',say:'Rainbow'},{w:'Rabbit',img:'🐰',say:'Rabbit'}] },
+    { l:'S', ipa:'/s/', color:'#f5a623', speakWords:'Sun. Snake. Star. All start with the s sound, like in sun.', words:[{w:'Sun',img:'☀️',say:'Sun'},{w:'Snake',img:'🐍',say:'Snake'},{w:'Star',img:'⭐',say:'Star'}] },
+    { l:'T', ipa:'/t/', color:'#4a90d9', speakWords:'Tap. Tree. Tiger. All start with the t sound, like in tap.', words:[{w:'Tap',img:'🚰',say:'Tap'},{w:'Tree',img:'🌳',say:'Tree'},{w:'Tiger',img:'🐯',say:'Tiger'}] },
+    { l:'U', ipa:'/ʌ/', color:'#e74c3c', speakWords:'Umbrella. Unicorn. Up. All start with the short u sound, like in umbrella.', words:[{w:'Umbrella',img:'☂️',say:'Umbrella'},{w:'Unicorn',img:'🦄',say:'Unicorn'},{w:'Up',img:'⬆️',say:'Up'}] },
+    { l:'V', ipa:'/v/', color:'#3498db', speakWords:'Van. Violin. Vulture. All start with the v sound, like in van.', words:[{w:'Van',img:'🚐',say:'Van'},{w:'Violin',img:'🎻',say:'Violin'},{w:'Vulture',img:'🦅',say:'Vulture'}] },
+    { l:'W', ipa:'/w/', color:'#e67e22', speakWords:'Watch. Wolf. Whale. All start with the w sound, like in watch.', words:[{w:'Watch',img:'⌚',say:'Watch'},{w:'Wolf',img:'🐺',say:'Wolf'},{w:'Whale',img:'🐋',say:'Whale'}] },
+    { l:'X', ipa:'/ks/', color:'#9b59b6', speakWords:'Box. Fox. Mix. These words all end with the x sound, like in box.', words:[{w:'Box',img:'📦',say:'Box'},{w:'Fox',img:'🦊',say:'Fox'},{w:'Mix',img:'🥣',say:'Mix'}] },
+    { l:'Y', ipa:'/j/', color:'#27ae60', speakWords:'Yellow. Yarn. Yak. All start with the y sound, like in yellow.', words:[{w:'Yellow',img:'🟡',say:'Yellow'},{w:'Yarn',img:'🧶',say:'Yarn'},{w:'Yak',img:'🐂',say:'Yak'}] },
+    { l:'Z', ipa:'/z/', color:'#16a085', speakWords:'Zebra. Zoo. Zip. All start with the z sound, like in zebra.', words:[{w:'Zebra',img:'🦓',say:'Zebra'},{w:'Zoo',img:'🦁',say:'Zoo'},{w:'Zip',img:'🤐',say:'Zip'}] },
+  ];
+
+  const visitedSounds = new Set();
+  let currentSound = 0;
+
+  function buildNav() {
+    const nav = document.getElementById('lettersNav');
+    nav.innerHTML = soundData.map((s, i) =>
+      `<button class="letter-nav-btn ${visitedSounds.has(i)?'visited':''}" id="navbtn-${i}" onclick="showSound(${i})">${s.l}</button>`
+    ).join('');
+  }
+
+  function showSound(idx) {
+    currentSound = idx;
+    const s = soundData[idx];
+    visitedSounds.add(idx);
+    document.querySelectorAll('.letter-nav-btn').forEach((b,i) => {
+      b.classList.remove('active');
+      if (visitedSounds.has(i)) b.classList.add('visited');
+      else b.classList.remove('visited');
     });
+    document.getElementById('navbtn-' + idx).classList.add('active');
+    document.getElementById('soundGroupContainer').innerHTML = `
+      <div class="sound-group" style="border-color:${s.color}">
+        <div class="sound-header">
+          <div class="sound-big-letter" style="background:${s.color}">${s.l}</div>
+          <div class="sound-info">
+            <h4>The letter ${s.l}</h4>
+            <div class="sound-ipa" style="color:${s.color}">IPA: <span style="font-family:serif">${s.ipa}</span></div>
+            <div class="sound-desc">Click the words below to hear them!</div>
+          </div>
+          <button class="sound-play-btn" style="background:${s.color}" onclick="speak('${s.speakWords.replace(/'/g,"\\'")}')">🔊 Hear Sound</button>
+        </div>
+        <div class="sound-words">
+          ${s.words.map(w => `
+            <div class="sound-word-card" style="border-color:${s.color}" onclick="speak('${w.say}')">
+              <div class="sw-img">${w.img}</div>
+              <div class="sw-word"><span class="sw-first" style="color:${s.color}">${w.w[0]}</span>${w.w.slice(1)}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    speak(s.speakWords);
+    updateProgress();
   }
 
-  function addLetter(l, btn) {
-    if (currentWord.length < 3 && !btn.classList.contains('used')) {
-      currentWord += l;
-      btn.classList.add('used');
-      usedLetters.push(btn);
-      const blanks = currentWord.split('').join(' ') + ' _'.repeat(3 - currentWord.length);
-      document.getElementById('wordDisplay').textContent = blanks.trim();
-    }
-  }
-
-  function clearWord() {
-    currentWord = '';
-    usedLetters.forEach(b => b.classList.remove('used'));
-    usedLetters = [];
-    document.getElementById('wordDisplay').textContent = '_ _ _';
-    document.getElementById('wordFeedback').textContent = '';
-  }
-
-  function checkWord() {
-    const wc = wordChallenges[wcIdx];
-    const fb = document.getElementById('wordFeedback');
-    if (currentWord === wc.word) {
-      fb.style.color = '#7ed321';
-      fb.textContent = '✅ Correct! ' + wc.word + ' — well done!';
+  function updateProgress() {
+    const total = soundData.length;
+    const done = visitedSounds.size;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('progressText').textContent = done + ' of ' + total + ' sounds practised';
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+    soundData.forEach((_, i) => {
+      const btn = document.getElementById('navbtn-' + i);
+      if (btn && visitedSounds.has(i)) btn.classList.add('visited');
+    });
+    if (done === total) {
       setTimeout(() => {
-        wcIdx++;
-        if (wcIdx < wordChallenges.length) {
-          loadWordChallenge();
-        } else {
-          fb.textContent = '🎉 Amazing! You built all the words!';
-          document.getElementById('nextToQuizBtn').style.display = 'block';
-        }
-      }, 1500);
-    } else {
-      fb.style.color = '#e74c3c';
-      fb.textContent = '❌ Not quite! Try again. Hint: ' + wc.hint;
-      clearWord();
+        speak('Amazing! You practised all 26 sounds! Well done!');
+        document.getElementById('allDoneMsg').className = 'all-done-msg show';
+      }, 600);
     }
+  }
+
+  // MATCHING
+  const matchData = [
+    { clue:'Which letter does Ball start with?', ipa:'/b/', answer:'B', options:['B','D','P','T'], say:'Which letter does Ball start with?' },
+    { clue:'Which letter does Sun start with?',  ipa:'/s/', answer:'S', options:['F','S','C','Z'], say:'Which letter does Sun start with?' },
+    { clue:'Which letter does Monkey start with?', ipa:'/m/', answer:'M', options:['N','M','W','R'], say:'Which letter does Monkey start with?' },
+    { clue:'Which letter does Tree start with?', ipa:'/t/', answer:'T', options:['D','F','T','L'], say:'Which letter does Tree start with?' },
+    { clue:'Which letter does Apple start with?', ipa:'/æ/', answer:'A', options:['A','E','I','O'], say:'Which letter does Apple start with?' },
+    { clue:'Which letter does Pig start with?',  ipa:'/p/', answer:'P', options:['B','P','F','Q'], say:'Which letter does Pig start with?' },
+  ];
+  let matchIdx = 0;
+  let matchScore = 0;
+  let matchAnswered = false;
+
+  function loadMatch() {
+    if (matchIdx >= matchData.length) return;
+    const m = matchData[matchIdx];
+    matchAnswered = false;
+    document.getElementById('matchClue').textContent = m.clue;
+    document.getElementById('matchIPA').textContent = m.ipa;
+    document.getElementById('matchScore').textContent = 'Question ' + (matchIdx+1) + ' of ' + matchData.length;
+    document.getElementById('matchFeedback').textContent = '';
+    document.getElementById('nextToOdd').style.display = 'none';
+    const opts = [...m.options].sort(() => Math.random() - 0.5);
+    document.getElementById('matchOptions').innerHTML = opts.map(o =>
+      `<button class="match-btn" onclick="checkMatch('${o}','${m.answer}',this)">${o}</button>`
+    ).join('');
+    speak(m.say);
+  }
+
+  function playMatchSound() {
+    speak(matchData[matchIdx].say);
+  }
+
+  function checkMatch(selected, correct, btn) {
+    if (matchAnswered) return;
+    matchAnswered = true;
+    const btns = document.querySelectorAll('.match-btn');
+    btns.forEach(b => b.disabled = true);
+    const fb = document.getElementById('matchFeedback');
+    if (selected === correct) {
+      btn.classList.add('correct');
+      matchScore++;
+      fb.style.color = '#7ed321';
+      fb.textContent = '✅ Correct! ' + correct + ' is the right answer!';
+      speak('Correct! Well done!');
+    } else {
+      btn.classList.add('wrong');
+      btns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+      fb.style.color = '#e74c3c';
+      fb.textContent = '❌ The correct answer is ' + correct + '!';
+      speak('The correct answer is ' + correct);
+    }
+    setTimeout(() => {
+      matchIdx++;
+      if (matchIdx < matchData.length) loadMatch();
+      else {
+        document.getElementById('matchFeedback').textContent = '🎉 You matched ' + matchScore + ' out of ' + matchData.length + ' correctly!';
+        document.getElementById('nextToOdd').style.display = 'block';
+        speak('Great job! You matched ' + matchScore + ' out of ' + matchData.length + ' correctly!');
+      }
+    }, 1800);
+  }
+
+  // ODD ONE OUT
+  const oddData = [
+    { hint:'Ball, Balloon and Bee all start with B. Which word does NOT start with B?', words:[{w:'Ball',img:'🏀'},{w:'Bee',img:'🐝'},{w:'Cat',img:'🐱'},{w:'Balloon',img:'🎈'}], odd:2 },
+    { hint:'Sun, Star and Snake all start with S. Which word does NOT start with S?', words:[{w:'Sun',img:'☀️'},{w:'Dog',img:'🐶'},{w:'Star',img:'⭐'},{w:'Snake',img:'🐍'}], odd:1 },
+    { hint:'Moon, Mango and Monkey all start with M. Which word does NOT start with M?', words:[{w:'Fish',img:'🐟'},{w:'Moon',img:'🌙'},{w:'Mango',img:'🥭'},{w:'Monkey',img:'🐒'}], odd:0 },
+    { hint:'Tree, Tiger and Tap all start with T. Which word does NOT start with T?', words:[{w:'Tree',img:'🌳'},{w:'Tiger',img:'🐯'},{w:'Tap',img:'🚰'},{w:'Rabbit',img:'🐰'}], odd:3 },
+  ];
+  let oddIdx = 0;
+  let oddScore = 0;
+  let oddAnswered = false;
+
+  function loadOdd() {
+    if (oddIdx >= oddData.length) return;
+    const o = oddData[oddIdx];
+    oddAnswered = false;
+    document.getElementById('oddContainer').innerHTML = `
+      <div class="odd-question">Which word does NOT belong?</div>
+      <div class="odd-hint">💡 ${o.hint}</div>
+      <div class="odd-options">
+        ${o.words.map((w,i) => `
+          <div class="odd-btn" onclick="checkOdd(${i},${o.odd},this)">
+            <div class="odd-emoji">${w.img}</div>
+            <div class="odd-word">${w.w}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="odd-feedback" id="oddFeedback"></div>
+      <div style="text-align:center;color:#aaa;font-size:13px;margin-top:5px">Question ${oddIdx+1} of ${oddData.length}</div>
+    `;
+    speak(o.hint);
+  }
+
+  function checkOdd(selected, correct, btn) {
+    if (oddAnswered) return;
+    oddAnswered = true;
+    const btns = document.querySelectorAll('.odd-btn');
+    btns.forEach(b => b.style.pointerEvents = 'none');
+    const fb = document.getElementById('oddFeedback');
+    const o = oddData[oddIdx];
+    if (selected === correct) {
+      btn.classList.add('correct');
+      oddScore++;
+      fb.style.color = '#7ed321';
+      fb.textContent = '✅ Correct! ' + o.words[correct].w + ' is the odd one out!';
+      speak('Correct! ' + o.words[correct].w + ' is the odd one out!');
+    } else {
+      btn.classList.add('wrong');
+      btns[correct].classList.add('correct');
+      fb.style.color = '#e74c3c';
+      fb.textContent = '❌ ' + o.words[correct].w + ' is the odd one out!';
+      speak('The odd one out is ' + o.words[correct].w);
+    }
+    setTimeout(() => {
+      oddIdx++;
+      if (oddIdx < oddData.length) loadOdd();
+      else {
+        document.getElementById('nextToQuiz').style.display = 'block';
+        speak('Well done! You completed all the questions!');
+      }
+    }, 2000);
   }
 
   // QUIZ
   const quizData = [
-    { q: "What sound does the letter B make?", options: ['"buh" as in Ball', '"puh" as in Pen', '"duh" as in Dog', '"fuh" as in Fish'], answer: 0 },
-    { q: "Which word starts with the short 'A' sound?", options: ["Umbrella", "Orange", "Apple", "Egg"], answer: 2 },
-    { q: "What is phonics?", options: ["Learning to draw", "Learning letter sounds", "Learning numbers", "Learning colours"], answer: 1 },
+    { q:'Which letter does the word Sun start with?', options:['B','S','M','T'], answer:1 },
+    { q:'Which picture starts with the letter B?', options:['🍕 Pizza','🐝 Bee','🌙 Moon','🌳 Tree'], answer:1 },
+    { q:'What does the letter M sound like?', options:['Like in Sun','Like in Ball','Like in Monkey','Like in Kite'], answer:2 },
+    { q:'Which word starts with the letter M?', options:['Apple','Tree','Mango','Fish'], answer:2 },
   ];
   let quizIdx = 0;
   let quizScore = 0;
@@ -350,50 +570,60 @@
       <div class="quiz-options">
         ${q.options.map((o,i) => `<button class="quiz-btn" onclick="checkQuiz(${i},${q.answer},this)">${o}</button>`).join('')}
       </div>
-      <div style="text-align:center;color:#aaa;font-size:13px">Question ${quizIdx+1} of ${quizData.length}</div>
+      <div style="text-align:center;color:#aaa;font-size:13px;margin-top:8px">Question ${quizIdx+1} of ${quizData.length}</div>
     `;
+    speak('Question ' + (quizIdx+1) + '. ' + q.q);
   }
 
   function checkQuiz(selected, correct, btn) {
-    const btns = document.querySelectorAll('.quiz-btn');
-    btns.forEach(b => b.disabled = true);
-    if (selected === correct) { btn.classList.add('correct'); quizScore++; }
-    else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+    document.querySelectorAll('.quiz-btn').forEach(b => b.disabled = true);
+    if (selected === correct) {
+      btn.classList.add('correct');
+      quizScore++;
+      speak('Correct! Well done!');
+    } else {
+      btn.classList.add('wrong');
+      document.querySelectorAll('.quiz-btn')[correct].classList.add('correct');
+      speak('The correct answer is ' + quizData[quizIdx].options[correct]);
+    }
     setTimeout(() => {
       quizIdx++;
-      if (quizIdx < quizData.length) { loadQuiz(); }
-      else { showResult(); }
-    }, 1200);
+      if (quizIdx < quizData.length) loadQuiz();
+      else showResult();
+    }, 1500);
   }
 
   function showResult() {
-    goToSection(5);
+    goToSection(7);
     const pct = quizScore / quizData.length;
     let stars, title, msg;
-    if (pct === 1) { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You are a phonics superstar! You know how every letter sounds!'; }
-    else if (pct >= 0.6) { stars='⭐⭐'; title='Well Done! 😊'; msg='Great work! You understand phonics well. Keep practising those sounds!'; }
-    else { stars='⭐'; title='Good Try! 💪'; msg='Phonics takes practice! Try the lesson again and you will get it!'; }
+    if (pct === 1) { stars='⭐⭐⭐'; title='Phonics Champion! 🎉'; msg='Incredible! You know all the letter sounds perfectly!'; }
+    else if (pct >= 0.5) { stars='⭐⭐'; title='Well Done! 😊'; msg='Great work! You understand phonics well. Keep practising!'; }
+    else { stars='⭐'; title='Good Try! 💪'; msg='Phonics takes practice! Try the lesson again!'; }
     document.getElementById('resultStars').textContent = stars;
     document.getElementById('resultTitle').textContent = title;
-    document.getElementById('resultScore').textContent = `Quiz Score: ${quizScore}/${quizData.length}`;
+    document.getElementById('resultScore').textContent = `Score: ${quizScore}/${quizData.length}`;
     document.getElementById('resultMsg').textContent = msg;
+    speak(title + ' You got ' + quizScore + ' out of ' + quizData.length + ' correct!');
   }
 
-  // NAVIGATION
   function goToSection(n) {
     document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
-    for (let i=1; i<=5; i++) {
+    for (let i=1; i<=7; i++) {
       const step = document.getElementById('step'+i);
+      if (!step) continue;
       if (i < n) { step.className='step done'; step.querySelector('.step-circle').textContent='✓'; }
-      else if (i===n) { step.className='step active'; }
+      else if (i===n) { step.className='step active'; step.querySelector('.step-circle').textContent=i; }
       else { step.className='step'; step.querySelector('.step-circle').textContent=i; }
-      if (i < 5) { const line = document.getElementById('line'+i); if(line) line.className = i < n ? 'step-line done' : 'step-line'; }
+      if (i < 7) { const line = document.getElementById('line'+i); if(line) line.className = i < n ? 'step-line done' : 'step-line'; }
     }
-    if (n===3) loadWordChallenge();
-    if (n===4) loadQuiz();
+    if (n===3) { buildNav(); showSound(0); }
+    if (n===4) { matchIdx=0; matchScore=0; loadMatch(); }
+    if (n===5) { oddIdx=0; oddScore=0; loadOdd(); }
+    if (n===6) { quizIdx=0; quizScore=0; loadQuiz(); }
     window.scrollTo(0,0);
   }
+
 </script>
-<script src="audio.js"></script>
 </body>
 </html>
