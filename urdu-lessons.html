@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - Urdu Lessons</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #f5a623; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .page-hero { background: linear-gradient(135deg, #f5a623, #e67e22); color: white; padding: 30px 40px; }
+    .page-hero h2 { font-size: 32px; margin-bottom: 8px; }
+    .page-hero p { font-size: 16px; opacity: 0.9; }
+    .container { max-width: 900px; margin: 30px auto; padding: 0 20px 50px; }
+    .overall-progress { background: white; border-radius: 20px; padding: 25px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 30px; }
+    .overall-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px; }
+    .overall-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+    .stat-box { background: #fff5e0; border-radius: 14px; padding: 15px; text-align: center; }
+    .stat-num { font-size: 28px; font-weight: bold; color: #f5a623; margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: #888; }
+    .overall-bar-wrap { background: #e0e0e0; border-radius: 20px; height: 14px; overflow: hidden; }
+    .overall-bar { height: 14px; border-radius: 20px; background: linear-gradient(90deg, #f5a623, #e67e22); transition: width 0.5s; }
+    .overall-bar-label { display: flex; justify-content: space-between; margin-top: 6px; font-size: 13px; color: #888; }
+    .level-section { margin-bottom: 30px; }
+    .level-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding: 18px 20px; border-radius: 16px; }
+    .level-icon { font-size: 32px; }
+    .level-info { flex: 1; }
+    .level-title { font-size: 20px; font-weight: bold; color: white; margin-bottom: 4px; }
+    .level-subtitle { font-size: 14px; opacity: 0.9; color: white; }
+    .level-progress-wrap { width: 150px; }
+    .level-progress-bar { background: rgba(255,255,255,0.3); border-radius: 20px; height: 10px; overflow: hidden; margin-bottom: 4px; }
+    .level-progress-fill { height: 10px; border-radius: 20px; background: white; transition: width 0.5s; }
+    .level-progress-text { font-size: 12px; color: white; text-align: right; opacity: 0.9; }
+    .lessons-grid { display: flex; flex-direction: column; gap: 10px; }
+    .lesson-card { background: white; border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: all 0.2s; text-decoration: none; }
+    .lesson-card:hover { transform: translateX(5px); }
+    .lesson-card.locked { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+    .lesson-card.current { border: 2px solid #f5a623; background: #fff5e0; }
+    .lesson-card.completed { border-left: 4px solid #f5a623; }
+    .lesson-num { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; flex-shrink: 0; }
+    .ln-completed { background: #f5a623; color: white; }
+    .ln-current { background: #e67e22; color: white; }
+    .ln-locked { background: #e0e0e0; color: #aaa; }
+    .lesson-info { flex: 1; }
+    .lesson-title { font-size: 15px; font-weight: bold; color: #333; margin-bottom: 3px; }
+    .lesson-desc { font-size: 13px; color: #888; }
+    .lesson-meta { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .lesson-time { font-size: 12px; color: #aaa; background: #f0f0f0; padding: 3px 8px; border-radius: 20px; }
+    .lesson-status { font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 20px; }
+    .ls-done { background: #e0ffe0; color: #3a7a00; }
+    .ls-current { background: #fff5e0; color: #e67e22; }
+    .ls-locked { background: #f0f0f0; color: #aaa; }
+    .current-badge { background: #f5a623; color: white; font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 20px; }
+    .back-btn { display: inline-block; margin-bottom: 20px; background: #f5a623; color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-size: 14px; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav><a href="index.html">Home</a><a href="dashboard.html">Dashboard</a></nav>
+</header>
+<div class="page-hero">
+  <h2>✍️ Urdu Course</h2>
+  <p>30 lessons across 3 levels — Starters, Explorers and Builders</p>
+</div>
+<div class="container">
+  <a href="urdu.html" class="back-btn">← Back to Urdu</a>
+  <div class="overall-progress">
+    <div class="overall-title">📊 Your Overall Urdu Progress</div>
+    <div class="overall-stats">
+      <div class="stat-box"><div class="stat-num" id="totalCompleted">0</div><div class="stat-label">Lessons Completed</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:#f5a623" id="totalStars">0</div><div class="stat-label">⭐ Stars Earned</div></div>
+      <div class="stat-box"><div class="stat-num" id="totalPct">0%</div><div class="stat-label">Course Complete</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:#e67e22" id="currentLesson">L1</div><div class="stat-label">Current Lesson</div></div>
+    </div>
+    <div class="overall-bar-wrap"><div class="overall-bar" id="overallBar" style="width:0%"></div></div>
+    <div class="overall-bar-label"><span>0 lessons</span><span id="barLabel">0 of 30 completed</span><span>30 lessons</span></div>
+  </div>
+  <div class="level-section">
+    <div class="level-header" style="background:linear-gradient(135deg,#f5a623,#e67e22)">
+      <div class="level-icon">⭐</div>
+      <div class="level-info"><div class="level-title">Starters Level</div><div class="level-subtitle">Ages 3–5 · 10 lessons · Haroof e Tahajji</div></div>
+      <div class="level-progress-wrap"><div class="level-progress-bar"><div class="level-progress-fill" id="starterBar" style="width:0%"></div></div><div class="level-progress-text" id="starterText">0 / 10</div></div>
+    </div>
+    <div class="lessons-grid" id="starterLessons"></div>
+  </div>
+  <div class="level-section">
+    <div class="level-header" style="background:linear-gradient(135deg,#e67e22,#d35400)">
+      <div class="level-icon">🚀</div>
+      <div class="level-info"><div class="level-title">Explorers Level</div><div class="level-subtitle">Ages 6–8 · 10 lessons · Words and sentences</div></div>
+      <div class="level-progress-wrap"><div class="level-progress-bar"><div class="level-progress-fill" id="explorerBar" style="width:0%"></div></div><div class="level-progress-text" id="explorerText">0 / 10</div></div>
+    </div>
+    <div class="lessons-grid" id="explorerLessons"></div>
+  </div>
+  <div class="level-section">
+    <div class="level-header" style="background:linear-gradient(135deg,#d35400,#a04000)">
+      <div class="level-icon">🏆</div>
+      <div class="level-info"><div class="level-title">Builders Level</div><div class="level-subtitle">Ages 9–11 · 10 lessons · Grammar and writing</div></div>
+      <div class="level-progress-wrap"><div class="level-progress-bar"><div class="level-progress-fill" id="builderBar" style="width:0%"></div></div><div class="level-progress-text" id="builderText">0 / 10</div></div>
+    </div>
+    <div class="lessons-grid" id="builderLessons"></div>
+  </div>
+</div>
+<script>
+  const allLessons = {
+    starters: [
+      { num:1, title:'Haroof e Tahajji — Alif se Yay', desc:'Learn all Urdu letters with pictures', time:'10 min', url:'#', stars:0, status:'current' },
+      { num:2, title:'Harkat — Zabar, Zer, Pesh', desc:'Short vowel sounds in Urdu', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:3, title:'Do Harfi Alfaaz', desc:'Two-letter Urdu words', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:4, title:'Teen Harfi Alfaaz', desc:'Three-letter Urdu words', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:5, title:'Jism ke Azaa', desc:'Body parts in Urdu', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:6, title:'Janwar', desc:'Animals in Urdu', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:7, title:'Rang', desc:'Colours in Urdu', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:8, title:'Phal aur Sabziyaan', desc:'Fruits and vegetables in Urdu', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:9, title:'Ginti', desc:'Numbers 1 to 20 in Urdu', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:10, title:'Hafte ke Din', desc:'Days of the week in Urdu', time:'10 min', url:'#', stars:0, status:'locked' },
+    ],
+    explorers: [
+      { num:1, title:'Chhote Jumlay', desc:'Simple Urdu sentences', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:2, title:'Savaal aur Jawaab', desc:'Questions and answers in Urdu', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:3, title:'Madd aur Tanween', desc:'Long vowels in Urdu', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:4, title:'Zamaana — Maazi aur Haal', desc:'Past and present tense in Urdu', time:'15 min', url:'#', stars:0, status:'locked' },
+      { num:5, title:'Sifat', desc:'Adjectives in Urdu', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:6, title:'Fail', desc:'Verbs in Urdu', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:7, title:'Chhoti Kahani', desc:'Read and understand a short Urdu story', time:'15 min', url:'#', stars:0, status:'locked' },
+      { num:8, title:'Nazam', desc:'Simple Urdu poems', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:9, title:'Urdu Muhawaray', desc:'Common Urdu phrases and expressions', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:10, title:'Chhota Paragraph', desc:'Write a short paragraph in Urdu', time:'15 min', url:'#', stars:0, status:'locked' },
+    ],
+    builders: [
+      { num:1, title:'Urdu Qawaid — Isam', desc:'Nouns in Urdu grammar', time:'15 min', url:'#', stars:0, status:'locked' },
+      { num:2, title:'Urdu Qawaid — Zamir', desc:'Pronouns in Urdu grammar', time:'15 min', url:'#', stars:0, status:'locked' },
+      { num:3, title:'Urdu Qawaid — Fail', desc:'Verbs and tenses in Urdu', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:4, title:'Murakkab Jumlay', desc:'Compound sentences in Urdu', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:5, title:'Kahani Likhna', desc:'Write a complete Urdu story', time:'25 min', url:'#', stars:0, status:'locked' },
+      { num:6, title:'Mazameen', desc:'Write essays in Urdu', time:'25 min', url:'#', stars:0, status:'locked' },
+      { num:7, title:'Khat Nawisi', desc:'Letter writing in Urdu', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:8, title:'Urdu Adab', desc:'Urdu literature and famous poets', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:9, title:'Darkhwast', desc:'Writing formal applications in Urdu', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:10, title:'Imla aur Imlaa', desc:'Spelling and dictation in Urdu', time:'20 min', url:'#', stars:0, status:'locked' },
+    ]
+  };
+  function getStarDisplay(stars, status) {
+    if (status==='locked') return '';
+    if (status==='current') return '<span style="color:#aaa;font-size:13px">Not started</span>';
+    if (stars===3) return '⭐⭐⭐';
+    if (stars===2) return '⭐⭐';
+    if (stars===1) return '⭐';
+    return '';
+  }
+  function buildLessons(lessons, containerId, level) {
+    const container = document.getElementById(containerId);
+    let completed=0, totalStars=0;
+    lessons.forEach(lesson => {
+      if (lesson.status==='completed') { completed++; totalStars+=lesson.stars; }
+      let numClass='ln-locked', cardClass='lesson-card', statusBadge='<span class="lesson-status ls-locked">🔒 Locked</span>', href='#';
+      if (lesson.status==='completed') { numClass='ln-completed'; cardClass='lesson-card completed'; statusBadge='<span class="lesson-status ls-done">✅ Done</span>'; href=lesson.url; }
+      else if (lesson.status==='current') { numClass='ln-current'; cardClass='lesson-card current'; statusBadge='<span class="lesson-status ls-current">▶ Start</span>'; href=lesson.url; }
+      else { cardClass='lesson-card locked'; }
+      const card=document.createElement('a');
+      card.href=href; card.className=cardClass;
+      card.innerHTML=`<div class="lesson-num ${numClass}">${lesson.status==='completed'?'✓':lesson.num}</div><div class="lesson-info"><div class="lesson-title">Lesson ${lesson.num}: ${lesson.title} ${lesson.status==='current'?'<span class="current-badge">START HERE</span>':''}</div><div class="lesson-desc">${lesson.desc}</div></div><div class="lesson-meta"><div>${getStarDisplay(lesson.stars,lesson.status)}</div><div class="lesson-time">⏱ ${lesson.time}</div>${statusBadge}</div>`;
+      container.appendChild(card);
+    });
+    const pct=Math.round((completed/lessons.length)*100);
+    document.getElementById(level+'Bar').style.width=pct+'%';
+    document.getElementById(level+'Text').textContent=completed+' / '+lessons.length;
+    return {completed,totalStars};
+  }
+  const s=buildLessons(allLessons.starters,'starterLessons','starter');
+  const e=buildLessons(allLessons.explorers,'explorerLessons','explorer');
+  const b=buildLessons(allLessons.builders,'builderLessons','builder');
+  const totalCompleted=s.completed+e.completed+b.completed;
+  const totalStars=s.totalStars+e.totalStars+b.totalStars;
+  const totalPct=Math.round((totalCompleted/30)*100);
+  document.getElementById('totalCompleted').textContent=totalCompleted;
+  document.getElementById('totalStars').textContent=totalStars;
+  document.getElementById('totalPct').textContent=totalPct+'%';
+  document.getElementById('overallBar').style.width=totalPct+'%';
+  document.getElementById('barLabel').textContent=totalCompleted+' of 30 completed';
+  const allFlat=[...allLessons.starters,...allLessons.explorers,...allLessons.builders];
+  const current=allFlat.find(l=>l.status==='current');
+  if(current) document.getElementById('currentLesson').textContent='L'+current.num;
+</script>
+</body>
+</html>

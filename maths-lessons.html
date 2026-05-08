@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - Maths Lessons</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #7ed321; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .page-hero { background: linear-gradient(135deg, #7ed321, #27ae60); color: white; padding: 30px 40px; }
+    .page-hero h2 { font-size: 32px; margin-bottom: 8px; }
+    .page-hero p { font-size: 16px; opacity: 0.9; }
+    .container { max-width: 900px; margin: 30px auto; padding: 0 20px 50px; }
+    .overall-progress { background: white; border-radius: 20px; padding: 25px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 30px; }
+    .overall-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px; }
+    .overall-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+    .stat-box { background: #f0fff0; border-radius: 14px; padding: 15px; text-align: center; }
+    .stat-num { font-size: 28px; font-weight: bold; color: #7ed321; margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: #888; }
+    .overall-bar-wrap { background: #e0e0e0; border-radius: 20px; height: 14px; overflow: hidden; }
+    .overall-bar { height: 14px; border-radius: 20px; background: linear-gradient(90deg, #7ed321, #27ae60); transition: width 0.5s; }
+    .overall-bar-label { display: flex; justify-content: space-between; margin-top: 6px; font-size: 13px; color: #888; }
+    .level-section { margin-bottom: 30px; }
+    .level-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding: 18px 20px; border-radius: 16px; }
+    .level-icon { font-size: 32px; }
+    .level-info { flex: 1; }
+    .level-title { font-size: 20px; font-weight: bold; color: white; margin-bottom: 4px; }
+    .level-subtitle { font-size: 14px; opacity: 0.9; color: white; }
+    .level-progress-wrap { width: 150px; }
+    .level-progress-bar { background: rgba(255,255,255,0.3); border-radius: 20px; height: 10px; overflow: hidden; margin-bottom: 4px; }
+    .level-progress-fill { height: 10px; border-radius: 20px; background: white; transition: width 0.5s; }
+    .level-progress-text { font-size: 12px; color: white; text-align: right; opacity: 0.9; }
+    .lessons-grid { display: flex; flex-direction: column; gap: 10px; }
+    .lesson-card { background: white; border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: all 0.2s; text-decoration: none; }
+    .lesson-card:hover { transform: translateX(5px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .lesson-card.locked { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+    .lesson-card.current { border: 2px solid #7ed321; background: #f0fff0; }
+    .lesson-card.completed { border-left: 4px solid #7ed321; }
+    .lesson-num { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; flex-shrink: 0; }
+    .ln-completed { background: #7ed321; color: white; }
+    .ln-current { background: #27ae60; color: white; }
+    .ln-locked { background: #e0e0e0; color: #aaa; }
+    .lesson-info { flex: 1; }
+    .lesson-title { font-size: 15px; font-weight: bold; color: #333; margin-bottom: 3px; }
+    .lesson-desc { font-size: 13px; color: #888; }
+    .lesson-meta { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .lesson-time { font-size: 12px; color: #aaa; background: #f0f0f0; padding: 3px 8px; border-radius: 20px; }
+    .lesson-status { font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 20px; }
+    .ls-done { background: #e0ffe0; color: #3a7a00; }
+    .ls-current { background: #f0fff0; color: #27ae60; }
+    .ls-locked { background: #f0f0f0; color: #aaa; }
+    .current-badge { background: #7ed321; color: white; font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 20px; }
+    .back-btn { display: inline-block; margin-bottom: 20px; background: #7ed321; color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-size: 14px; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
+<div class="page-hero">
+  <h2>🔢 Maths Course</h2>
+  <p>30 lessons across 3 levels — Starters, Explorers and Builders</p>
+</div>
+<div class="container">
+  <a href="maths.html" class="back-btn">← Back to Maths</a>
+  <div class="overall-progress">
+    <div class="overall-title">📊 Your Overall Maths Progress</div>
+    <div class="overall-stats">
+      <div class="stat-box"><div class="stat-num" id="totalCompleted">0</div><div class="stat-label">Lessons Completed</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:#f5a623" id="totalStars">0</div><div class="stat-label">⭐ Stars Earned</div></div>
+      <div class="stat-box"><div class="stat-num" id="totalPct">0%</div><div class="stat-label">Course Complete</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:#27ae60" id="currentLesson">L1</div><div class="stat-label">Current Lesson</div></div>
+    </div>
+    <div class="overall-bar-wrap"><div class="overall-bar" id="overallBar" style="width:0%"></div></div>
+    <div class="overall-bar-label"><span>0 lessons</span><span id="barLabel">0 of 30 completed</span><span>30 lessons</span></div>
+  </div>
+
+  <div class="level-section">
+    <div class="level-header" style="background:linear-gradient(135deg,#f5a623,#e67e22)">
+      <div class="level-icon">⭐</div>
+      <div class="level-info"><div class="level-title">Starters Level</div><div class="level-subtitle">Ages 3–5 · 10 lessons · Counting and shapes</div></div>
+      <div class="level-progress-wrap"><div class="level-progress-bar"><div class="level-progress-fill" id="starterBar" style="width:0%"></div></div><div class="level-progress-text" id="starterText">0 / 10</div></div>
+    </div>
+    <div class="lessons-grid" id="starterLessons"></div>
+  </div>
+
+  <div class="level-section">
+    <div class="level-header" style="background:linear-gradient(135deg,#7ed321,#27ae60)">
+      <div class="level-icon">🚀</div>
+      <div class="level-info"><div class="level-title">Explorers Level</div><div class="level-subtitle">Ages 6–8 · 10 lessons · Addition and subtraction</div></div>
+      <div class="level-progress-wrap"><div class="level-progress-bar"><div class="level-progress-fill" id="explorerBar" style="width:0%"></div></div><div class="level-progress-text" id="explorerText">0 / 10</div></div>
+    </div>
+    <div class="lessons-grid" id="explorerLessons"></div>
+  </div>
+
+  <div class="level-section">
+    <div class="level-header" style="background:linear-gradient(135deg,#27ae60,#1e8449)">
+      <div class="level-icon">🏆</div>
+      <div class="level-info"><div class="level-title">Builders Level</div><div class="level-subtitle">Ages 9–11 · 10 lessons · Multiplication and fractions</div></div>
+      <div class="level-progress-wrap"><div class="level-progress-bar"><div class="level-progress-fill" id="builderBar" style="width:0%"></div></div><div class="level-progress-text" id="builderText">0 / 10</div></div>
+    </div>
+    <div class="lessons-grid" id="builderLessons"></div>
+  </div>
+</div>
+
+<script>
+  const allLessons = {
+    starters: [
+      { num:1, title:'Counting 1 to 10', desc:'Count objects and learn number names', time:'10 min', url:'lesson-maths-1.html', stars:0, status:'current' },
+      { num:2, title:'Counting 11 to 20', desc:'Extend counting to twenty', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:3, title:'Shapes', desc:'Circles, squares, triangles and rectangles', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:4, title:'Colours and Sorting', desc:'Sort objects by colour and size', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:5, title:'Patterns', desc:'Identify and continue simple patterns', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:6, title:'Big and Small', desc:'Compare sizes, weights and lengths', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:7, title:'More and Less', desc:'Which group has more? Which has less?', time:'10 min', url:'#', stars:0, status:'locked' },
+      { num:8, title:'Simple Addition', desc:'Adding numbers up to 5', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:9, title:'Simple Subtraction', desc:'Taking away numbers up to 5', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:10, title:'Number Bonds to 10', desc:'Pairs of numbers that make 10', time:'12 min', url:'#', stars:0, status:'locked' },
+    ],
+    explorers: [
+      { num:1, title:'Addition to 20', desc:'Adding two numbers with answers up to 20', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:2, title:'Subtraction to 20', desc:'Subtracting numbers with answers up to 20', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:3, title:'Telling Time', desc:'Read clocks and tell the time', time:'15 min', url:'#', stars:0, status:'locked' },
+      { num:4, title:'Money Basics', desc:'Coins, notes and simple addition', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:5, title:'2D and 3D Shapes', desc:'Learn squares, cubes, spheres and more', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:6, title:'Measurement', desc:'Centimetres, metres, kilograms and litres', time:'15 min', url:'#', stars:0, status:'locked' },
+      { num:7, title:'Multiplication Intro', desc:'Groups of numbers and multiplication tables 2 and 5', time:'15 min', url:'#', stars:0, status:'locked' },
+      { num:8, title:'Division Intro', desc:'Sharing equally — introduction to division', time:'15 min', url:'#', stars:0, status:'locked' },
+      { num:9, title:'Fractions Intro', desc:'Half, quarter and three quarters', time:'12 min', url:'#', stars:0, status:'locked' },
+      { num:10, title:'Word Problems', desc:'Solve maths problems written in sentences', time:'15 min', url:'#', stars:0, status:'locked' },
+    ],
+    builders: [
+      { num:1, title:'Multiplication Tables', desc:'Times tables 2 to 12', time:'15 min', url:'#', stars:0, status:'locked' },
+      { num:2, title:'Long Multiplication', desc:'Multiply 2-digit and 3-digit numbers', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:3, title:'Long Division', desc:'Divide larger numbers step by step', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:4, title:'Fractions', desc:'Add, subtract and compare fractions', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:5, title:'Decimals', desc:'Tenths, hundredths and decimal addition', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:6, title:'Percentages', desc:'Understand and calculate percentages', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:7, title:'Area and Perimeter', desc:'Calculate area and perimeter of shapes', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:8, title:'Angles', desc:'Types of angles and measuring with protractor', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:9, title:'Graphs and Charts', desc:'Bar graphs, pie charts and line graphs', time:'20 min', url:'#', stars:0, status:'locked' },
+      { num:10, title:'Problem Solving', desc:'Multi-step word problems and logic puzzles', time:'25 min', url:'#', stars:0, status:'locked' },
+    ]
+  };
+
+  function getStarDisplay(stars, status) {
+    if (status === 'locked') return '';
+    if (status === 'current') return '<span style="color:#aaa;font-size:13px">Not started</span>';
+    if (stars === 3) return '⭐⭐⭐';
+    if (stars === 2) return '⭐⭐';
+    if (stars === 1) return '⭐';
+    return '';
+  }
+
+  function buildLessons(lessons, containerId, level) {
+    const container = document.getElementById(containerId);
+    let completed = 0;
+    let totalStars = 0;
+    lessons.forEach(lesson => {
+      if (lesson.status === 'completed') { completed++; totalStars += lesson.stars; }
+      let numClass = 'ln-locked';
+      let cardClass = 'lesson-card';
+      let statusBadge = '<span class="lesson-status ls-locked">🔒 Locked</span>';
+      let href = '#';
+      if (lesson.status === 'completed') { numClass='ln-completed'; cardClass='lesson-card completed'; statusBadge='<span class="lesson-status ls-done">✅ Done</span>'; href=lesson.url; }
+      else if (lesson.status === 'current') { numClass='ln-current'; cardClass='lesson-card current'; statusBadge='<span class="lesson-status ls-current">▶ Start</span>'; href=lesson.url; }
+      else { cardClass='lesson-card locked'; }
+      const card = document.createElement('a');
+      card.href = href;
+      card.className = cardClass;
+      card.innerHTML = `
+        <div class="lesson-num ${numClass}">${lesson.status === 'completed' ? '✓' : lesson.num}</div>
+        <div class="lesson-info">
+          <div class="lesson-title">Lesson ${lesson.num}: ${lesson.title} ${lesson.status === 'current' ? '<span class="current-badge">START HERE</span>' : ''}</div>
+          <div class="lesson-desc">${lesson.desc}</div>
+        </div>
+        <div class="lesson-meta">
+          <div>${getStarDisplay(lesson.stars, lesson.status)}</div>
+          <div class="lesson-time">⏱ ${lesson.time}</div>
+          ${statusBadge}
+        </div>`;
+      container.appendChild(card);
+    });
+    const pct = Math.round((completed / lessons.length) * 100);
+    document.getElementById(level + 'Bar').style.width = pct + '%';
+    document.getElementById(level + 'Text').textContent = completed + ' / ' + lessons.length;
+    return { completed, totalStars };
+  }
+
+  const s = buildLessons(allLessons.starters, 'starterLessons', 'starter');
+  const e = buildLessons(allLessons.explorers, 'explorerLessons', 'explorer');
+  const b = buildLessons(allLessons.builders, 'builderLessons', 'builder');
+  const totalCompleted = s.completed + e.completed + b.completed;
+  const totalStars = s.totalStars + e.totalStars + b.totalStars;
+  const totalPct = Math.round((totalCompleted / 30) * 100);
+  document.getElementById('totalCompleted').textContent = totalCompleted;
+  document.getElementById('totalStars').textContent = totalStars;
+  document.getElementById('totalPct').textContent = totalPct + '%';
+  document.getElementById('overallBar').style.width = totalPct + '%';
+  document.getElementById('barLabel').textContent = totalCompleted + ' of 30 completed';
+  const allFlat = [...allLessons.starters, ...allLessons.explorers, ...allLessons.builders];
+  const current = allFlat.find(l => l.status === 'current');
+  if (current) document.getElementById('currentLesson').textContent = 'L' + current.num;
+</script>
+</body>
+</html>
