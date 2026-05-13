@@ -34,7 +34,25 @@
     .tip-box { background: #fff5e0; border-left: 4px solid #f5a623; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
     .highlight { color: #4a90d9; font-weight: bold; }
 
-    /* PROGRESS BAR */
+    /* STICKY FEATURED BOX */
+    .sticky-wrap { position: sticky; top: 0; z-index: 200; margin-bottom: 15px; }
+    .featured-box { background: linear-gradient(135deg, #4a90d9, #764ba2); border-radius: 0 0 20px 20px; padding: 15px 20px; display: none; color: white; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .featured-box.show { display: block; }
+    .featured-inner { display: flex; align-items: center; gap: 20px; max-width: 900px; margin: 0 auto; }
+    .feat-letter { font-size: 60px; font-weight: bold; line-height: 1; flex-shrink: 0; }
+    .feat-img { font-size: 50px; flex-shrink: 0; }
+    .feat-info { flex: 1; }
+    .feat-word { font-size: 22px; font-weight: bold; margin-bottom: 2px; }
+    .feat-desc { font-size: 14px; opacity: 0.85; }
+    .feat-nav { display: flex; gap: 8px; flex-shrink: 0; }
+    .nav-btn { background: rgba(255,255,255,0.25); border: none; color: white; font-size: 20px; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; transition: background 0.2s; }
+    .nav-btn:hover { background: rgba(255,255,255,0.4); }
+    .feat-dots { display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; margin-top: 10px; max-width: 900px; margin-left: auto; margin-right: auto; padding: 0 20px; }
+    .feat-dot { width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.25); color: white; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; cursor: pointer; transition: all 0.2s; border: none; }
+    .feat-dot.active { background: white; color: #4a90d9; }
+    .feat-dot.visited { background: rgba(126,211,33,0.8); color: white; }
+
+    /* PROGRESS */
     .progress-section { margin-top: 15px; }
     .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
     .progress-text { font-size: 14px; font-weight: bold; color: #333; }
@@ -42,84 +60,33 @@
     .progress-track { background: #e0e0e0; border-radius: 20px; height: 12px; overflow: hidden; }
     .progress-fill { height: 12px; border-radius: 20px; background: linear-gradient(90deg, #4a90d9, #7ed321); width: 0%; transition: width 0.4s; }
 
-    /* FEATURED LETTER */
-    .featured-box { background: linear-gradient(135deg, #4a90d9, #764ba2); border-radius: 20px; padding: 25px 20px; margin-bottom: 20px; display: none; color: white; }
-    .featured-box.show { display: block; }
-    .featured-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .nav-btn { background: rgba(255,255,255,0.25); border: none; color: white; font-size: 28px; width: 54px; height: 54px; border-radius: 50%; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
-    .nav-btn:hover { background: rgba(255,255,255,0.4); }
-    .featured-center { flex: 1; text-align: center; }
-    .feat-letter { font-size: 90px; font-weight: bold; line-height: 1; margin-bottom: 8px; }
-    .feat-img { font-size: 70px; margin-bottom: 8px; }
-    .feat-word { font-size: 26px; font-weight: bold; margin-bottom: 4px; }
-    .feat-desc { font-size: 15px; opacity: 0.85; }
-    .feat-dots { display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; margin-top: 15px; }
-    .feat-dot { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.25); color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; border: none; }
-    .feat-dot.active { background: white; color: #4a90d9; }
-    .feat-dot.visited-dot { background: rgba(126,211,33,0.6); }
-    .feat-dot:hover { background: rgba(255,255,255,0.5); }
-
     /* ALPHABET GRID */
     .alphabet-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 15px 0; }
-
-    .alpha-card {
-      background: white;
-      border-radius: 16px;
-      padding: 16px 8px 12px;
-      text-align: center;
-      cursor: pointer;
-      border: 3px solid #e0e0e0;
-      transition: all 0.2s;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-      position: relative;
-    }
+    .alpha-card { background: white; border-radius: 16px; padding: 16px 8px 12px; text-align: center; cursor: pointer; border: 3px solid #e0e0e0; transition: all 0.2s; box-shadow: 0 3px 8px rgba(0,0,0,0.06); position: relative; }
     .alpha-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-    .alpha-card.playing { transform: scale(1.08); box-shadow: 0 8px 20px rgba(74,144,217,0.3); border-color: #4a90d9; }
-
-    .alpha-card.visited { border-color: #7ed321; background: #f0fff4; }
-    .alpha-card.visited .alpha-letter { color: #27a745; }
-    .alpha-card.visited .alpha-word { color: #27a745; }
-
-    .tick-badge {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      width: 22px;
-      height: 22px;
-      background: #7ed321;
-      border-radius: 50%;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 13px;
-      font-weight: bold;
-      border: 2px solid white;
-      z-index: 10;
-    }
+    .alpha-card.playing { transform: scale(1.08); box-shadow: 0 8px 20px rgba(74,144,217,0.3); border-color: #4a90d9 !important; }
+    .alpha-card.visited { border-color: #7ed321 !important; background: #f0fff4; }
+    .alpha-card.visited .alpha-letter { color: #27a745 !important; }
+    .tick-badge { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; background: #7ed321; border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold; border: 2px solid white; z-index: 10; }
     .alpha-card.visited .tick-badge { display: flex; }
-
     .alpha-img { font-size: 36px; margin-bottom: 6px; display: block; }
     .alpha-letter { font-size: 24px; font-weight: bold; margin-bottom: 3px; color: #333; }
     .alpha-word { font-size: 12px; color: #666; }
+    .c0{border-color:#FFB3B3;} .c0 .alpha-letter{color:#cc0000;}
+    .c1{border-color:#FFD9B3;} .c1 .alpha-letter{color:#cc6600;}
+    .c2{border-color:#FFFAB3;} .c2 .alpha-letter{color:#999900;}
+    .c3{border-color:#B3FFB3;} .c3 .alpha-letter{color:#006600;}
+    .c4{border-color:#B3FFFF;} .c4 .alpha-letter{color:#006666;}
+    .c5{border-color:#B3D9FF;} .c5 .alpha-letter{color:#003399;}
+    .c6{border-color:#D9B3FF;} .c6 .alpha-letter{color:#6600cc;}
+    .c7{border-color:#FFB3D9;} .c7 .alpha-letter{color:#cc0066;}
+    .c8{border-color:#B3FFD9;} .c8 .alpha-letter{color:#006633;}
+    .c9{border-color:#FFB3FF;} .c9 .alpha-letter{color:#660066;}
 
-    .c0 { border-color: #FFB3B3; } .c0 .alpha-letter { color: #cc0000; }
-    .c1 { border-color: #FFD9B3; } .c1 .alpha-letter { color: #cc6600; }
-    .c2 { border-color: #FFFAB3; } .c2 .alpha-letter { color: #999900; }
-    .c3 { border-color: #B3FFB3; } .c3 .alpha-letter { color: #006600; }
-    .c4 { border-color: #B3FFFF; } .c4 .alpha-letter { color: #006666; }
-    .c5 { border-color: #B3D9FF; } .c5 .alpha-letter { color: #003399; }
-    .c6 { border-color: #D9B3FF; } .c6 .alpha-letter { color: #6600cc; }
-    .c7 { border-color: #FFB3D9; } .c7 .alpha-letter { color: #cc0066; }
-    .c8 { border-color: #B3FFD9; } .c8 .alpha-letter { color: #006633; }
-    .c9 { border-color: #FFB3FF; } .c9 .alpha-letter { color: #660066; }
-
-    /* ALL DONE MESSAGE */
+    /* ALL DONE */
     .all-done-msg { display: none; background: #e0ffe0; border: 2px solid #7ed321; border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 15px; }
-    .all-done-msg.show { display: block; }
-    .all-done-icon { font-size: 50px; margin-bottom: 10px; }
-    .all-done-title { font-size: 22px; font-weight: bold; color: #3a7a00; margin-bottom: 6px; }
-    .all-done-sub { font-size: 14px; color: #555; }
+    .all-done-msg.show { display: block; animation: popIn 0.5s ease; }
+    @keyframes popIn { 0%{transform:scale(0.8);opacity:0} 100%{transform:scale(1);opacity:1} }
 
     /* VOWELS */
     .vowel-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
@@ -134,7 +101,7 @@
     .quiz-image { font-size: 80px; text-align: center; margin-bottom: 15px; }
     .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
     .quiz-btn { padding: 18px; background: #f0f8ff; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 24px; font-weight: bold; cursor: pointer; transition: all 0.2s; color: #333; text-align: center; }
-    .quiz-btn:hover { border-color: #4a90d9; background: #e8f4ff; transform: scale(1.02); }
+    .quiz-btn:hover { border-color: #4a90d9; background: #e8f4ff; }
     .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
     .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
 
@@ -148,6 +115,8 @@
     .btn-next:hover { background: #357abd; }
     .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
     .btn-home { display: inline-block; padding: 14px 30px; background: #4a90d9; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
+    .proceed-btn { display: block; width: 100%; padding: 20px; background: linear-gradient(135deg, #7ed321, #27ae60); color: white; border: none; border-radius: 16px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 15px; text-align: center; text-decoration: none; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(126,211,33,0.5)} 70%{box-shadow:0 0 0 15px rgba(126,211,33,0)} 100%{box-shadow:0 0 0 0 rgba(126,211,33,0)} }
   </style>
 </head>
 <body>
@@ -156,10 +125,29 @@
   <h1>🌟 KidLearn</h1>
   <nav>
     <a href="index.html">Home</a>
-    <a href="english.html">English</a>
+    <a href="english-lessons.html">English</a>
     <a href="dashboard.html">Dashboard</a>
   </nav>
 </header>
+
+<!-- STICKY FEATURED DISPLAY — always visible at top -->
+<div class="sticky-wrap" id="stickyWrap" style="display:none">
+  <div class="featured-box show" id="featuredBox">
+    <div class="featured-inner">
+      <div class="feat-letter" id="featLetter">A</div>
+      <div class="feat-img" id="featImg">🍎</div>
+      <div class="feat-info">
+        <div class="feat-word" id="featWord">Apple</div>
+        <div class="feat-desc" id="featDesc">A is for Apple!</div>
+      </div>
+      <div class="feat-nav">
+        <button class="nav-btn" onclick="changeLetterBy(-1)">◀</button>
+        <button class="nav-btn" onclick="changeLetterBy(1)">▶</button>
+      </div>
+    </div>
+    <div class="feat-dots" id="featDots"></div>
+  </div>
+</div>
 
 <div class="lesson-hero">
   <div>
@@ -188,11 +176,10 @@
 
   <!-- SECTION 1: LEARN -->
   <div class="lesson-section active" id="section1">
-
     <div class="card">
       <h3>🔤 The English Alphabet — Click every letter!</h3>
-      <p>The English alphabet has <span class="highlight">26 letters</span>. Click each card to see the picture and hear the letter! Try to click all 26!</p>
-      <div class="tip-box">💡 <strong>Tip:</strong> Click any letter — then use ◀ ▶ arrows to move between letters. A green ✓ means you have explored that letter!</div>
+      <p>The English alphabet has <span class="highlight">26 letters</span>. Click each card to see the picture and hear the letter!</p>
+      <div class="tip-box">💡 <strong>Tip:</strong> Click every letter to explore all 26! The selected letter stays visible at the top of the screen!</div>
       <div class="progress-section">
         <div class="progress-header">
           <span class="progress-text" id="progressText">0 of 26 letters explored</span>
@@ -204,31 +191,15 @@
       </div>
     </div>
 
-    <!-- FEATURED LETTER -->
-    <div class="featured-box" id="featuredBox">
-      <div class="featured-nav">
-        <button class="nav-btn" onclick="changeLetterBy(-1)">◀</button>
-        <div class="featured-center">
-          <div class="feat-letter" id="featLetter">A</div>
-          <div class="feat-img" id="featImg">🍎</div>
-          <div class="feat-word" id="featWord">Apple</div>
-          <div class="feat-desc" id="featDesc">A is for Apple!</div>
-        </div>
-        <button class="nav-btn" onclick="changeLetterBy(1)">▶</button>
-      </div>
-      <div class="feat-dots" id="featDots"></div>
-    </div>
-
-    <!-- ALPHABET GRID -->
     <div class="card">
       <div class="alphabet-grid" id="alphabetGrid"></div>
     </div>
 
-    <!-- ALL DONE MESSAGE -->
     <div class="all-done-msg" id="allDoneMsg">
-      <div class="all-done-icon">🎉</div>
-      <div class="all-done-title">Amazing! You explored all 26 letters!</div>
-      <div class="all-done-sub">You are ready to learn about Vowels! Click the button below!</div>
+      <div style="font-size:50px;margin-bottom:10px">🎉</div>
+      <div style="font-size:24px;font-weight:bold;color:#3a7a00;margin-bottom:8px">Amazing! You explored all 26 letters!</div>
+      <div style="font-size:15px;color:#555;margin-bottom:15px">You are a true alphabet superstar! Ready for the next section?</div>
+      <a onclick="goToSection(2)" class="proceed-btn">🚀 Continue to Vowels ➡️</a>
     </div>
 
     <button class="btn-next" onclick="goToSection(2)">Next — Learn Vowels ➡️</button>
@@ -267,11 +238,10 @@
           <div class="v-word">Umbrella</div>
         </div>
       </div>
-      <div style="background:#e8f4ff;border-radius:16px;padding:20px;margin-top:20px;text-align:center">
-        <p style="font-size:16px;color:#4a90d9;font-weight:bold;margin-bottom:10px">🎵 Sing the Vowel Song!</p>
-        <p style="font-size:20px;color:#333;font-weight:bold;letter-spacing:6px">A — E — I — O — U</p>
-        <p style="font-size:14px;color:#666;margin-top:6px">These are the vowels, there are just a few!</p>
-        <button onclick="speak('A, E, I, O, U. These are the vowels, there are just a few!')" style="margin-top:12px;padding:10px 24px;background:#4a90d9;color:white;border:none;border-radius:25px;font-size:15px;cursor:pointer">🔊 Hear the Vowel Song</button>
+      <div style="background:#e8f4ff;border-radius:16px;padding:20px;margin-top:20px">
+        <p style="font-size:16px;color:#4a90d9;font-weight:bold;margin-bottom:15px;text-align:center">🎵 Watch the Vowel Song!</p>
+        <iframe width="100%" height="380" src="https://www.youtube.com/embed/gp1UmVSlLJ4" frameborder="0" allowfullscreen style="border-radius:12px;display:block"></iframe>
+        <p style="font-size:14px;color:#666;margin-top:12px;text-align:center">🎤 Sing along — A, E, I, O, U!</p>
       </div>
     </div>
     <button class="btn-next" onclick="goToSection(3)">Next — Quiz Time ➡️</button>
@@ -294,6 +264,7 @@
         <div class="result-score" id="resultScore">Score: 5/5</div>
         <p class="result-msg" id="resultMsg">You know all your letters!</p>
         <br/>
+        <a href="english-lessons.html" class="btn-home">← All Lessons</a>
         <a href="lesson-english-2.html" class="btn-success">Next Lesson →</a>
         <a href="dashboard.html" class="btn-home">Dashboard</a>
       </div>
@@ -350,34 +321,33 @@
       <div class="alpha-letter">${item.l}</div>
       <div class="alpha-word">${item.word}</div>
     `;
-    card.onclick = () => showLetter(idx);
+    card.onclick = () => showLetter(idx, true);
     grid.appendChild(card);
   });
 
-  function showLetter(idx) {
+  function showLetter(idx, markVisited) {
     currentIdx = idx;
     const item = alphabetData[idx];
 
-    // Show featured box
-    document.getElementById('featuredBox').className = 'featured-box show';
+    // Show sticky featured box
+    document.getElementById('stickyWrap').style.display = 'block';
     document.getElementById('featLetter').textContent = item.l;
     document.getElementById('featImg').textContent = item.img;
     document.getElementById('featWord').textContent = item.word;
     document.getElementById('featDesc').textContent = item.sound + '!';
 
-    // Mark visited
-    visitedSet.add(idx);
+    // Mark as visited
+    if (markVisited) visitedSet.add(idx);
 
     // Update all cards
     alphabetData.forEach((_, i) => {
       const card = document.getElementById('card-' + i);
       card.classList.remove('playing');
-      if (visitedSet.has(i)) {
-        card.classList.add('visited');
-      }
+      if (visitedSet.has(i)) card.classList.add('visited');
+      else card.classList.remove('visited');
     });
 
-    // Highlight current
+    // Highlight current card
     document.getElementById('card-' + idx).classList.add('playing');
 
     // Speak
@@ -387,15 +357,12 @@
     buildDots();
 
     // Update progress
-    updateProgress();
-
-    // Scroll to featured
-    document.getElementById('featuredBox').scrollIntoView({behavior:'smooth', block:'center'});
+    if (markVisited) updateProgress();
   }
 
   function changeLetterBy(dir) {
     const idx = (currentIdx + dir + alphabetData.length) % alphabetData.length;
-    showLetter(idx);
+    showLetter(idx, true);
   }
 
   function buildDots() {
@@ -403,8 +370,8 @@
     dots.innerHTML = alphabetData.map((item, i) => {
       let cls = 'feat-dot';
       if (i === currentIdx) cls += ' active';
-      else if (visitedSet.has(i)) cls += ' visited-dot';
-      return `<button class="${cls}" onclick="showLetter(${i})">${item.l}</button>`;
+      else if (visitedSet.has(i)) cls += ' visited';
+      return `<button class="${cls}" onclick="showLetter(${i}, true)">${item.l}</button>`;
     }).join('');
   }
 
@@ -418,11 +385,11 @@
 
     if (done === total) {
       setTimeout(() => {
-        speak('Amazing! You explored all 26 letters! You are ready for the next section!');
+        speak('Amazing! You explored all 26 letters! You are an alphabet superstar!');
         const msg = document.getElementById('allDoneMsg');
         msg.className = 'all-done-msg show';
         msg.scrollIntoView({behavior:'smooth', block:'center'});
-      }, 600);
+      }, 800);
     }
   }
 
@@ -432,11 +399,11 @@
 
   // QUIZ
   const quizData = [
-    {question:'What letter is this?',            img:'🍎', options:['A','B','C','D'], answer:0},
-    {question:'What letter is this?',            img:'🦓', options:['X','Y','Z','W'], answer:2},
-    {question:'Which letter is a VOWEL?',        img:'',   options:['B','C','E','D'], answer:2},
-    {question:'What letter is this?',            img:'🌈', options:['P','Q','R','S'], answer:2},
-    {question:'How many letters in the alphabet?',img:'',  options:['24','25','26','27'], answer:2},
+    {question:'What letter is this?',              img:'🍎', options:['A','B','C','D'], answer:0},
+    {question:'What letter is this?',              img:'🦓', options:['X','Y','Z','W'], answer:2},
+    {question:'Which letter is a VOWEL?',          img:'',   options:['B','C','E','D'], answer:2},
+    {question:'What letter is this?',              img:'🌈', options:['P','Q','R','S'], answer:2},
+    {question:'How many letters in the alphabet?', img:'',   options:['24','25','26','27'], answer:2},
   ];
   let quizIdx = 0;
   let quizScore = 0;
@@ -451,6 +418,7 @@
       </div>
       <div style="text-align:center;color:#aaa;font-size:13px;margin-top:8px">Question ${quizIdx+1} of ${quizData.length}</div>
     `;
+    speak('Question ' + (quizIdx+1) + '. ' + q.question);
   }
 
   function checkQuiz(selected, correct, btn) {
@@ -475,9 +443,9 @@
     goToSection(4);
     const pct = quizScore / quizData.length;
     let stars, title, msg;
-    if (pct === 1) { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You know all your letters! You are an alphabet superstar!'; }
-    else if (pct >= 0.6) { stars='⭐⭐'; title='Well Done! 😊'; msg='Great job! You know most of your letters. Keep practising!'; }
-    else { stars='⭐'; title='Good Try! 💪'; msg='Keep looking at the letters and try again. You can do it!'; }
+    if (pct === 1)       { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You know all your letters!'; }
+    else if (pct >= 0.6) { stars='⭐⭐';  title='Well Done! 😊';     msg='Great job! Keep practising the letters!'; }
+    else                 { stars='⭐';    title='Good Try! 💪';       msg='Keep looking at the letters and try again!'; }
     document.getElementById('resultStars').textContent = stars;
     document.getElementById('resultTitle').textContent = title;
     document.getElementById('resultScore').textContent = `Score: ${quizScore}/${quizData.length}`;
@@ -486,6 +454,8 @@
   }
 
   function goToSection(n) {
+    // Hide sticky when leaving section 1
+    if (n !== 1) document.getElementById('stickyWrap').style.display = 'none';
     document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
     for (let i=1; i<=4; i++) {
       const step = document.getElementById('step'+i);

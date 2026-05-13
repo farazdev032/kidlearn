@@ -1,27 +1,23 @@
 function speak(text) {
-  if (typeof responsiveVoice !== 'undefined') {
-    responsiveVoice.cancel();
-    responsiveVoice.speak(text, 'UK English Female', {
-      pitch: 1.2,
-      rate: 0.85,
-      volume: 1,
-      onstart: function() {},
-      onend: function() {}
-    });
-  } else {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.8;
-    u.pitch = 1.1;
-    u.volume = 1;
-    window.speechSynthesis.speak(u);
-  }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.85;
+  u.pitch = 1.2;
+  u.volume = 1;
+  // Force female voice
+  const voices = window.speechSynthesis.getVoices();
+  const female = voices.find(v =>
+    v.name.includes('Female') ||
+    v.name.includes('Samantha') ||
+    v.name.includes('Karen') ||
+    v.name.includes('Google UK English Female') ||
+    v.name.includes('Microsoft Zira')
+  );
+  if (female) u.voice = female;
+  window.speechSynthesis.speak(u);
 }
 
-function stopSpeaking() {
-  if (typeof responsiveVoice !== 'undefined') {
-    responsiveVoice.cancel();
-  } else {
-    window.speechSynthesis.cancel();
-  }
-}
+// Load voices
+window.speechSynthesis.onvoiceschanged = function() {
+  window.speechSynthesis.getVoices();
+};
