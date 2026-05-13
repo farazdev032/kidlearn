@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - English Lesson 5: Body Parts</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #4a90d9; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .lesson-hero { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .lesson-hero h2 { font-size: 28px; margin-bottom: 8px; }
+    .lesson-hero p { font-size: 15px; opacity: 0.9; }
+    .lesson-meta { display: flex; gap: 15px; margin-top: 12px; }
+    .meta-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .hero-icon { font-size: 80px; }
+    .lesson-container { max-width: 900px; margin: 30px auto; padding: 0 20px 50px; }
+    .lesson-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #aaa; }
+    .step.active { color: #e74c3c; font-weight: bold; }
+    .step.done { color: #7ed321; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #aaa; }
+    .step.active .step-circle { background: #e74c3c; color: white; }
+    .step.done .step-circle { background: #7ed321; color: white; }
+    .step-line { flex: 1; height: 2px; background: #e0e0e0; }
+    .step-line.done { background: #7ed321; }
+    .lesson-section { display: none; }
+    .lesson-section.active { display: block; }
+    .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; }
+    .card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+    .tip-box { background: #fff5e0; border-left: 4px solid #f5a623; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
+    .highlight { color: #e74c3c; font-weight: bold; }
+
+    /* PROGRESS */
+    .progress-section { margin-top: 15px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .progress-text { font-size: 14px; font-weight: bold; color: #333; }
+    .progress-pct { font-size: 13px; color: #7ed321; font-weight: bold; }
+    .progress-track { background: #e0e0e0; border-radius: 20px; height: 12px; overflow: hidden; }
+    .progress-fill { height: 12px; border-radius: 20px; background: linear-gradient(90deg, #e74c3c, #7ed321); width: 0%; transition: width 0.4s; }
+
+    /* BODY PARTS GRID */
+    .body-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 15px 0; }
+    .body-card { background: white; border-radius: 18px; padding: 20px 12px; text-align: center; cursor: pointer; border: 3px solid #e0e0e0; transition: all 0.2s; box-shadow: 0 3px 10px rgba(0,0,0,0.07); position: relative; }
+    .body-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+    .body-card.visited { border-color: #7ed321 !important; background: #f0fff4; }
+    .body-card.playing { transform: scale(1.08); box-shadow: 0 8px 25px rgba(231,76,60,0.3); }
+    .tick-badge { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; background: #7ed321; border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold; border: 2px solid white; z-index: 10; }
+    .body-card.visited .tick-badge { display: flex; }
+    .body-img { font-size: 48px; margin-bottom: 10px; display: block; }
+    .body-name { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 4px; }
+    .body-desc { font-size: 12px; color: #888; }
+
+    /* FEATURED BODY PART */
+    .featured-body { background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 20px; padding: 25px; margin-bottom: 20px; display: none; color: white; text-align: center; }
+    .featured-body.show { display: block; }
+    .feat-body-img { font-size: 80px; margin-bottom: 10px; }
+    .feat-body-name { font-size: 32px; font-weight: bold; margin-bottom: 8px; }
+    .feat-body-fact { font-size: 16px; opacity: 0.9; margin-bottom: 15px; }
+    .feat-body-sentence { font-size: 14px; opacity: 0.8; font-style: italic; }
+
+    /* ALL DONE */
+    .all-done-msg { display: none; background: #e0ffe0; border: 2px solid #7ed321; border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 15px; }
+    .all-done-msg.show { display: block; animation: popIn 0.5s ease; }
+    @keyframes popIn { 0%{transform:scale(0.8);opacity:0} 100%{transform:scale(1);opacity:1} }
+    @keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+    /* ACTIVITY */
+    .activity-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; }
+    .activity-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 15px; }
+    .activity-btn { background: white; border: 3px solid #e0e0e0; border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .activity-btn:hover { border-color: #e74c3c; transform: translateY(-3px); }
+    .activity-btn.correct { background: #e0ffe0; border-color: #7ed321; }
+    .activity-btn.wrong { background: #ffe0e0; border-color: #e74c3c; }
+    .activity-img { font-size: 48px; margin-bottom: 8px; }
+    .activity-label { font-size: 16px; font-weight: bold; color: #333; }
+    .activity-feedback { text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px; min-height: 30px; }
+    .activity-score { text-align: center; font-size: 14px; color: #888; margin-top: 5px; }
+
+    /* QUIZ */
+    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 15px; text-align: center; }
+    .quiz-image { font-size: 80px; text-align: center; margin-bottom: 15px; }
+    .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+    .quiz-btn { padding: 15px; background: #fff0f0; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 16px; cursor: pointer; transition: all 0.2s; color: #333; text-align: center; font-weight: bold; }
+    .quiz-btn:hover { border-color: #e74c3c; background: #ffe0e0; }
+    .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+
+    /* RESULT */
+    .result-box { text-align: center; padding: 20px; }
+    .result-stars { font-size: 60px; margin-bottom: 15px; }
+    .result-title { font-size: 28px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .result-msg { font-size: 16px; color: #666; margin-bottom: 25px; }
+    .result-score { display: inline-block; background: #fff0f0; color: #e74c3c; font-size: 20px; font-weight: bold; padding: 10px 28px; border-radius: 20px; margin-bottom: 25px; }
+    .btn-next { display: block; width: 100%; padding: 18px; background: #e74c3c; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-next:hover { background: #c0392b; }
+    .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
+    .btn-home { display: inline-block; padding: 14px 30px; background: #4a90d9; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
+    .proceed-btn { display: block; width: 100%; padding: 20px; background: linear-gradient(135deg, #7ed321, #27ae60); color: white; border: none; border-radius: 16px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 15px; text-align: center; text-decoration: none; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(126,211,33,0.5)} 70%{box-shadow:0 0 0 15px rgba(126,211,33,0)} 100%{box-shadow:0 0 0 0 rgba(126,211,33,0)} }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="english-lessons.html">English</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
+
+<div class="lesson-hero">
+  <div>
+    <h2>🧍 English — Lesson 5</h2>
+    <p>Body Parts — Learn the parts of your body!</p>
+    <div class="lesson-meta">
+      <span class="meta-badge">⭐ Starters</span>
+      <span class="meta-badge">⏱ 10 minutes</span>
+      <span class="meta-badge">🎯 Ages 3–5</span>
+    </div>
+  </div>
+  <div class="hero-icon">🧍</div>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-progress">
+    <div class="step active" id="step1"><div class="step-circle">1</div> Learn</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2"><div class="step-circle">2</div> Activity</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3"><div class="step-circle">3</div> Quiz</div>
+    <div class="step-line" id="line3"></div>
+    <div class="step" id="step4"><div class="step-circle">4</div> Done!</div>
+  </div>
+
+  <!-- SECTION 1: LEARN -->
+  <div class="lesson-section active" id="section1">
+    <div class="card">
+      <h3>🧍 Body Parts — Click each one to learn!</h3>
+      <p>Our body has many amazing parts! Let's learn their names in English. Click each card to hear the name!</p>
+      <div class="tip-box">💡 <strong>Tip:</strong> Click every body part card to explore them all! Touch that part of your own body as you hear its name!</div>
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-text" id="progressText">0 of 12 body parts explored</span>
+          <span class="progress-pct" id="progressPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURED BODY PART -->
+    <div class="featured-body" id="featuredBody">
+      <div class="feat-body-img" id="featBodyImg">👁️</div>
+      <div class="feat-body-name" id="featBodyName">Eyes</div>
+      <div class="feat-body-fact" id="featBodyFact">We use our eyes to see!</div>
+      <div class="feat-body-sentence" id="featBodySentence">"I have two eyes."</div>
+    </div>
+
+    <div class="card">
+      <div class="body-grid" id="bodyGrid"></div>
+    </div>
+
+    <div class="all-done-msg" id="allDoneMsg">
+      <div style="font-size:50px;margin-bottom:10px">🎉</div>
+      <div style="font-size:22px;font-weight:bold;color:#3a7a00;margin-bottom:6px">Amazing! You learned all 12 body parts!</div>
+      <div style="font-size:14px;color:#555;margin-bottom:15px">Now let's do a fun activity!</div>
+      <a onclick="goToSection(2)" class="proceed-btn">🚀 Continue to Activity ➡️</a>
+    </div>
+
+    <button class="btn-next" onclick="goToSection(2)">Next — Activity ➡️</button>
+  </div>
+
+  <!-- SECTION 2: ACTIVITY -->
+  <div class="lesson-section" id="section2">
+    <div class="card">
+      <h3>🎯 Which body part is this?</h3>
+      <p>Look at the picture and click the correct body part name!</p>
+      <div id="activityContainer"></div>
+      <button class="btn-next" id="nextToQuizBtn" onclick="goToSection(3)" style="display:none">Next — Quiz Time ➡️</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: QUIZ -->
+  <div class="lesson-section" id="section3">
+    <div class="card">
+      <h3>🧠 Body Parts Quiz!</h3>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: RESULT -->
+  <div class="lesson-section" id="section4">
+    <div class="card">
+      <div class="result-box">
+        <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+        <div class="result-title" id="resultTitle">Amazing!</div>
+        <div class="result-score" id="resultScore">Score: 5/5</div>
+        <p class="result-msg" id="resultMsg">You know all your body parts!</p>
+        <br/>
+        <a href="lesson-english-s4.html" class="btn-home">← Lesson 4</a>
+        <a href="lesson-english-s6.html" class="btn-success">Next Lesson →</a>
+        <a href="english-lessons.html" class="btn-home">All Lessons</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="audio.js"></script>
+<script>
+
+  const bodyData = [
+    { name:'Head',     img:'🗣️', fact:'We use our head to think!',       sentence:'I have one head.',       color:'#e74c3c' },
+    { name:'Eyes',     img:'👁️', fact:'We use our eyes to see!',         sentence:'I have two eyes.',       color:'#3498db' },
+    { name:'Ears',     img:'👂', fact:'We use our ears to hear!',        sentence:'I have two ears.',       color:'#f5a623' },
+    { name:'Nose',     img:'👃', fact:'We use our nose to smell!',       sentence:'I have one nose.',       color:'#9b59b6' },
+    { name:'Mouth',    img:'👄', fact:'We use our mouth to eat and talk!',sentence:'I have one mouth.',     color:'#e74c3c' },
+    { name:'Hands',    img:'🤲', fact:'We use our hands to touch things!',sentence:'I have two hands.',     color:'#27ae60' },
+    { name:'Fingers',  img:'🖐️', fact:'We have 5 fingers on each hand!', sentence:'I have ten fingers.',   color:'#3498db' },
+    { name:'Legs',     img:'🦵', fact:'We use our legs to walk and run!', sentence:'I have two legs.',      color:'#f5a623' },
+    { name:'Feet',     img:'🦶', fact:'We use our feet to stand!',        sentence:'I have two feet.',      color:'#e74c3c' },
+    { name:'Hair',     img:'💇', fact:'Hair grows on top of our head!',   sentence:'I have hair on my head.', color:'#9b59b6' },
+    { name:'Arms',     img:'💪', fact:'We use our arms to hug and carry!', sentence:'I have two arms.',     color:'#27ae60' },
+    { name:'Teeth',    img:'🦷', fact:'We use our teeth to chew food!',   sentence:'I have many teeth.',    color:'#9b59b6' },
+  ];
+
+  const visitedSet = new Set();
+
+  // BUILD BODY GRID
+  const bodyGrid = document.getElementById('bodyGrid');
+  bodyData.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'body-card';
+    card.id = 'body-' + idx;
+    card.style.borderColor = item.color + '44';
+    card.innerHTML = `
+      <div class="tick-badge">✓</div>
+      <span class="body-img">${item.img}</span>
+      <div class="body-name" style="color:${item.color}">${item.name}</div>
+      <div class="body-desc">${item.sentence}</div>
+    `;
+    card.onclick = () => showBodyPart(idx);
+    bodyGrid.appendChild(card);
+  });
+
+  function showBodyPart(idx) {
+    const item = bodyData[idx];
+    visitedSet.add(idx);
+
+    // Show featured
+    document.getElementById('featuredBody').className = 'featured-body show';
+    document.getElementById('featuredBody').style.background = `linear-gradient(135deg, ${item.color}, ${item.color}cc)`;
+    document.getElementById('featBodyImg').textContent = item.img;
+    document.getElementById('featBodyName').textContent = item.name;
+    document.getElementById('featBodyFact').textContent = item.fact;
+    document.getElementById('featBodySentence').textContent = '"' + item.sentence + '"';
+
+    // Update cards
+    bodyData.forEach((_, i) => {
+      const card = document.getElementById('body-' + i);
+      card.classList.remove('playing');
+      if (visitedSet.has(i)) card.classList.add('visited');
+    });
+    document.getElementById('body-' + idx).classList.add('playing');
+
+    // Speak
+    speak(item.name + '. ' + item.fact + ' ' + item.sentence);
+
+    // Update progress
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const total = bodyData.length;
+    const done = visitedSet.size;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('progressText').textContent = done + ' of ' + total + ' body parts explored';
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    if (done === total) {
+      setTimeout(() => {
+        launchConfetti();
+        playAchievementSound();
+        speak('Amazing! You learned all 12 body parts! You are a superstar!');
+        const msg = document.getElementById('allDoneMsg');
+        msg.className = 'all-done-msg show';
+        msg.scrollIntoView({behavior:'smooth', block:'center'});
+      }, 800);
+    }
+  }
+
+  // CONFETTI
+  function launchConfetti() {
+    const colors = ['#f5a623','#4a90d9','#7ed321','#e74c3c','#9b59b6','#50e3c2','#FFD700'];
+    const container = document.createElement('div');
+    container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden';
+    document.body.appendChild(container);
+    for (let i = 0; i < 150; i++) {
+      const confetti = document.createElement('div');
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const size = Math.random() * 10 + 6;
+      const left = Math.random() * 100;
+      const duration = Math.random() * 2 + 2;
+      const delay = Math.random() * 2;
+      const shape = Math.random() > 0.5 ? '50%' : '0%';
+      confetti.style.cssText = `position:absolute;top:-20px;left:${left}%;width:${size}px;height:${size}px;background:${color};border-radius:${shape};animation:confettiFall ${duration}s ${delay}s ease-in forwards;`;
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 5000);
+  }
+
+  // ACHIEVEMENT SOUND
+  function playAchievementSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      ctx.resume().then(() => {
+        const notes = [523, 659, 784, 1047, 1319];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.value = freq;
+          osc.type = 'sine';
+          gain.gain.setValueAtTime(0.4, ctx.currentTime + i * 0.15);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.5);
+          osc.start(ctx.currentTime + i * 0.15);
+          osc.stop(ctx.currentTime + i * 0.15 + 0.5);
+        });
+      });
+    } catch(e) {}
+  }
+
+  // ACTIVITY
+  const activityData = [
+    { question:'Which body part do we use to SEE?',   img:'👁️', answer:'Eyes',      options:['Nose','Eyes','Mouth','Ears'] },
+    { question:'Which body part do we use to HEAR?',  img:'👂', answer:'Ears',      options:['Eyes','Hands','Ears','Feet'] },
+    { question:'Which body part do we use to SMELL?', img:'👃', answer:'Nose',      options:['Mouth','Nose','Tummy','Back'] },
+    { question:'Which body part do we use to WALK?',  img:'🦵', answer:'Legs',      options:['Legs','Fingers','Head','Shoulders'] },
+    { question:'Which body part do we use to EAT?',   img:'👄', answer:'Mouth',     options:['Ears','Mouth','Hands','Eyes'] },
+    { question:'How many FINGERS do we have?',        img:'🖐️', answer:'Ten',       options:['Eight','Five','Ten','Twelve'] },
+  ];
+
+  let actIdx = 0;
+  let actScore = 0;
+  let actAnswered = false;
+
+  function loadActivity() {
+    if (actIdx >= activityData.length) return;
+    const a = activityData[actIdx];
+    actAnswered = false;
+    document.getElementById('activityContainer').innerHTML = `
+      <div class="quiz-image">${a.img}</div>
+      <div class="activity-question">${a.question}</div>
+      <div class="quiz-options">
+        ${a.options.map(o => `<button class="quiz-btn" onclick="checkActivity('${o}','${a.answer}',this)">${o}</button>`).join('')}
+      </div>
+      <div class="activity-feedback" id="actFeedback"></div>
+      <div style="text-align:center;color:#aaa;font-size:13px;margin-top:5px">Question ${actIdx+1} of ${activityData.length}</div>
+    `;
+    speak('Question ' + (actIdx+1) + '. ' + a.question);
+  }
+
+  function checkActivity(selected, correct, btn) {
+    if (actAnswered) return;
+    actAnswered = true;
+    document.querySelectorAll('.quiz-btn').forEach(b => b.disabled = true);
+    const fb = document.getElementById('actFeedback');
+    if (selected === correct) {
+      btn.classList.add('correct');
+      actScore++;
+      fb.style.color = '#7ed321';
+      fb.textContent = '✅ Correct! Well done!';
+      speak('Correct! Well done!');
+    } else {
+      btn.classList.add('wrong');
+      document.querySelectorAll('.quiz-btn').forEach(b => { if(b.textContent === correct) b.classList.add('correct'); });
+      fb.style.color = '#e74c3c';
+      fb.textContent = '❌ The correct answer is ' + correct + '!';
+      speak('The correct answer is ' + correct);
+    }
+    setTimeout(() => {
+      actIdx++;
+      if (actIdx < activityData.length) loadActivity();
+      else {
+        fb.textContent = '🎉 Great job! You completed the activity!';
+        document.getElementById('nextToQuizBtn').style.display = 'block';
+        speak('Great job! You completed the activity!');
+      }
+    }, 1500);
+  }
+
+  // QUIZ
+  const quizData = [
+    { q:'Which body part do we use to HEAR?',   img:'👂', options:['Eyes','Nose','Ears','Mouth'],     answer:2 },
+    { q:'How many eyes do we have?',             img:'👁️', options:['One','Two','Three','Four'],       answer:1 },
+    { q:'Which body part do we use to WALK?',    img:'🦵', options:['Hands','Arms','Head','Legs'],     answer:3 },
+    { q:'Which body part do we use to SMELL?',   img:'👃', options:['Ears','Nose','Eyes','Mouth'],     answer:1 },
+    { q:'How many fingers do we have in total?', img:'🖐️', options:['Five','Eight','Ten','Twelve'],    answer:2 },
+  ];
+  let quizIdx = 0;
+  let quizScore = 0;
+
+  function loadQuiz() {
+    const q = quizData[quizIdx];
+    document.getElementById('quizContainer').innerHTML = `
+      <div class="quiz-image">${q.img}</div>
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((o,i) => `<button class="quiz-btn" onclick="checkQuiz(${i},${q.answer},this)">${o}</button>`).join('')}
+      </div>
+      <div style="text-align:center;color:#aaa;font-size:13px;margin-top:8px">Question ${quizIdx+1} of ${quizData.length}</div>
+    `;
+    speak('Question ' + (quizIdx+1) + '. ' + q.q);
+  }
+
+  function checkQuiz(selected, correct, btn) {
+    document.querySelectorAll('.quiz-btn').forEach(b => b.disabled = true);
+    if (selected === correct) {
+      btn.classList.add('correct');
+      quizScore++;
+      speak('Correct! Well done!');
+    } else {
+      btn.classList.add('wrong');
+      document.querySelectorAll('.quiz-btn')[correct].classList.add('correct');
+      speak('The correct answer is ' + quizData[quizIdx].options[correct]);
+    }
+    setTimeout(() => {
+      quizIdx++;
+      if (quizIdx < quizData.length) loadQuiz();
+      else showResult();
+    }, 1500);
+  }
+
+  function showResult() {
+    goToSection(4);
+    const pct = quizScore / quizData.length;
+    let stars, title, msg;
+    if (pct === 1)       { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You know all your body parts!'; launchConfetti(); playAchievementSound(); }
+    else if (pct >= 0.6) { stars='⭐⭐';  title='Well Done! 😊';     msg='Great job! You know most of your body parts!'; }
+    else                 { stars='⭐';    title='Good Try! 💪';       msg='Keep practising! You will get better every day!'; }
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = `Score: ${quizScore}/${quizData.length}`;
+    document.getElementById('resultMsg').textContent = msg;
+    speak(title + ' You got ' + quizScore + ' out of ' + quizData.length + ' correct!');
+  }
+
+  function goToSection(n) {
+    document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
+    for (let i=1; i<=4; i++) {
+      const step = document.getElementById('step'+i);
+      if (!step) continue;
+      if (i < n) { step.className='step done'; step.querySelector('.step-circle').textContent='✓'; }
+      else if (i===n) { step.className='step active'; step.querySelector('.step-circle').textContent=i; }
+      else { step.className='step'; step.querySelector('.step-circle').textContent=i; }
+      if (i < 4) { const line = document.getElementById('line'+i); if(line) line.className = i < n ? 'step-line done' : 'step-line'; }
+    }
+    if (n===2) { actIdx=0; actScore=0; loadActivity(); }
+    if (n===3) { quizIdx=0; quizScore=0; loadQuiz(); }
+    window.scrollTo(0,0);
+  }
+
+</script>
+</body>
+</html>
