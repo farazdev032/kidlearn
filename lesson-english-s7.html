@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - English Lesson 7: Family Members</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #4a90d9; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .lesson-hero { background: linear-gradient(135deg, #9b59b6, #764ba2); color: white; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .lesson-hero h2 { font-size: 28px; margin-bottom: 8px; }
+    .lesson-hero p { font-size: 15px; opacity: 0.9; }
+    .lesson-meta { display: flex; gap: 15px; margin-top: 12px; }
+    .meta-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .hero-icon { font-size: 80px; }
+    .lesson-container { max-width: 900px; margin: 30px auto; padding: 0 20px 50px; }
+    .lesson-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #aaa; }
+    .step.active { color: #9b59b6; font-weight: bold; }
+    .step.done { color: #7ed321; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #aaa; }
+    .step.active .step-circle { background: #9b59b6; color: white; }
+    .step.done .step-circle { background: #7ed321; color: white; }
+    .step-line { flex: 1; height: 2px; background: #e0e0e0; }
+    .step-line.done { background: #7ed321; }
+    .lesson-section { display: none; }
+    .lesson-section.active { display: block; }
+    .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; }
+    .card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+    .tip-box { background: #fff5e0; border-left: 4px solid #f5a623; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
+    .highlight { color: #9b59b6; font-weight: bold; }
+    .progress-section { margin-top: 15px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .progress-text { font-size: 14px; font-weight: bold; color: #333; }
+    .progress-pct { font-size: 13px; color: #7ed321; font-weight: bold; }
+    .progress-track { background: #e0e0e0; border-radius: 20px; height: 12px; overflow: hidden; }
+    .progress-fill { height: 12px; border-radius: 20px; background: linear-gradient(90deg, #9b59b6, #7ed321); width: 0%; transition: width 0.4s; }
+
+    /* FAMILY GRID */
+    .family-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 15px 0; }
+    .family-card { background: white; border-radius: 18px; padding: 20px 12px; text-align: center; cursor: pointer; border: 3px solid #e0e0e0; transition: all 0.2s; box-shadow: 0 3px 10px rgba(0,0,0,0.07); position: relative; }
+    .family-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+    .family-card.visited { border-color: #7ed321 !important; background: #f0fff4; }
+    .family-card.playing { transform: scale(1.08); box-shadow: 0 8px 25px rgba(155,89,182,0.3); }
+    .tick-badge { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; background: #7ed321; border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold; border: 2px solid white; z-index: 10; }
+    .family-card.visited .tick-badge { display: flex; }
+    .family-img { font-size: 52px; margin-bottom: 10px; display: block; }
+    .family-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; }
+    .family-desc { font-size: 12px; color: #888; }
+
+    /* FEATURED */
+    .featured-family { border-radius: 20px; padding: 25px; margin-bottom: 20px; display: none; color: white; text-align: center; }
+    .featured-family.show { display: block; }
+    .feat-family-img { font-size: 80px; margin-bottom: 10px; }
+    .feat-family-name { font-size: 32px; font-weight: bold; margin-bottom: 8px; }
+    .feat-family-desc { font-size: 18px; opacity: 0.9; margin-bottom: 8px; }
+    .feat-family-sentence { font-size: 15px; opacity: 0.8; font-style: italic; }
+
+    /* ALL DONE */
+    .all-done-msg { display: none; background: #e0ffe0; border: 2px solid #7ed321; border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 15px; }
+    .all-done-msg.show { display: block; animation: popIn 0.5s ease; }
+    @keyframes popIn { 0%{transform:scale(0.8);opacity:0} 100%{transform:scale(1);opacity:1} }
+    @keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+    /* FAMILY TREE */
+    .family-tree { background: #f5e8ff; border-radius: 16px; padding: 20px; margin: 15px 0; text-align: center; }
+    .family-tree-title { font-size: 16px; font-weight: bold; color: #9b59b6; margin-bottom: 15px; }
+    .family-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+    .family-tree-card { background: white; border: 2px solid #9b59b6; border-radius: 14px; padding: 12px 16px; text-align: center; min-width: 80px; cursor: pointer; transition: all 0.2s; }
+    .family-tree-card:hover { background: #f5e8ff; transform: scale(1.05); }
+    .ftc-img { font-size: 30px; margin-bottom: 4px; }
+    .ftc-name { font-size: 13px; font-weight: bold; color: #9b59b6; }
+
+    /* QUIZ */
+    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 15px; text-align: center; }
+    .quiz-image { font-size: 80px; text-align: center; margin-bottom: 15px; }
+    .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+    .quiz-btn { padding: 15px; background: #f5e8ff; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 16px; cursor: pointer; transition: all 0.2s; color: #333; text-align: center; font-weight: bold; }
+    .quiz-btn:hover { border-color: #9b59b6; background: #ede0f7; }
+    .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+
+    /* RESULT */
+    .result-box { text-align: center; padding: 20px; }
+    .result-stars { font-size: 60px; margin-bottom: 15px; }
+    .result-title { font-size: 28px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .result-msg { font-size: 16px; color: #666; margin-bottom: 25px; }
+    .result-score { display: inline-block; background: #f5e8ff; color: #9b59b6; font-size: 20px; font-weight: bold; padding: 10px 28px; border-radius: 20px; margin-bottom: 25px; }
+    .btn-next { display: block; width: 100%; padding: 18px; background: #9b59b6; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-next:hover { background: #764ba2; }
+    .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
+    .btn-home { display: inline-block; padding: 14px 30px; background: #4a90d9; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
+    .proceed-btn { display: block; width: 100%; padding: 20px; background: linear-gradient(135deg, #7ed321, #27ae60); color: white; border: none; border-radius: 16px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 15px; text-align: center; text-decoration: none; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(126,211,33,0.5)} 70%{box-shadow:0 0 0 15px rgba(126,211,33,0)} 100%{box-shadow:0 0 0 0 rgba(126,211,33,0)} }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="english-lessons.html">English</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
+
+<div class="lesson-hero">
+  <div>
+    <h2>👨‍👩‍👧‍👦 English — Lesson 7</h2>
+    <p>Family Members — Learn about your family!</p>
+    <div class="lesson-meta">
+      <span class="meta-badge">⭐ Starters</span>
+      <span class="meta-badge">⏱ 10 minutes</span>
+      <span class="meta-badge">🎯 Ages 3–5</span>
+    </div>
+  </div>
+  <div class="hero-icon">👨‍👩‍👧‍👦</div>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-progress">
+    <div class="step active" id="step1"><div class="step-circle">1</div> Learn</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2"><div class="step-circle">2</div> Family Tree</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3"><div class="step-circle">3</div> Quiz</div>
+    <div class="step-line" id="line3"></div>
+    <div class="step" id="step4"><div class="step-circle">4</div> Done!</div>
+  </div>
+
+  <!-- SECTION 1: LEARN -->
+  <div class="lesson-section active" id="section1">
+    <div class="card">
+      <h3>👨‍👩‍👧‍👦 Family Members — Click each one!</h3>
+      <p>A <span class="highlight">family</span> is a group of people who love and care for each other. Let's learn the names of family members in English!</p>
+      <div class="tip-box">💡 <strong>Tip:</strong> Click every family member card to learn their name! Think about your own family as you learn!</div>
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-text" id="progressText">0 of 10 family members explored</span>
+          <span class="progress-pct" id="progressPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURED -->
+    <div class="featured-family" id="featuredFamily" style="background:linear-gradient(135deg,#9b59b6,#764ba2)">
+      <div class="feat-family-img" id="featFamilyImg">👨</div>
+      <div class="feat-family-name" id="featFamilyName">Father</div>
+      <div class="feat-family-desc" id="featFamilyDesc">Your father is your dad!</div>
+      <div class="feat-family-sentence" id="featFamilySentence">"My father loves me very much."</div>
+    </div>
+
+    <div class="card">
+      <div class="family-grid" id="familyGrid"></div>
+    </div>
+
+    <div class="all-done-msg" id="allDoneMsg">
+      <div style="font-size:50px;margin-bottom:10px">🎉</div>
+      <div style="font-size:22px;font-weight:bold;color:#3a7a00;margin-bottom:6px">Amazing! You learned all family members!</div>
+      <div style="font-size:14px;color:#555;margin-bottom:15px">Now let's look at the family tree!</div>
+      <a onclick="goToSection(2)" class="proceed-btn">🚀 Continue to Family Tree ➡️</a>
+    </div>
+
+    <button class="btn-next" onclick="goToSection(2)">Next — Family Tree ➡️</button>
+  </div>
+
+  <!-- SECTION 2: FAMILY TREE -->
+  <div class="lesson-section" id="section2">
+    <div class="card">
+      <h3>🌳 The Family Tree</h3>
+      <p>A <span class="highlight">family tree</span> shows how family members are connected to each other. Click each member to hear their name!</p>
+      <div class="family-tree">
+        <div class="family-tree-title">👨‍👩‍👧‍👦 My Family Tree</div>
+        <div class="family-row">
+          <div class="family-tree-card" onclick="speak('Grandfather. Your grandfather is your dad or mum s father.')">
+            <div class="ftc-img">👴</div>
+            <div class="ftc-name">Grandfather</div>
+          </div>
+          <div class="family-tree-card" onclick="speak('Grandmother. Your grandmother is your dad or mum s mother.')">
+            <div class="ftc-img">👵</div>
+            <div class="ftc-name">Grandmother</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:24px;color:#9b59b6;margin-bottom:10px">⬇️</div>
+        <div class="family-row">
+          <div class="family-tree-card" onclick="speak('Father. Your father is your dad.')">
+            <div class="ftc-img">👨</div>
+            <div class="ftc-name">Father</div>
+          </div>
+          <div class="family-tree-card" onclick="speak('Mother. Your mother is your mum.')">
+            <div class="ftc-img">👩</div>
+            <div class="ftc-name">Mother</div>
+          </div>
+          <div class="family-tree-card" onclick="speak('Uncle. Your uncle is your dad or mum s brother.')">
+            <div class="ftc-img">👨‍💼</div>
+            <div class="ftc-name">Uncle</div>
+          </div>
+          <div class="family-tree-card" onclick="speak('Aunt. Your aunt is your dad or mum s sister.')">
+            <div class="ftc-img">👩‍💼</div>
+            <div class="ftc-name">Aunt</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:24px;color:#9b59b6;margin-bottom:10px">⬇️</div>
+        <div class="family-row">
+          <div class="family-tree-card" onclick="speak('Brother. Your brother is a boy in your family.')">
+            <div class="ftc-img">👦</div>
+            <div class="ftc-name">Brother</div>
+          </div>
+          <div class="family-tree-card" onclick="speak('Me! This is you!')">
+            <div class="ftc-img">🧒</div>
+            <div class="ftc-name">Me!</div>
+          </div>
+          <div class="family-tree-card" onclick="speak('Sister. Your sister is a girl in your family.')">
+            <div class="ftc-img">👧</div>
+            <div class="ftc-name">Sister</div>
+          </div>
+          <div class="family-tree-card" onclick="speak('Cousin. Your cousin is your uncle or aunt s child.')">
+            <div class="ftc-img">👧‍🦱</div>
+            <div class="ftc-name">Cousin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-next" onclick="goToSection(3)">Next — Quiz Time ➡️</button>
+  </div>
+
+  <!-- SECTION 3: QUIZ -->
+  <div class="lesson-section" id="section3">
+    <div class="card">
+      <h3>🧠 Family Members Quiz!</h3>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: RESULT -->
+  <div class="lesson-section" id="section4">
+    <div class="card">
+      <div class="result-box">
+        <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+        <div class="result-title" id="resultTitle">Amazing!</div>
+        <div class="result-score" id="resultScore">Score: 5/5</div>
+        <p class="result-msg" id="resultMsg">You know all your family members!</p>
+        <br/>
+        <a href="lesson-english-s6.html" class="btn-home">← Lesson 6</a>
+        <a href="lesson-english-s8.html" class="btn-success">Next Lesson →</a>
+        <a href="english-lessons.html" class="btn-home">All Lessons</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="audio.js"></script>
+<script>
+
+  const familyData = [
+    { name:'Father',      img:'👨',    desc:'Your father is your dad!',              sentence:'My father loves me very much.',    color:'#3498db' },
+    { name:'Mother',      img:'👩',    desc:'Your mother is your mum!',              sentence:'My mother takes care of me.',       color:'#e74c3c' },
+    { name:'Brother',     img:'👦',    desc:'Your brother is a boy in your family!', sentence:'I play with my brother.',           color:'#27ae60' },
+    { name:'Sister',      img:'👧',    desc:'Your sister is a girl in your family!', sentence:'My sister is my best friend.',      color:'#9b59b6' },
+    { name:'Grandfather', img:'👴',    desc:'Your grandfather is your dad\'s father!',sentence:'My grandfather tells great stories.',color:'#e67e22' },
+    { name:'Grandmother', img:'👵',    desc:'Your grandmother is your mum\'s mother!',sentence:'My grandmother cooks delicious food.',color:'#e74c3c' },
+    { name:'Uncle',       img:'👨‍💼', desc:'Your uncle is your dad\'s brother!',    sentence:'My uncle is very funny.',           color:'#3498db' },
+    { name:'Aunt',        img:'👩‍💼', desc:'Your aunt is your mum\'s sister!',      sentence:'My aunt gives me nice presents.',   color:'#9b59b6' },
+    { name:'Baby',        img:'👶',    desc:'A baby is the youngest in the family!', sentence:'Our baby is very cute.',            color:'#f5a623' },
+    { name:'Family',      img:'👨‍👩‍👧‍👦', desc:'Family means love and togetherness!',sentence:'I love my family very much.',      color:'#27ae60' },
+  ];
+
+  const visitedSet = new Set();
+
+  // BUILD FAMILY GRID
+  const familyGrid = document.getElementById('familyGrid');
+  familyData.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'family-card';
+    card.id = 'family-' + idx;
+    card.style.borderColor = item.color + '44';
+    card.innerHTML = `
+      <div class="tick-badge">✓</div>
+      <span class="family-img">${item.img}</span>
+      <div class="family-name" style="color:${item.color}">${item.name}</div>
+      <div class="family-desc">${item.sentence}</div>
+    `;
+    card.onclick = () => showFamily(idx);
+    familyGrid.appendChild(card);
+  });
+
+  function showFamily(idx) {
+    const item = familyData[idx];
+    visitedSet.add(idx);
+
+    // Show featured
+    const feat = document.getElementById('featuredFamily');
+    feat.className = 'featured-family show';
+    feat.style.background = `linear-gradient(135deg, ${item.color}, ${item.color}cc)`;
+    document.getElementById('featFamilyImg').textContent = item.img;
+    document.getElementById('featFamilyName').textContent = item.name;
+    document.getElementById('featFamilyDesc').textContent = item.desc;
+    document.getElementById('featFamilySentence').textContent = '"' + item.sentence + '"';
+
+    // Update cards
+    familyData.forEach((_, i) => {
+      const card = document.getElementById('family-' + i);
+      card.classList.remove('playing');
+      if (visitedSet.has(i)) card.classList.add('visited');
+    });
+    document.getElementById('family-' + idx).classList.add('playing');
+
+    // Speak
+    speak(item.name + '. ' + item.desc + ' ' + item.sentence);
+
+    // Update progress
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const total = familyData.length;
+    const done = visitedSet.size;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('progressText').textContent = done + ' of ' + total + ' family members explored';
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    if (done === total) {
+      setTimeout(() => {
+        launchConfetti();
+        playAchievementSound();
+        speak('Amazing! You learned all the family members!');
+        const msg = document.getElementById('allDoneMsg');
+        msg.className = 'all-done-msg show';
+        msg.scrollIntoView({behavior:'smooth', block:'center'});
+      }, 800);
+    }
+  }
+
+  // CONFETTI
+  function launchConfetti() {
+    const colors = ['#f5a623','#4a90d9','#7ed321','#e74c3c','#9b59b6','#50e3c2','#FFD700'];
+    const container = document.createElement('div');
+    container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden';
+    document.body.appendChild(container);
+    for (let i = 0; i < 150; i++) {
+      const confetti = document.createElement('div');
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const size = Math.random() * 10 + 6;
+      const left = Math.random() * 100;
+      const duration = Math.random() * 2 + 2;
+      const delay = Math.random() * 2;
+      const shape = Math.random() > 0.5 ? '50%' : '0%';
+      confetti.style.cssText = `position:absolute;top:-20px;left:${left}%;width:${size}px;height:${size}px;background:${color};border-radius:${shape};animation:confettiFall ${duration}s ${delay}s ease-in forwards;`;
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 5000);
+  }
+
+  // ACHIEVEMENT SOUND
+  function playAchievementSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      ctx.resume().then(() => {
+        const notes = [523, 659, 784, 1047, 1319];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.value = freq;
+          osc.type = 'sine';
+          gain.gain.setValueAtTime(0.4, ctx.currentTime + i * 0.15);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.5);
+          osc.start(ctx.currentTime + i * 0.15);
+          osc.stop(ctx.currentTime + i * 0.15 + 0.5);
+        });
+      });
+    } catch(e) {}
+  }
+
+  // QUIZ
+  const quizData = [
+    { q:'Who is your father?',           img:'👨',    options:['Your mum','Your dad','Your brother','Your uncle'],    answer:1 },
+    { q:'Who is your mother?',           img:'👩',    options:['Your aunt','Your sister','Your mum','Your grandma'],  answer:2 },
+    { q:'Who is your grandmother?',      img:'👵',    options:['Your mum','Your aunt','Your sister','Your grandma'],  answer:3 },
+    { q:'What is a brother?',            img:'👦',    options:['A girl in family','A boy in family','Your dad','Your uncle'], answer:1 },
+    { q:'Who is the youngest in family?',img:'👶',    options:['Grandfather','Uncle','Baby','Father'],               answer:2 },
+  ];
+  let quizIdx = 0;
+  let quizScore = 0;
+
+  function loadQuiz() {
+    const q = quizData[quizIdx];
+    document.getElementById('quizContainer').innerHTML = `
+      <div class="quiz-image">${q.img}</div>
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((o,i) => `<button class="quiz-btn" onclick="checkQuiz(${i},${q.answer},this)">${o}</button>`).join('')}
+      </div>
+      <div style="text-align:center;color:#aaa;font-size:13px;margin-top:8px">Question ${quizIdx+1} of ${quizData.length}</div>
+    `;
+    speak('Question ' + (quizIdx+1) + '. ' + q.q);
+  }
+
+  function checkQuiz(selected, correct, btn) {
+    document.querySelectorAll('.quiz-btn').forEach(b => b.disabled = true);
+    if (selected === correct) {
+      btn.classList.add('correct');
+      quizScore++;
+      speak('Correct! Well done!');
+    } else {
+      btn.classList.add('wrong');
+      document.querySelectorAll('.quiz-btn')[correct].classList.add('correct');
+      speak('The correct answer is ' + quizData[quizIdx].options[correct]);
+    }
+    setTimeout(() => {
+      quizIdx++;
+      if (quizIdx < quizData.length) loadQuiz();
+      else showResult();
+    }, 1500);
+  }
+
+  function showResult() {
+    goToSection(4);
+    const pct = quizScore / quizData.length;
+    let stars, title, msg;
+    if (pct === 1)       { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You know all your family members!'; launchConfetti(); playAchievementSound(); }
+    else if (pct >= 0.6) { stars='⭐⭐';  title='Well Done! 😊';     msg='Great job! You know most of your family members!'; }
+    else                 { stars='⭐';    title='Good Try! 💪';       msg='Keep practising! Family is important to learn!'; }
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = `Score: ${quizScore}/${quizData.length}`;
+    document.getElementById('resultMsg').textContent = msg;
+    speak(title + ' You got ' + quizScore + ' out of ' + quizData.length + ' correct!');
+  }
+
+  function goToSection(n) {
+    document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
+    for (let i=1; i<=4; i++) {
+      const step = document.getElementById('step'+i);
+      if (!step) continue;
+      if (i < n) { step.className='step done'; step.querySelector('.step-circle').textContent='✓'; }
+      else if (i===n) { step.className='step active'; step.querySelector('.step-circle').textContent=i; }
+      else { step.className='step'; step.querySelector('.step-circle').textContent=i; }
+      if (i < 4) { const line = document.getElementById('line'+i); if(line) line.className = i < n ? 'step-line done' : 'step-line'; }
+    }
+    if (n===3) { quizIdx=0; quizScore=0; loadQuiz(); }
+    window.scrollTo(0,0);
+  }
+
+</script>
+</body>
+</html>
