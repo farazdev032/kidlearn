@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KidLearn - English Lesson 9: Food & Drinks</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; }
+    header { background: #4a90d9; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .lesson-hero { background: linear-gradient(135deg, #e67e22, #d35400); color: white; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .lesson-hero h2 { font-size: 28px; margin-bottom: 8px; }
+    .lesson-hero p { font-size: 15px; opacity: 0.9; }
+    .lesson-meta { display: flex; gap: 15px; margin-top: 12px; }
+    .meta-badge { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .hero-icon { font-size: 80px; }
+    .lesson-container { max-width: 900px; margin: 30px auto; padding: 0 20px 50px; }
+    .lesson-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #aaa; }
+    .step.active { color: #e67e22; font-weight: bold; }
+    .step.done { color: #7ed321; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #aaa; }
+    .step.active .step-circle { background: #e67e22; color: white; }
+    .step.done .step-circle { background: #7ed321; color: white; }
+    .step-line { flex: 1; height: 2px; background: #e0e0e0; }
+    .step-line.done { background: #7ed321; }
+    .lesson-section { display: none; }
+    .lesson-section.active { display: block; }
+    .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .card h3 { font-size: 20px; color: #333; margin-bottom: 15px; }
+    .card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+    .tip-box { background: #fff5e0; border-left: 4px solid #f5a623; border-radius: 0 12px 12px 0; padding: 15px; margin: 15px 0; font-size: 14px; color: #555; }
+    .highlight { color: #e67e22; font-weight: bold; }
+    .progress-section { margin-top: 15px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .progress-text { font-size: 14px; font-weight: bold; color: #333; }
+    .progress-pct { font-size: 13px; color: #7ed321; font-weight: bold; }
+    .progress-track { background: #e0e0e0; border-radius: 20px; height: 12px; overflow: hidden; }
+    .progress-fill { height: 12px; border-radius: 20px; background: linear-gradient(90deg, #e67e22, #7ed321); width: 0%; transition: width 0.4s; }
+
+    /* FOOD GRID */
+    .food-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 15px 0; }
+    .food-card { background: white; border-radius: 18px; padding: 18px 10px; text-align: center; cursor: pointer; border: 3px solid #e0e0e0; transition: all 0.2s; box-shadow: 0 3px 10px rgba(0,0,0,0.07); position: relative; }
+    .food-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+    .food-card.visited { border-color: #7ed321 !important; background: #f0fff4; }
+    .food-card.playing { transform: scale(1.08); box-shadow: 0 8px 25px rgba(230,126,34,0.3); }
+    .tick-badge { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; background: #7ed321; border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold; border: 2px solid white; z-index: 10; }
+    .food-card.visited .tick-badge { display: flex; }
+    .food-img { font-size: 46px; margin-bottom: 8px; display: block; }
+    .food-name { font-size: 15px; font-weight: bold; margin-bottom: 3px; }
+    .food-type { font-size: 11px; color: #aaa; background: #f5f5f5; padding: 2px 8px; border-radius: 20px; display: inline-block; }
+
+    /* FEATURED */
+    .featured-food { border-radius: 20px; padding: 25px; margin-bottom: 20px; display: none; color: white; text-align: center; }
+    .featured-food.show { display: block; }
+    .feat-food-img { font-size: 80px; margin-bottom: 10px; }
+    .feat-food-name { font-size: 32px; font-weight: bold; margin-bottom: 8px; }
+    .feat-food-desc { font-size: 16px; opacity: 0.9; margin-bottom: 6px; }
+    .feat-food-sentence { font-size: 14px; opacity: 0.8; font-style: italic; }
+
+    /* ALL DONE */
+    .all-done-msg { display: none; background: #e0ffe0; border: 2px solid #7ed321; border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 15px; }
+    .all-done-msg.show { display: block; animation: popIn 0.5s ease; }
+    @keyframes popIn { 0%{transform:scale(0.8);opacity:0} 100%{transform:scale(1);opacity:1} }
+    @keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+    /* HEALTHY vs UNHEALTHY */
+    .health-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 15px 0; }
+    .health-col { border-radius: 16px; padding: 20px; }
+    .health-col-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; text-align: center; }
+    .health-items { display: flex; flex-direction: column; gap: 10px; }
+    .health-item { background: white; border-radius: 12px; padding: 12px 15px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
+    .health-item:hover { transform: translateX(5px); }
+    .hi-img { font-size: 28px; flex-shrink: 0; }
+    .hi-name { font-size: 15px; font-weight: bold; color: #333; }
+    .hi-desc { font-size: 12px; color: #888; }
+
+    /* QUIZ */
+    .quiz-question { font-size: 20px; font-weight: bold; color: #333; margin-bottom: 15px; text-align: center; }
+    .quiz-image { font-size: 80px; text-align: center; margin-bottom: 15px; }
+    .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+    .quiz-btn { padding: 15px; background: #fff5e0; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 16px; cursor: pointer; transition: all 0.2s; color: #333; text-align: center; font-weight: bold; }
+    .quiz-btn:hover { border-color: #e67e22; background: #ffe8cc; }
+    .quiz-btn.correct { background: #e0ffe0; border-color: #7ed321; color: #3a7a00; }
+    .quiz-btn.wrong { background: #ffe0e0; border-color: #e74c3c; color: #a00; }
+
+    /* RESULT */
+    .result-box { text-align: center; padding: 20px; }
+    .result-stars { font-size: 60px; margin-bottom: 15px; }
+    .result-title { font-size: 28px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .result-msg { font-size: 16px; color: #666; margin-bottom: 25px; }
+    .result-score { display: inline-block; background: #fff5e0; color: #e67e22; font-size: 20px; font-weight: bold; padding: 10px 28px; border-radius: 20px; margin-bottom: 25px; }
+    .btn-next { display: block; width: 100%; padding: 18px; background: #e67e22; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    .btn-next:hover { background: #d35400; }
+    .btn-success { display: inline-block; padding: 14px 30px; background: #7ed321; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 8px; text-decoration: none; }
+    .btn-home { display: inline-block; padding: 14px 30px; background: #4a90d9; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; margin: 8px; text-decoration: none; }
+    .proceed-btn { display: block; width: 100%; padding: 20px; background: linear-gradient(135deg, #7ed321, #27ae60); color: white; border: none; border-radius: 16px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 15px; text-align: center; text-decoration: none; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(126,211,33,0.5)} 70%{box-shadow:0 0 0 15px rgba(126,211,33,0)} 100%{box-shadow:0 0 0 0 rgba(126,211,33,0)} }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 KidLearn</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="english-lessons.html">English</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
+
+<div class="lesson-hero">
+  <div>
+    <h2>🍎 English — Lesson 9</h2>
+    <p>Food & Drinks — Learn yummy food words in English!</p>
+    <div class="lesson-meta">
+      <span class="meta-badge">⭐ Starters</span>
+      <span class="meta-badge">⏱ 10 minutes</span>
+      <span class="meta-badge">🎯 Ages 3–5</span>
+    </div>
+  </div>
+  <div class="hero-icon">🍎</div>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-progress">
+    <div class="step active" id="step1"><div class="step-circle">1</div> Food</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2"><div class="step-circle">2</div> Drinks</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3"><div class="step-circle">3</div> Healthy</div>
+    <div class="step-line" id="line3"></div>
+    <div class="step" id="step4"><div class="step-circle">4</div> Quiz</div>
+    <div class="step-line" id="line4"></div>
+    <div class="step" id="step5"><div class="step-circle">5</div> Done!</div>
+  </div>
+
+  <!-- SECTION 1: FOOD -->
+  <div class="lesson-section active" id="section1">
+    <div class="card">
+      <h3>🍎 Foods — Click each food to learn its name!</h3>
+      <p>We eat <span class="highlight">food</span> every day to grow strong and healthy! Let's learn the names of different foods in English!</p>
+      <div class="tip-box">💡 <strong>Tip:</strong> Click every food card to learn its name! Think about which foods you like!</div>
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-text" id="foodProgressText">0 of 12 foods explored</span>
+          <span class="progress-pct" id="foodProgressPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="foodProgressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="featured-food" id="featuredFood" style="background:linear-gradient(135deg,#e67e22,#d35400)">
+      <div class="feat-food-img" id="featFoodImg">🍎</div>
+      <div class="feat-food-name" id="featFoodName">Apple</div>
+      <div class="feat-food-desc" id="featFoodDesc">An apple is a sweet crunchy fruit!</div>
+      <div class="feat-food-sentence" id="featFoodSentence">"I like to eat apples."</div>
+    </div>
+
+    <div class="card">
+      <div class="food-grid" id="foodGrid"></div>
+    </div>
+
+    <div class="all-done-msg" id="foodDoneMsg">
+      <div style="font-size:50px;margin-bottom:10px">🎉</div>
+      <div style="font-size:22px;font-weight:bold;color:#3a7a00;margin-bottom:6px">Amazing! You learned all the food words!</div>
+      <div style="font-size:14px;color:#555;margin-bottom:15px">Now let's learn about drinks!</div>
+      <a onclick="goToSection(2)" class="proceed-btn">🚀 Continue to Drinks ➡️</a>
+    </div>
+
+    <button class="btn-next" onclick="goToSection(2)">Next — Learn Drinks ➡️</button>
+  </div>
+
+  <!-- SECTION 2: DRINKS -->
+  <div class="lesson-section" id="section2">
+    <div class="card">
+      <h3>🥤 Drinks — Click each drink to learn its name!</h3>
+      <p>We drink liquids to stay <span class="highlight">hydrated</span> and healthy! Let's learn drink names in English!</p>
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-text" id="drinkProgressText">0 of 8 drinks explored</span>
+          <span class="progress-pct" id="drinkProgressPct">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="drinkProgressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="featured-food" id="featuredDrink" style="background:linear-gradient(135deg,#3498db,#2980b9)">
+      <div class="feat-food-img" id="featDrinkImg">💧</div>
+      <div class="feat-food-name" id="featDrinkName">Water</div>
+      <div class="feat-food-desc" id="featDrinkDesc">Water is the most important drink!</div>
+      <div class="feat-food-sentence" id="featDrinkSentence">"I drink water every day."</div>
+    </div>
+
+    <div class="card">
+      <div class="food-grid" id="drinkGrid"></div>
+    </div>
+
+    <div class="all-done-msg" id="drinkDoneMsg">
+      <div style="font-size:50px;margin-bottom:10px">🎉</div>
+      <div style="font-size:22px;font-weight:bold;color:#3a7a00;margin-bottom:6px">Amazing! You learned all the drink words!</div>
+      <div style="font-size:14px;color:#555;margin-bottom:15px">Now let's learn about healthy eating!</div>
+      <a onclick="goToSection(3)" class="proceed-btn">🚀 Continue ➡️</a>
+    </div>
+
+    <button class="btn-next" onclick="goToSection(3)">Next — Healthy Eating ➡️</button>
+  </div>
+
+  <!-- SECTION 3: HEALTHY vs UNHEALTHY -->
+  <div class="lesson-section" id="section3">
+    <div class="card">
+      <h3>🥗 Healthy & Unhealthy Foods</h3>
+      <p>Some foods are <span class="highlight">healthy</span> and give us energy. Other foods are <span style="color:#e74c3c;font-weight:bold">unhealthy</span> and should only be eaten sometimes. Click each food to learn more!</p>
+      <div class="health-grid">
+        <div class="health-col" style="background:#e0fff4">
+          <div class="health-col-title" style="color:#27ae60">✅ Healthy Foods</div>
+          <div class="health-items" id="healthyItems"></div>
+        </div>
+        <div class="health-col" style="background:#fff0f0">
+          <div class="health-col-title" style="color:#e74c3c">❌ Unhealthy Foods</div>
+          <div class="health-items" id="unhealthyItems"></div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-next" onclick="goToSection(4)">Next — Quiz Time ➡️</button>
+  </div>
+
+  <!-- SECTION 4: QUIZ -->
+  <div class="lesson-section" id="section4">
+    <div class="card">
+      <h3>🧠 Food & Drinks Quiz!</h3>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: RESULT -->
+  <div class="lesson-section" id="section5">
+    <div class="card">
+      <div class="result-box">
+        <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+        <div class="result-title" id="resultTitle">Amazing!</div>
+        <div class="result-score" id="resultScore">Score: 5/5</div>
+        <p class="result-msg" id="resultMsg">You know all the food and drink words!</p>
+        <br/>
+        <a href="lesson-english-s8.html" class="btn-home">← Lesson 8</a>
+        <a href="lesson-english-s10.html" class="btn-success">Next Lesson →</a>
+        <a href="english-lessons.html" class="btn-home">All Lessons</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="audio.js"></script>
+<script>
+
+  const foodData = [
+    { name:'Apple',      img:'🍎', desc:'An apple is a sweet crunchy fruit!',      sentence:'I like to eat apples.',         color:'#e74c3c' },
+    { name:'Banana',     img:'🍌', desc:'A banana is a yellow curved fruit!',       sentence:'Monkeys love bananas!',          color:'#f5a623' },
+    { name:'Rice',       img:'🍚', desc:'Rice is a grain we eat with curry!',       sentence:'We eat rice for lunch.',         color:'#bdc3c7' },
+    { name:'Bread',      img:'🍞', desc:'Bread is made from flour and water!',      sentence:'I eat bread for breakfast.',     color:'#e67e22' },
+    { name:'Egg',        img:'🥚', desc:'Eggs give us protein to grow strong!',     sentence:'I eat eggs every morning.',      color:'#f5a623' },
+    { name:'Chicken',    img:'🍗', desc:'Chicken is a tasty meat food!',            sentence:'We eat chicken for dinner.',     color:'#e67e22' },
+    { name:'Pizza',      img:'🍕', desc:'Pizza is a favourite food of many kids!',  sentence:'Pizza is my favourite food!',    color:'#e74c3c' },
+    { name:'Salad',      img:'🥗', desc:'Salad has vegetables and is very healthy!',sentence:'I eat salad to stay healthy.',   color:'#27ae60' },
+    { name:'Cake',       img:'🎂', desc:'Cake is sweet and eaten at birthdays!',    sentence:'We eat cake on birthdays.',      color:'#9b59b6' },
+    { name:'Chocolate',  img:'🍫', desc:'Chocolate is sweet but eat only a little!',sentence:'Chocolate is a yummy treat!',   color:'#8B4513' },
+    { name:'Orange',     img:'🍊', desc:'Oranges are juicy and full of vitamin C!', sentence:'I drink orange juice.',          color:'#f5a623' },
+    { name:'Carrot',     img:'🥕', desc:'Carrots are orange vegetables good for eyes!',sentence:'Rabbits love carrots!',      color:'#e67e22' },
+  ];
+
+  const drinkData = [
+    { name:'Water',       img:'💧', desc:'Water is the most important drink for our body!', sentence:'I drink water every day.',       color:'#3498db' },
+    { name:'Milk',        img:'🥛', desc:'Milk makes our bones strong!',                    sentence:'I drink milk every morning.',    color:'#bdc3c7' },
+    { name:'Orange Juice',img:'🍊', desc:'Orange juice is made from oranges!',              sentence:'I love fresh orange juice.',     color:'#f5a623' },
+    { name:'Tea',         img:'🍵', desc:'Tea is a hot drink enjoyed by many people!',      sentence:'My parents drink tea.',          color:'#8B4513' },
+    { name:'Lemonade',    img:'🍋', desc:'Lemonade is a sour and sweet cold drink!',        sentence:'Lemonade is refreshing!',        color:'#f5e642' },
+    { name:'Smoothie',    img:'🥤', desc:'A smoothie is made from fruits and milk!',        sentence:'I love banana smoothies!',       color:'#9b59b6' },
+    { name:'Coconut Water',img:'🥥',desc:'Coconut water comes from inside a coconut!',     sentence:'Coconut water is very healthy!', color:'#27ae60' },
+    { name:'Hot Chocolate',img:'☕',desc:'Hot chocolate is a warm sweet drink!',            sentence:'I drink hot chocolate in winter.',color:'#8B4513' },
+  ];
+
+  const visitedFoods = new Set();
+  const visitedDrinks = new Set();
+
+  // BUILD FOOD GRID
+  const foodGrid = document.getElementById('foodGrid');
+  foodData.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'food-card';
+    card.id = 'food-' + idx;
+    card.style.borderColor = item.color + '55';
+    card.innerHTML = `
+      <div class="tick-badge">✓</div>
+      <span class="food-img">${item.img}</span>
+      <div class="food-name" style="color:${item.color}">${item.name}</div>
+      <div class="food-type">food</div>
+    `;
+    card.onclick = () => showFood(idx);
+    foodGrid.appendChild(card);
+  });
+
+  function showFood(idx) {
+    const item = foodData[idx];
+    visitedFoods.add(idx);
+
+    const feat = document.getElementById('featuredFood');
+    feat.className = 'featured-food show';
+    feat.style.background = `linear-gradient(135deg, ${item.color}, ${item.color}cc)`;
+    document.getElementById('featFoodImg').textContent = item.img;
+    document.getElementById('featFoodName').textContent = item.name;
+    document.getElementById('featFoodDesc').textContent = item.desc;
+    document.getElementById('featFoodSentence').textContent = '"' + item.sentence + '"';
+
+    foodData.forEach((_, i) => {
+      const card = document.getElementById('food-' + i);
+      card.classList.remove('playing');
+      if (visitedFoods.has(i)) card.classList.add('visited');
+    });
+    document.getElementById('food-' + idx).classList.add('playing');
+
+    speak(item.name + '. ' + item.desc + ' ' + item.sentence);
+    updateFoodProgress();
+  }
+
+  function updateFoodProgress() {
+    const done = visitedFoods.size;
+    const pct = Math.round((done / foodData.length) * 100);
+    document.getElementById('foodProgressText').textContent = done + ' of ' + foodData.length + ' foods explored';
+    document.getElementById('foodProgressPct').textContent = pct + '%';
+    document.getElementById('foodProgressFill').style.width = pct + '%';
+    if (done === foodData.length) {
+      setTimeout(() => {
+        launchConfetti();
+        playAchievementSound();
+        speak('Amazing! You learned all the food words!');
+        document.getElementById('foodDoneMsg').className = 'all-done-msg show';
+        document.getElementById('foodDoneMsg').scrollIntoView({behavior:'smooth', block:'center'});
+      }, 800);
+    }
+  }
+
+  // BUILD DRINK GRID
+  const drinkGrid = document.getElementById('drinkGrid');
+  drinkData.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'food-card';
+    card.id = 'drink-' + idx;
+    card.style.borderColor = item.color + '55';
+    card.innerHTML = `
+      <div class="tick-badge">✓</div>
+      <span class="food-img">${item.img}</span>
+      <div class="food-name" style="color:${item.color}">${item.name}</div>
+      <div class="food-type">drink</div>
+    `;
+    card.onclick = () => showDrink(idx);
+    drinkGrid.appendChild(card);
+  });
+
+  function showDrink(idx) {
+    const item = drinkData[idx];
+    visitedDrinks.add(idx);
+
+    const feat = document.getElementById('featuredDrink');
+    feat.className = 'featured-food show';
+    feat.style.background = `linear-gradient(135deg, ${item.color}, ${item.color}cc)`;
+    document.getElementById('featDrinkImg').textContent = item.img;
+    document.getElementById('featDrinkName').textContent = item.name;
+    document.getElementById('featDrinkDesc').textContent = item.desc;
+    document.getElementById('featDrinkSentence').textContent = '"' + item.sentence + '"';
+
+    drinkData.forEach((_, i) => {
+      const card = document.getElementById('drink-' + i);
+      card.classList.remove('playing');
+      if (visitedDrinks.has(i)) card.classList.add('visited');
+    });
+    document.getElementById('drink-' + idx).classList.add('playing');
+
+    speak(item.name + '. ' + item.desc + ' ' + item.sentence);
+    updateDrinkProgress();
+  }
+
+  function updateDrinkProgress() {
+    const done = visitedDrinks.size;
+    const pct = Math.round((done / drinkData.length) * 100);
+    document.getElementById('drinkProgressText').textContent = done + ' of ' + drinkData.length + ' drinks explored';
+    document.getElementById('drinkProgressPct').textContent = pct + '%';
+    document.getElementById('drinkProgressFill').style.width = pct + '%';
+    if (done === drinkData.length) {
+      setTimeout(() => {
+        launchConfetti();
+        playAchievementSound();
+        speak('Amazing! You learned all the drink words!');
+        document.getElementById('drinkDoneMsg').className = 'all-done-msg show';
+        document.getElementById('drinkDoneMsg').scrollIntoView({behavior:'smooth', block:'center'});
+      }, 800);
+    }
+  }
+
+  // HEALTHY vs UNHEALTHY
+  const healthyFoods = [
+    { img:'🥗', name:'Salad',   desc:'Full of vitamins and minerals!' },
+    { img:'🍎', name:'Apple',   desc:'Sweet and full of fibre!' },
+    { img:'🥕', name:'Carrot',  desc:'Great for your eyes!' },
+    { img:'🥛', name:'Milk',    desc:'Makes your bones strong!' },
+    { img:'🍌', name:'Banana',  desc:'Gives you lots of energy!' },
+  ];
+
+  const unhealthyFoods = [
+    { img:'🍕', name:'Pizza',      desc:'Tasty but has too much fat!' },
+    { img:'🍫', name:'Chocolate',  desc:'Sweet but has too much sugar!' },
+    { img:'🍟', name:'Chips',      desc:'Salty and has too much oil!' },
+    { img:'🧁', name:'Cupcake',    desc:'Sweet treat — eat only sometimes!' },
+    { img:'🥤', name:'Fizzy Drink',desc:'Too much sugar — not good for teeth!' },
+  ];
+
+  function buildHealthy() {
+    const hItems = document.getElementById('healthyItems');
+    const uItems = document.getElementById('unhealthyItems');
+    healthyFoods.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'health-item';
+      div.style.borderColor = '#27ae6033';
+      div.innerHTML = `<div class="hi-img">${item.img}</div><div><div class="hi-name">${item.name}</div><div class="hi-desc">${item.desc}</div></div>`;
+      div.onclick = () => speak(item.name + '. ' + item.desc + ' This is a healthy food!');
+      hItems.appendChild(div);
+    });
+    unhealthyFoods.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'health-item';
+      div.style.borderColor = '#e74c3c33';
+      div.innerHTML = `<div class="hi-img">${item.img}</div><div><div class="hi-name">${item.name}</div><div class="hi-desc">${item.desc}</div></div>`;
+      div.onclick = () => speak(item.name + '. ' + item.desc + ' This is an unhealthy food. Eat only sometimes!');
+      uItems.appendChild(div);
+    });
+  }
+
+  // CONFETTI
+  function launchConfetti() {
+    const colors = ['#f5a623','#4a90d9','#7ed321','#e74c3c','#9b59b6','#50e3c2','#FFD700'];
+    const container = document.createElement('div');
+    container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden';
+    document.body.appendChild(container);
+    for (let i = 0; i < 150; i++) {
+      const confetti = document.createElement('div');
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const size = Math.random() * 10 + 6;
+      const left = Math.random() * 100;
+      const duration = Math.random() * 2 + 2;
+      const delay = Math.random() * 2;
+      const shape = Math.random() > 0.5 ? '50%' : '0%';
+      confetti.style.cssText = `position:absolute;top:-20px;left:${left}%;width:${size}px;height:${size}px;background:${color};border-radius:${shape};animation:confettiFall ${duration}s ${delay}s ease-in forwards;`;
+      container.appendChild(confetti);
+    }
+    setTimeout(() => container.remove(), 5000);
+  }
+
+  // ACHIEVEMENT SOUND
+  function playAchievementSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      ctx.resume().then(() => {
+        const notes = [523, 659, 784, 1047, 1319];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.value = freq;
+          osc.type = 'sine';
+          gain.gain.setValueAtTime(0.4, ctx.currentTime + i * 0.15);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.5);
+          osc.start(ctx.currentTime + i * 0.15);
+          osc.stop(ctx.currentTime + i * 0.15 + 0.5);
+        });
+      });
+    } catch(e) {}
+  }
+
+  // QUIZ
+  const quizData = [
+    { q:'Which food is a fruit?',           img:'🍎', options:['Rice','Bread','Apple','Chicken'],       answer:2 },
+    { q:'Which drink is the most healthy?', img:'💧', options:['Lemonade','Water','Tea','Hot Chocolate'],answer:1 },
+    { q:'Which food is healthy?',           img:'🥗', options:['Chips','Chocolate','Cake','Salad'],     answer:3 },
+    { q:'What is milk good for?',           img:'🥛', options:['Strong teeth','Strong bones','Good eyes','Good ears'], answer:1 },
+    { q:'Which food has too much sugar?',   img:'🍫', options:['Apple','Carrot','Chocolate','Banana'],  answer:2 },
+  ];
+  let quizIdx = 0;
+  let quizScore = 0;
+
+  function loadQuiz() {
+    const q = quizData[quizIdx];
+    document.getElementById('quizContainer').innerHTML = `
+      <div class="quiz-image">${q.img}</div>
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((o,i) => `<button class="quiz-btn" onclick="checkQuiz(${i},${q.answer},this)">${o}</button>`).join('')}
+      </div>
+      <div style="text-align:center;color:#aaa;font-size:13px;margin-top:8px">Question ${quizIdx+1} of ${quizData.length}</div>
+    `;
+    speak('Question ' + (quizIdx+1) + '. ' + q.q);
+  }
+
+  function checkQuiz(selected, correct, btn) {
+    document.querySelectorAll('.quiz-btn').forEach(b => b.disabled = true);
+    if (selected === correct) {
+      btn.classList.add('correct');
+      quizScore++;
+      speak('Correct! Well done!');
+    } else {
+      btn.classList.add('wrong');
+      document.querySelectorAll('.quiz-btn')[correct].classList.add('correct');
+      speak('The correct answer is ' + quizData[quizIdx].options[correct]);
+    }
+    setTimeout(() => {
+      quizIdx++;
+      if (quizIdx < quizData.length) loadQuiz();
+      else showResult();
+    }, 1500);
+  }
+
+  function showResult() {
+    goToSection(5);
+    const pct = quizScore / quizData.length;
+    let stars, title, msg;
+    if (pct === 1)       { stars='⭐⭐⭐'; title='Perfect Score! 🎉'; msg='Incredible! You know all the food and drink words!'; launchConfetti(); playAchievementSound(); }
+    else if (pct >= 0.6) { stars='⭐⭐';  title='Well Done! 😊';     msg='Great job! You know most of the food words!'; }
+    else                 { stars='⭐';    title='Good Try! 💪';       msg='Keep practising! Food is fun to learn!'; }
+    document.getElementById('resultStars').textContent = stars;
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultScore').textContent = `Score: ${quizScore}/${quizData.length}`;
+    document.getElementById('resultMsg').textContent = msg;
+    speak(title + ' You got ' + quizScore + ' out of ' + quizData.length + ' correct!');
+  }
+
+  function goToSection(n) {
+    document.querySelectorAll('.lesson-section').forEach((s,i) => s.classList.toggle('active', i+1===n));
+    for (let i=1; i<=5; i++) {
+      const step = document.getElementById('step'+i);
+      if (!step) continue;
+      if (i < n) { step.className='step done'; step.querySelector('.step-circle').textContent='✓'; }
+      else if (i===n) { step.className='step active'; step.querySelector('.step-circle').textContent=i; }
+      else { step.className='step'; step.querySelector('.step-circle').textContent=i; }
+      if (i < 5) { const line = document.getElementById('line'+i); if(line) line.className = i < n ? 'step-line done' : 'step-line'; }
+    }
+    if (n===3) buildHealthy();
+    if (n===4) { quizIdx=0; quizScore=0; loadQuiz(); }
+    window.scrollTo(0,0);
+  }
+
+</script>
+</body>
+</html>
